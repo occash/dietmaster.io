@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file alias="main.qml">qml/main.qml</file>
+        <file alias="LoginForm.qml">qml/LoginForm.qml</file>
+        <file alias="MainForm.qml">qml/MainForm.qml</file>
+        <file alias="NutritionPanel.qml">qml/NutritionPanel.qml</file>
+        <file alias="InfoForm.qml">qml/InfoForm.qml</file>
+        <file alias="FatPanel.qml">qml/FatPanel.qml</file>
+        <file alias="FatButton.qml">qml/FatButton.qml</file>
+        <file alias="UserForm.qml">qml/UserForm.qml</file>
+        <file alias="InputField.qml">qml/InputField.qml</file>
+        <file alias="xregexp.js">qml/xregexp.js</file>
+        <file alias="enums.js">qml/enums.js</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>images/male/1_1.png</file>
+        <file>images/male/1_2.png</file>
+        <file>images/male/1_3.png</file>
+        <file>images/male/2_1.png</file>
+        <file>images/male/2_2.png</file>
+        <file>images/male/2_3.png</file>
+        <file>images/male/3_1.png</file>
+        <file>images/male/3_2.png</file>
+        <file>images/male/3_3.png</file>
+    </qresource>
+    <qresource prefix="/i18n">
+        <file alias="dietmaster_ru.qm">i18n/dietmaster_ru.qm</file>
+    </qresource>
+</RCC>
