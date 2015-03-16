@@ -3,8 +3,6 @@ TEMPLATE = app
 QT += qml quick widgets
 
 SOURCES += main.cpp
-SOURCES += qml/*.qml
-SOURCES += qml/*.js
 
 TRANSLATIONS += \
     i18n/dietmaster_ru.ts
@@ -18,4 +16,6 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 DISTFILES += \
-    qml/InputField.qml
+    qml/*.qml \
+    qml/*.js
+

@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 
-GridLayout {
+Grid {
     id: fatPanel
 
     property real fatPercentage: group.current.percent
@@ -12,108 +12,64 @@ GridLayout {
     columnSpacing: 2
     rowSpacing: 2
 
+    ListModel {
+        id: model
+
+        ListElement {
+            name: "1_1"
+            value: 4.0
+        }
+        ListElement {
+            name: "1_2"
+            value: 7.0
+        }
+        ListElement {
+            name: "1_3"
+            value: 11.0
+        }
+        ListElement {
+            name: "2_1"
+            value: 15.0
+        }
+        ListElement {
+            name: "2_2"
+            value: 20.0
+        }
+        ListElement {
+            name: "2_3"
+            value: 25.0
+        }
+        ListElement {
+            name: "3_1"
+            value: 30.0
+        }
+        ListElement {
+            name: "3_2"
+            value: 35.0
+        }
+        ListElement {
+            name: "3_3"
+            value: 40.0
+        }
+    }
+
+    Repeater {
+        id: repeater
+        model: model
+
+        FatButton {
+            id: fatButton
+            image: name
+            percent: value
+            exclusiveGroup: group
+            width: fatPanel.width / 3
+        }
+    }
+
     ExclusiveGroup {
         id: group
     }
 
-    FatButton {
-        id: fat1_1
-        image: "1_1"
-        percent: 4.0
-
-        exclusiveGroup: group
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    FatButton {
-        id: fat1_2
-        image: "1_2"
-        percent: 7.0
-
-        exclusiveGroup: group
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    FatButton {
-        id: fat1_3
-        image: "1_3"
-        percent: 11.0
-
-        exclusiveGroup: group
-        checked: true
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    FatButton {
-        id: fat2_1
-        image: "2_1"
-        percent: 15.0
-
-        exclusiveGroup: group
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    FatButton {
-        id: fat2_2
-        image: "2_2"
-        percent: 20.0
-
-        exclusiveGroup: group
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    FatButton {
-        id: fat2_3
-        image: "2_3"
-        percent: 25.0
-
-        exclusiveGroup: group
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    FatButton {
-        id: fat3_1
-        image: "3_1"
-        percent: 30.0
-
-        exclusiveGroup: group
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    FatButton {
-        id: fat3_2
-        image: "3_2"
-        percent: 35.0
-
-        exclusiveGroup: group
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    FatButton {
-        id: fat3_3
-        image: "3_3"
-        percent: 40.0
-
-        exclusiveGroup: group
-
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
+    Component.onCompleted: group.current = repeater.itemAt(0)
 }
 

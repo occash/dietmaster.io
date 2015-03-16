@@ -11,6 +11,7 @@ Column {
 
     property bool valid: true
     property int severity: 0
+    property bool isDefault: false
 
     property alias title: label.text
     property alias text: field.text
@@ -20,6 +21,7 @@ Column {
 
     signal validate()
     signal validateFull()
+    signal accept()
 
     function severityColor(s) {
         switch (s)
@@ -55,6 +57,8 @@ Column {
             validate()
         }
 
+        onAccepted: accept()
+
         Timer {
             id: timer
             interval: 400
@@ -62,6 +66,11 @@ Column {
                 if (input.valid)
                     validateFull()
             }
+        }
+
+        Component.onCompleted: {
+            if (isDefault)
+                field.forceActiveFocus()
         }
     }
 

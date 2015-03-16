@@ -9,8 +9,12 @@
         <file alias="FatButton.qml">qml/FatButton.qml</file>
         <file alias="UserForm.qml">qml/UserForm.qml</file>
         <file alias="InputField.qml">qml/InputField.qml</file>
+        <file alias="HorizontalSpacer.qml">qml/HorizontalSpacer.qml</file>
+        <file alias="VerticalSpacer.qml">qml/VerticalSpacer.qml</file>
+        <file alias="Link.qml">qml/Link.qml</file>
         <file alias="xregexp.js">qml/xregexp.js</file>
         <file alias="enums.js">qml/enums.js</file>
+        <file alias="utils.js">qml/utils.js</file>
     </qresource>
     <qresource prefix="/">
         <file>images/male/1_1.png</file>

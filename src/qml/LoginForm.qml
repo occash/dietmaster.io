@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.1
 import Enginio 1.0
 import Qt.labs.settings 1.0
 
+import "utils.js" as Utils
+
 Rectangle {
     id: loginForm
 
@@ -16,10 +18,8 @@ Rectangle {
     signal register()
 
     Component.onCompleted: {
-        if (autoLogin) {
-            console.log("Autologin")
+        if (autoLogin)
             loginButton.clicked()
-        }
     }
 
     function login() {
@@ -38,7 +38,7 @@ Rectangle {
         id: user
 
         user: usernameField.text
-        password: Qt.md5(passwordField.text)
+        password: passwordField.text
     }
 
     Connections {
@@ -53,7 +53,7 @@ Rectangle {
         onSessionAuthenticationError: {
             console.log("AuthenticationError", JSON.stringify(reply.data))
             client.identity = null
-            errorLabel.text = reply.data.error_description
+            errorLabel.text = Utils.capitalizeFirst(reply.data.error_description)
         }
 
         onSessionTerminated: {
@@ -67,56 +67,29 @@ Rectangle {
 
         anchors.fill: parent
 
-        Label {
-            id: usernameLabel
-
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
-
-            text: qsTr("Username")
-        }
-
-        TextField {
+        InputField {
             id: usernameField
-
             Layout.fillWidth: true
-            placeholderText: qsTr("Enter username")
+            title: qsTr("Username")
+            placeholder: qsTr("Enter username")
+            isDefault: true
 
-            onAccepted: {
+            onAccept: {
                 if (passwordField.text.length > 0 && text.length > 0)
                     login()
             }
-
-            Component.onCompleted: {
-                if (text.length == 0)
-                    forceActiveFocus()
-            }
         }
 
-        Label {
-            id: passwordLabel
-
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
-
-            text: qsTr("Password")
-        }
-
-        TextField {
+        InputField {
             id: passwordField
-
             Layout.fillWidth: true
-            placeholderText: qsTr("Enter password")
-            echoMode: TextInput.Password
+            title: qsTr("Password")
+            placeholder: qsTr("Enter password")
+            echo: TextInput.Password
 
-            onAccepted: {
+            onAccept: {
                 if (usernameField.text.length > 0 && text.length > 0)
                     login()
-            }
-
-            Component.onCompleted: {
-                if (text.length == 0 && !usernameField.activeFocus)
-                    forceActiveFocus()
             }
         }
 
@@ -138,19 +111,12 @@ Rectangle {
             onClicked: login()
         }
 
-        Text {
+        Link {
             id: registerText
-
             Layout.fillWidth: true
+            linkText: qsTr("Register")
 
-            text: "<a href=\"register\">Register</a>"
-            textFormat: Text.RichText
-            color: "blue"
-            horizontalAlignment: Text.AlignHCenter
-
-            onLinkActivated: {
-                register()
-            }
+            onActivated: register()
         }
 
         Label {
@@ -158,13 +124,10 @@ Rectangle {
             visible: client.authenticationState == Enginio.AuthenticationFailure
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
-            color: "#ff9896"
+            color: "red"
         }
 
-        Item {
-            id: spacer
-            Layout.fillHeight: true
-        }
+        VerticalSpacer {}
     }
 }
 

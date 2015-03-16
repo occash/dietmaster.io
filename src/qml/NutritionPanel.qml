@@ -3,6 +3,8 @@ import QtQuick 2.0
 Rectangle {
     id: panel
 
+    property string title: ""
+
     property real minValue
     property real maxValue
     property real currentValue
@@ -13,10 +15,28 @@ Rectangle {
     color: currentValue > maxValue ? badColor : goodColor
 
     Text {
-        id: text
-        anchors.fill: parent
+        id: value
+        anchors {
+            left: parent.left
+            top: parent.top
+            right: parent.right
+        }
+        height: parent.height / 2
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        text: currentValue + "/" + maxValue
+        text: title
+    }
+
+    Text {
+        id: nutrition
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+            right: parent.right
+        }
+        height: parent.height / 2
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        text: currentValue.toFixed(1) + "/" + maxValue.toFixed(1)
     }
 }

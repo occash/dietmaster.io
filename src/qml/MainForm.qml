@@ -32,6 +32,7 @@ Rectangle {
     property real _height: 170
     property real _weight: 80
     property real _fatpercent: 25
+    property int _lifestyle: 0
 
     function updateCurrent() {
         var currentDate = new Date()
@@ -88,8 +89,22 @@ Rectangle {
                 _height = reply.data.results[0].height
                 _weight = reply.data.results[0].weight
                 _fatpercent = reply.data.results[0].fatpercent
+                _lifestyle = reply.data.results[0].lifestyle
             }
         })
+    }
+
+    function lifestyleCoef(l) {
+        switch (l)
+        {
+        case 0: return 1.2
+        case 1: return 1.375
+        case 2: return 1.4625
+        case 3: return 1.550
+        case 4: return 1.6375
+        case 5: return 1.725
+        case 6: return 1.9
+        }
     }
 
     function harrisBenedict(g, a, w, h) {
@@ -98,7 +113,7 @@ Rectangle {
         var hc = g ? 5.003 : 1.85
         var ac = g ? 6.775 : 4.676
 
-        return fc + wc * w + wc * h - ac * a
+        return fc + (wc * w) + (hc * h) - (ac * a)
     }
 
     ColumnLayout {
@@ -120,7 +135,7 @@ Rectangle {
             Timer {
                 id: timer
                 repeat: true
-                interval: 10 * 1000
+                interval: 1000
                 triggeredOnStart: true
                 running: pages.currentItem == mainForm
 
@@ -133,7 +148,9 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                maxValue: harrisBenedict(_gender, _age, _weight, _height)
+                title: qsTr("Calories")
+                maxValue: harrisBenedict(_gender, _age, _weight, _height) *
+                          lifestyleCoef(_lifestyle)
                 currentValue: 0
             }
 
@@ -143,6 +160,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
+                title: qsTr("Protein")
                 maxValue: _weight * (1 - _fatpercent / 100.0) * 5
                 currentValue: 0
             }
@@ -153,6 +171,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
+                title: qsTr("Fat")
                 maxValue: _weight * 3
                 currentValue: 0
             }
@@ -163,6 +182,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
+                title: qsTr("Carbohydrate")
                 maxValue: _weight * (1 - _fatpercent / 100.0)
                 currentValue: 0
             }

@@ -15,7 +15,7 @@ Rectangle {
     signal next()
 
     function validateUsername(username) {
-        var illegalChars = /\W/;
+        var allowedChars = /^[-\w\._]+$/
 
         if (username.length === 0)
             return 1
@@ -23,10 +23,10 @@ Rectangle {
             return 2
         else if (username.length > 15)
             return 3
-        else if (illegalChars.test(username))
+        else if (!allowedChars.test(username))
             return 4
 
-        return 0;
+        return 0
     }
 
     function usernameError(error) {
@@ -104,7 +104,7 @@ Rectangle {
         id: user
 
         user: usernameField.text
-        password: Qt.md5(passwordField.text)
+        password: passwordField.text
     }
 
     ColumnLayout {
@@ -117,6 +117,7 @@ Rectangle {
             Layout.fillWidth: true
             title: qsTr("Username")
             placeholder: qsTr("Enter username")
+            isDefault: true
 
             function check() {
                 var res = validateUsername(text)
@@ -226,7 +227,7 @@ Rectangle {
             Layout.fillWidth: true
 
             isDefault: true
-            text: qsTr("Next")
+            text: enabled ? qsTr("Next") : qsTr("Registering")
 
             onClicked: {
                 registerError.visible = true
@@ -241,11 +242,13 @@ Rectangle {
                 if (res) {
                     var query = {
                         "username": usernameField.text,
-                        "password": Qt.md5(passwordField.text),
+                        "password": passwordField.text,
                         "email": emailField.text,
                         "firstName": firstnameField.text,
                         "lastName": lastnameField.text
                     }
+
+                    nextButton.enabled = false
 
                     var reply = client.create(query, Enginio.UserOperation)
                     reply.finished.connect(function() {
@@ -259,6 +262,8 @@ Rectangle {
                             registerError.visible = true
                             registerError.text = reply.errorString
                         }
+
+                        nextButton.enabled = true
                     })
                 }
             }
