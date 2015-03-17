@@ -5,26 +5,10 @@ import QtQuick.Layouts 1.1
 import QtQuick.LocalStorage 2.0
 import Enginio 1.0
 
-/*for(var i = 0; i < rs.rows.length; ++i) {
-    console.log(rs.rows.item(i).name)
-    var product = {
-            objectType: "objects.product",
-            group: rs.rows.item(i).group,
-            name: rs.rows.item(i).name,
-            gi: rs.rows.item(i).gi,
-            calories: rs.rows.item(i).calories,
-            protein: rs.rows.item(i).protein,
-            fat: rs.rows.item(i).fat,
-            carbohydrate: rs.rows.item(i).carbohydrate
-        };
-    client.create(product)
-}*/
-
 Rectangle {
     id: mainForm
 
     property EnginioClient client: null
-    //property var db: LocalStorage.openDatabaseSync("diet", "1.0", "diet", 1000000);
     property var currentProduct
 
     property bool _gender: true
