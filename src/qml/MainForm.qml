@@ -105,7 +105,10 @@ Rectangle {
 
         anchors.fill: parent
 
-        Component.onCompleted: updateInfo()
+        Component.onCompleted: {
+            updateCurrent()
+            updateInfo()
+        }
 
         RowLayout {
             id: rowLayout
@@ -116,7 +119,7 @@ Rectangle {
             Layout.preferredHeight: parent.width / 4
             Layout.maximumHeight: 50
 
-            Timer {
+            /*Timer {
                 id: timer
                 repeat: true
                 interval: 1000
@@ -124,7 +127,7 @@ Rectangle {
                 running: pages.currentItem == mainForm
 
                 onTriggered: updateCurrent()
-            }
+            }*/
 
             NutritionPanel {
                 id: calories
