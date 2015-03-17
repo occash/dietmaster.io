@@ -11,6 +11,8 @@
         <file alias="InputField.qml">qml/InputField.qml</file>
         <file alias="HorizontalSpacer.qml">qml/HorizontalSpacer.qml</file>
         <file alias="VerticalSpacer.qml">qml/VerticalSpacer.qml</file>
+        <file alias="CentralWindow.qml">qml/CentralWindow.qml</file>
+        <file alias="SplashScreen.qml">qml/SplashScreen.qml</file>
         <file alias="Link.qml">qml/Link.qml</file>
         <file alias="xregexp.js">qml/xregexp.js</file>
         <file alias="enums.js">qml/enums.js</file>
@@ -26,6 +28,7 @@
         <file>images/male/3_1.png</file>
         <file>images/male/3_2.png</file>
         <file>images/male/3_3.png</file>
+        <file>images/logo.jpg</file>
     </qresource>
     <qresource prefix="/i18n">
         <file alias="dietmaster_ru.qm">i18n/dietmaster_ru.qm</file>

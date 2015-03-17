@@ -53,6 +53,7 @@ Column {
         }
 
         onTextChanged: {
+            valid = true
             timer.restart()
             validate()
         }

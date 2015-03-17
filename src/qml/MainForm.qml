@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.1
 import QtQuick.LocalStorage 2.0
 import Enginio 1.0
 
+import "enums.js" as Severity
+
 Rectangle {
     id: mainForm
 
@@ -175,25 +177,15 @@ Rectangle {
             }
         }
 
-        Label {
-            id: productLabel
-
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
-
-            text: qsTr("Product")
-        }
-
-        TextField {
+        InputField {
             id: productField
-
             Layout.fillWidth: true
-            placeholderText: qsTr("Enter product name")
+            title: qsTr("Product")
+            placeholder: qsTr("Enter product name")
+            errorString: qsTr("Not found in database")
+            severity: Severity.Bad
 
-            onTextChanged: {
-                if (text.length == 0)
-                    return
-
+            function checkFull() {
                 var queryString = {
                     "objectType": "objects.product",
                     "limit": 1,
@@ -214,7 +206,7 @@ Rectangle {
                 var reply = client.fullTextSearch(q)*/
 
                 reply.finished.connect(function() {
-                    errorLabel.visible = reply.data.results.length === 0
+                    valid = reply.data.results.length > 0
                     if (reply.data.results.length > 0)
                         currentProduct = reply.data.results[0]
                     else
@@ -225,14 +217,8 @@ Rectangle {
                     }*/
                 })
             }
-        }
 
-        Label {
-            id: errorLabel
-            visible: false
-            Layout.fillWidth: true
-            text: qsTr("Not found in database")
-            color: "#ff9896"
+            onValidateFull: checkFull()
         }
 
         Label {
@@ -244,26 +230,13 @@ Rectangle {
             text: qsTr("Weight")
         }
 
-        TextField {
+        SpinBox {
             id: weidthField
-
             Layout.fillWidth: true
-            placeholderText: qsTr("Enter product weight")
-            validator: DoubleValidator {
-                bottom: 1.0
-                notation: DoubleValidator.StandardNotation
-            }
-            /*style: TextFieldStyle {
-                    textColor: "black"
-                    background: Rectangle {
-                        radius: 2
-                        //implicitWidth: 100
-                        //implicitHeight: 24
-                        border.color: "#333"
-                        border.width: 1
-                        //color: "yellow"
-                    }
-                }*/
+            decimals: 2
+            value: 100
+            minimumValue: 1
+            maximumValue: 1500
         }
 
         Button {
@@ -276,6 +249,14 @@ Rectangle {
             onClicked: {
                 console.log("Adding record")
                 if (currentProduct) {
+                    var weight = weidthField.value
+                    var coef = weight / 100.0
+
+                    calories.currentValue += currentProduct.calories * coef
+                    protein.currentValue += currentProduct.protein * coef
+                    fat.currentValue += currentProduct.fat * coef
+                    carbohydrate.currentValue += currentProduct.carbohydrate * coef
+
                     var currentDate = new Date()
                     currentDate.setHours(0, 0, 0, 0)
 
@@ -286,13 +267,13 @@ Rectangle {
                             "id": currentProduct.id,
                             "objectType": "objects.product"
                         },
-                        "weight": Number(weidthField.text)
+                        "weight": weidthField.value
                     }
                     client.create(record)
 
-                    currentProduct = ""
+                    currentProduct = null
                     productField.text = ""
-                    weidthField.text = ""
+                    weidthField.value = 100
                 }
             }
         }
