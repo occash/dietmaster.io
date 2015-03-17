@@ -2,7 +2,8 @@ TEMPLATE = app
 
 QT += qml quick widgets
 
-SOURCES += main.cpp
+SOURCES += *.cpp
+HEADERS += *.h
 
 TRANSLATIONS += \
     i18n/dietmaster_ru.ts
