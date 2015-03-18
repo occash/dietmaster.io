@@ -115,7 +115,7 @@ Rectangle {
         RowLayout {
             id: rowLayout
 
-            spacing: 0
+            spacing: -1
 
             Layout.fillWidth: true
             Layout.preferredHeight: parent.width / 4
@@ -185,6 +185,10 @@ Rectangle {
             errorString: qsTr("Not found in database")
             severity: Severity.Bad
 
+            function check() {
+                valid = true
+            }
+
             function checkFull() {
                 var queryString = {
                     "objectType": "objects.product",
@@ -218,6 +222,7 @@ Rectangle {
                 })
             }
 
+            onValidate: check()
             onValidateFull: checkFull()
         }
 

@@ -53,9 +53,11 @@ Column {
         }
 
         onTextChanged: {
-            valid = true
-            timer.restart()
             validate()
+            if (text.length > 0)
+                timer.restart()
+            else
+                timer.stop()
         }
 
         onAccepted: accept()
