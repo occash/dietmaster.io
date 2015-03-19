@@ -153,9 +153,11 @@ Rectangle {
 
                 reply.finished.connect(function() {
                     valid = reply.data.results.length > 0
-                    if (reply.data.results.length > 0)
+                    if (reply.data.results.length > 0) {
                         currentProduct = reply.data.results[0]
-                    else
+                        list.model = reply.data.results
+                        list.visible = true
+                    } else
                         currentProduct = null
 
                     /*for (var i = 0; i < reply.data.results.length; ++i) {
@@ -166,6 +168,12 @@ Rectangle {
 
             onValidate: check()
             onValidateFull: checkFull()
+        }
+
+        SuggestList {
+            id: list
+            Layout.fillWidth: true
+            visible: false
         }
 
         Label {
