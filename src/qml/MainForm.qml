@@ -13,15 +13,6 @@ Rectangle {
     property EnginioClient client: null
     property var currentProduct
 
-    UserInfo {
-        id: user
-    }
-
-    OptimalNutrient {
-        id: nutrient
-        user: user
-    }
-
     function updateInfo() {
         var queryString = {
             "objectType": "objects.userinfo",
@@ -66,10 +57,10 @@ Rectangle {
                 totalCarbohydrate += reply.data.results[i].product.carbohydrate * factor
             }
 
-            calories.currentValue = totalCalories
-            protein.currentValue = totalProtein
-            fat.currentValue = totalFat
-            carbohydrate.currentValue = totalCarbohydrate
+            board.calories = totalCalories
+            board.protein = totalProtein
+            board.fat = totalFat
+            board.carbohydrate = totalCarbohydrate
         })
     }
 
@@ -78,10 +69,10 @@ Rectangle {
             var weight = weidthField.value
             var factor = weight / 100.0
 
-            calories.currentValue += currentProduct.calories * factor
-            protein.currentValue += currentProduct.protein * factor
-            fat.currentValue += currentProduct.fat * factor
-            carbohydrate.currentValue += currentProduct.carbohydrate * factor
+            board.calories += currentProduct.calories * factor
+            board.protein += currentProduct.protein * factor
+            board.fat += currentProduct.fat * factor
+            board.carbohydrate += currentProduct.carbohydrate * factor
 
             var currentDate = new Date()
             currentDate.setHours(0, 0, 0, 0)
@@ -103,6 +94,15 @@ Rectangle {
         }
     }
 
+    UserInfo {
+        id: user
+    }
+
+    OptimalNutrient {
+        id: nutrient
+        user: user
+    }
+
     ColumnLayout {
         id: layout
 
@@ -113,58 +113,9 @@ Rectangle {
             updateInfo()
         }
 
-        RowLayout {
-            id: rowLayout
-
-            spacing: -1
-
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.width / 4
-            Layout.maximumHeight: 50
-
-            NutritionPanel {
-                id: calories
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                title: qsTr("Calories")
-                maxValue: nutrient.calories
-                currentValue: 0
-            }
-
-            NutritionPanel {
-                id: protein
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                title: qsTr("Protein")
-                maxValue: nutrient.protein
-                currentValue: 0
-            }
-
-            NutritionPanel {
-                id: fat
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                title: qsTr("Fat")
-                maxValue: nutrient.fat
-                currentValue: 0
-            }
-
-            NutritionPanel {
-                id: carbohydrate
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                title: qsTr("Carbohydrate")
-                maxValue: nutrient.carbohydrate
-                currentValue: 0
-            }
+        DashBoard {
+            id: board
+            nutrient: nutrient
         }
 
         InputField {

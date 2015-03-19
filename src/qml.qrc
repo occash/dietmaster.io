@@ -16,6 +16,7 @@
         <file alias="Link.qml">qml/Link.qml</file>
         <file alias="UserInfo.qml">qml/UserInfo.qml</file>
         <file alias="OptimalNutrient.qml">qml/OptimalNutrient.qml</file>
+        <file alias="DashBoard.qml">qml/DashBoard.qml</file>
         <file alias="xregexp.js">qml/xregexp.js</file>
         <file alias="enums.js">qml/enums.js</file>
         <file alias="utils.js">qml/utils.js</file>
