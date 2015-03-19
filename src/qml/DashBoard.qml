@@ -13,10 +13,6 @@ RowLayout {
 
     spacing: -1
 
-    Layout.fillWidth: true
-    Layout.preferredHeight: parent.width / 4
-    Layout.maximumHeight: 50
-
     NutritionPanel {
         id: caloriesPanel
 

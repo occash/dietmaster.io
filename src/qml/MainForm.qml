@@ -116,6 +116,10 @@ Rectangle {
         DashBoard {
             id: board
             nutrient: nutrient
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.width / 4
+            Layout.maximumHeight: parent.height / 10
         }
 
         InputField {
