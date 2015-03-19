@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
-import QtQuick.LocalStorage 2.0
+import QtGraphicalEffects 1.0
 import Enginio 1.0
 
 import "enums.js" as Severity
@@ -13,14 +13,29 @@ Rectangle {
     property EnginioClient client: null
     property var currentProduct
 
-    property bool _gender: true
-    property int _age: 30
-    property real _height: 170
-    property real _weight: 80
-    property real _fatpercent: 25
-    property int _lifestyle: 0
+    UserInfo {
+        id: user
+    }
 
-    function updateCurrent() {
+    OptimalNutrient {
+        id: nutrient
+        user: user
+    }
+
+    function updateInfo() {
+        var queryString = {
+            "objectType": "objects.userinfo",
+            "limit": 1,
+            "query": {}
+        }
+        var reply = client.query(queryString)
+        reply.finished.connect(function() {
+            if (!reply.isError)
+                user.update(reply.data.results[0])
+        })
+    }
+
+    function updateNutrient() {
         var currentDate = new Date()
         currentDate.setHours(0, 0, 0, 0)
 
@@ -58,48 +73,34 @@ Rectangle {
         })
     }
 
-    function updateInfo() {
-        var queryString = {
-            "objectType": "objects.userinfo",
-            "limit": 1,
-            "query": {}
-        }
-        var reply = client.query(queryString)
-        reply.finished.connect(function() {
-            if (!reply.isError) {
-                var today = new Date()
-                var birth = Date.fromLocaleString(Qt.locale(),
-                    reply.data.results[0].birth, "yyyy-MM-ddThh:mm:ss.zzzZ")
-                _gender = reply.data.results[0].gender
-                _age = today.getFullYear() - birth.getFullYear()
-                _height = reply.data.results[0].height
-                _weight = reply.data.results[0].weight
-                _fatpercent = reply.data.results[0].fatpercent
-                _lifestyle = reply.data.results[0].lifestyle
+    function record() {
+        if (currentProduct) {
+            var weight = weidthField.value
+            var factor = weight / 100.0
+
+            calories.currentValue += currentProduct.calories * factor
+            protein.currentValue += currentProduct.protein * factor
+            fat.currentValue += currentProduct.fat * factor
+            carbohydrate.currentValue += currentProduct.carbohydrate * factor
+
+            var currentDate = new Date()
+            currentDate.setHours(0, 0, 0, 0)
+
+            var record = {
+                "objectType": "objects.record",
+                "date": currentDate,
+                "product": {
+                    "id": currentProduct.id,
+                    "objectType": "objects.product"
+                },
+                "weight": weidthField.value
             }
-        })
-    }
+            client.create(record)
 
-    function lifestyleCoef(l) {
-        switch (l)
-        {
-        case 0: return 1.2
-        case 1: return 1.375
-        case 2: return 1.4625
-        case 3: return 1.550
-        case 4: return 1.6375
-        case 5: return 1.725
-        case 6: return 1.9
+            currentProduct = null
+            productField.text = ""
+            weidthField.value = 100
         }
-    }
-
-    function harrisBenedict(g, a, w, h) {
-        var fc = g ? 66.5 : 655.1
-        var wc = g ? 13.75 : 9.563
-        var hc = g ? 5.003 : 1.85
-        var ac = g ? 6.775 : 4.676
-
-        return fc + (wc * w) + (hc * h) - (ac * a)
     }
 
     ColumnLayout {
@@ -108,7 +109,7 @@ Rectangle {
         anchors.fill: parent
 
         Component.onCompleted: {
-            updateCurrent()
+            updateNutrient()
             updateInfo()
         }
 
@@ -121,16 +122,6 @@ Rectangle {
             Layout.preferredHeight: parent.width / 4
             Layout.maximumHeight: 50
 
-            /*Timer {
-                id: timer
-                repeat: true
-                interval: 1000
-                triggeredOnStart: true
-                running: pages.currentItem == mainForm
-
-                onTriggered: updateCurrent()
-            }*/
-
             NutritionPanel {
                 id: calories
 
@@ -138,8 +129,7 @@ Rectangle {
                 Layout.fillHeight: true
 
                 title: qsTr("Calories")
-                maxValue: harrisBenedict(_gender, _age, _weight, _height) *
-                          lifestyleCoef(_lifestyle)
+                maxValue: nutrient.calories
                 currentValue: 0
             }
 
@@ -150,7 +140,7 @@ Rectangle {
                 Layout.fillHeight: true
 
                 title: qsTr("Protein")
-                maxValue: _weight * (1 - _fatpercent / 100.0) * 5
+                maxValue: nutrient.protein
                 currentValue: 0
             }
 
@@ -161,7 +151,7 @@ Rectangle {
                 Layout.fillHeight: true
 
                 title: qsTr("Fat")
-                maxValue: _weight * 3
+                maxValue: nutrient.fat
                 currentValue: 0
             }
 
@@ -172,7 +162,7 @@ Rectangle {
                 Layout.fillHeight: true
 
                 title: qsTr("Carbohydrate")
-                maxValue: _weight * (1 - _fatpercent / 100.0)
+                maxValue: nutrient.carbohydrate
                 currentValue: 0
             }
         }
@@ -186,6 +176,7 @@ Rectangle {
             severity: Severity.Bad
 
             function check() {
+                currentProduct = null
                 valid = true
             }
 
@@ -251,36 +242,7 @@ Rectangle {
             isDefault: true
             text: qsTr("Add record")
 
-            onClicked: {
-                console.log("Adding record")
-                if (currentProduct) {
-                    var weight = weidthField.value
-                    var coef = weight / 100.0
-
-                    calories.currentValue += currentProduct.calories * coef
-                    protein.currentValue += currentProduct.protein * coef
-                    fat.currentValue += currentProduct.fat * coef
-                    carbohydrate.currentValue += currentProduct.carbohydrate * coef
-
-                    var currentDate = new Date()
-                    currentDate.setHours(0, 0, 0, 0)
-
-                    var record = {
-                        "objectType": "objects.record",
-                        "date": currentDate,
-                        "product": {
-                            "id": currentProduct.id,
-                            "objectType": "objects.product"
-                        },
-                        "weight": weidthField.value
-                    }
-                    client.create(record)
-
-                    currentProduct = null
-                    productField.text = ""
-                    weidthField.value = 100
-                }
-            }
+            onClicked: record()
         }
 
         Item {

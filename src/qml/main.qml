@@ -49,7 +49,7 @@ ApplicationWindow {
                 target: loader
                 properties: "opacity"
                 to: 1
-                duration: 800
+                duration: 400
             }
         }
     }
