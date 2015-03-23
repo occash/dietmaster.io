@@ -1,16 +1,17 @@
 import QtQuick 2.0
+import QtQuick.Window 2.0
 
 ListView {
     id: listView
-    height: count > 3 ? 60 : count * 20
+    height: (count > 3 ? 15 : count * 5) * Screen.pixelDensity
     clip: true
     focus: true
 
     delegate: Item {
         id: container
 
-        height: 20
-        width: 250
+        height: 5 * Screen.pixelDensity
+        width: parent.width
 
         Text {
             anchors.fill: parent

@@ -1,5 +1,7 @@
 import QtQuick 2.3
 
+import "style"
+
 Text {
     id: link
 
@@ -7,9 +9,13 @@ Text {
     signal activated()
 
     text: "<a href=\"xdm\">" + linkText + "</a>"
-    textFormat: Text.RichText
-    color: "blue"
+    textFormat: Text.StyledText
+    color: Style.textColor
+    linkColor: Style.linkColor
     horizontalAlignment: Text.AlignHCenter
 
-    onLinkActivated: activated()
+    onLinkActivated: {
+        console.log("activated")
+        activated()
+    }
 }

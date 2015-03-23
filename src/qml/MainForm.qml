@@ -5,10 +5,12 @@ import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import Enginio 1.0
 
+import "style"
 import "enums.js" as Severity
 
 Rectangle {
     id: mainForm
+    color: Style.mainColor
 
     property EnginioClient client: null
     property var currentProduct

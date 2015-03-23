@@ -18,5 +18,7 @@ include(deployment.pri)
 
 DISTFILES += \
     qml/*.qml \
-    qml/*.js
+    qml/*.js \
+    qml/style/*.qml \
+    qml/style/qmldir
 

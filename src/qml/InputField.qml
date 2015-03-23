@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 
+import "style"
 import "enums.js" as Severity
 
 Column {
@@ -26,14 +27,16 @@ Column {
     function severityColor(s) {
         switch (s)
         {
-        case Severity.Good: return "green"
-        case Severity.Normal: return "orange"
-        case Severity.Bad: return "red"
+        case Severity.Good: return Style.colorGood
+        case Severity.Normal: return Style.colorNormal
+        case Severity.Bad: return Style.colorBad
         }
     }
 
     Label {
         id: label
+
+        color: Style.textColor
 
         anchors {
             left: parent.left
@@ -46,6 +49,8 @@ Column {
 
     TextField {
         id: field
+
+        style: DMTextFieldStyle {}
 
         anchors {
             left: parent.left

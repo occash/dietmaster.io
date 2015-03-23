@@ -68,7 +68,7 @@ Rectangle {
 
         Calendar {
             id: calendar
-            visible: birthField.activeFocus
+            visible: false//birthField.activeFocus
             selectedDate: new Date(1990, 1, 1)
 
             Layout.fillWidth: true

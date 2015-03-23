@@ -1,28 +1,33 @@
 <RCC>
-    <qresource prefix="/qml">
-        <file alias="main.qml">qml/main.qml</file>
-        <file alias="LoginForm.qml">qml/LoginForm.qml</file>
-        <file alias="MainForm.qml">qml/MainForm.qml</file>
-        <file alias="NutritionPanel.qml">qml/NutritionPanel.qml</file>
-        <file alias="InfoForm.qml">qml/InfoForm.qml</file>
-        <file alias="FatPanel.qml">qml/FatPanel.qml</file>
-        <file alias="FatButton.qml">qml/FatButton.qml</file>
-        <file alias="UserForm.qml">qml/UserForm.qml</file>
-        <file alias="InputField.qml">qml/InputField.qml</file>
-        <file alias="HorizontalSpacer.qml">qml/HorizontalSpacer.qml</file>
-        <file alias="VerticalSpacer.qml">qml/VerticalSpacer.qml</file>
-        <file alias="CentralWindow.qml">qml/CentralWindow.qml</file>
-        <file alias="SplashScreen.qml">qml/SplashScreen.qml</file>
-        <file alias="Link.qml">qml/Link.qml</file>
-        <file alias="UserInfo.qml">qml/UserInfo.qml</file>
-        <file alias="OptimalNutrient.qml">qml/OptimalNutrient.qml</file>
-        <file alias="DashBoard.qml">qml/DashBoard.qml</file>
-        <file alias="SuggestList.qml">qml/SuggestList.qml</file>
-        <file alias="xregexp.js">qml/xregexp.js</file>
-        <file alias="enums.js">qml/enums.js</file>
-        <file alias="utils.js">qml/utils.js</file>
-    </qresource>
     <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/LoginForm.qml</file>
+        <file>qml/MainForm.qml</file>
+        <file>qml/NutritionPanel.qml</file>
+        <file>qml/InfoForm.qml</file>
+        <file>qml/FatPanel.qml</file>
+        <file>qml/FatButton.qml</file>
+        <file>qml/UserForm.qml</file>
+        <file>qml/InputField.qml</file>
+        <file>qml/HorizontalSpacer.qml</file>
+        <file>qml/VerticalSpacer.qml</file>
+        <file>qml/CentralWindow.qml</file>
+        <file>qml/SplashScreen.qml</file>
+        <file>qml/Link.qml</file>
+        <file>qml/UserInfo.qml</file>
+        <file>qml/OptimalNutrient.qml</file>
+        <file>qml/DashBoard.qml</file>
+        <file>qml/SuggestList.qml</file>
+        <file>qml/xregexp.js</file>
+        <file>qml/enums.js</file>
+        <file>qml/utils.js</file>
+
+        <file>qml/style/Style.qml</file>
+        <file>qml/style/DMButtonStyle.qml</file>
+        <file>qml/style/DMTextFieldStyle.qml</file>
+        <file>qml/style/DMCheckBoxStyle.qml</file>
+        <file>qml/style/qmldir</file>
+
         <file>images/male/1_1.png</file>
         <file>images/male/1_2.png</file>
         <file>images/male/1_3.png</file>

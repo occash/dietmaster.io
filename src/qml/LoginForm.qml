@@ -5,10 +5,12 @@ import QtQuick.Layouts 1.1
 import Enginio 1.0
 import Qt.labs.settings 1.0
 
+import "style"
 import "utils.js" as Utils
 
 Rectangle {
     id: loginForm
+    color: Style.mainColor
 
     property bool autoLogin: false//autologinCheck.checked
     property EnginioClient client: null
@@ -19,7 +21,7 @@ Rectangle {
 
     Component.onCompleted: {
         if (autoLogin)
-            loginButton.clicked()
+            login()
     }
 
     function login() {
@@ -97,6 +99,8 @@ Rectangle {
             id: autologinCheck
             Layout.fillWidth: true
             text: qsTr("Auto login")
+
+            style: DMCheckBoxStyle {}
         }
 
         Button {
@@ -109,6 +113,8 @@ Rectangle {
             text: client.authenticationState == Enginio.Authenticating ? qsTr("Logging in") : qsTr("Login")
 
             onClicked: login()
+
+            style: DMButtonStyle {}
         }
 
         Link {
@@ -124,7 +130,7 @@ Rectangle {
             visible: client.authenticationState == Enginio.AuthenticationFailure
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
-            color: "red"
+            color: Style.colorBad
         }
 
         VerticalSpacer {}

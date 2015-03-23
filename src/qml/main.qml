@@ -1,5 +1,8 @@
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import QtQuick.Controls 1.1
+
+import "style"
 
 ApplicationWindow {
     id: window
@@ -8,7 +11,7 @@ ApplicationWindow {
     width: 250
     height: 480
 
-    color: "white"
+    color: Style.mainColor
     title: qsTr("DietMaster")
 
     Item {
@@ -25,13 +28,14 @@ ApplicationWindow {
         Loader {
             id: loader
             anchors.fill: parent
+            anchors.margins: 1 * Screen.pixelDensity
             source: "CentralWindow.qml"
             asynchronous: true
             opacity: 0
         }
 
         states: State {
-            name: "loaded";
+            name: "loaded"
             when: loader.status == Loader.Ready
         }
 
