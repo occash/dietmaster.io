@@ -14,8 +14,5 @@ Text {
     linkColor: Style.linkColor
     horizontalAlignment: Text.AlignHCenter
 
-    onLinkActivated: {
-        console.log("activated")
-        activated()
-    }
+    onLinkActivated: activated()
 }

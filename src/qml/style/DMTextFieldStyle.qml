@@ -6,7 +6,9 @@ import "."
 
 TextFieldStyle {
     textColor: Style.textColor
+    selectedTextColor: Style.textColor
     placeholderTextColor: Style.placeholderColor
+    selectionColor: Style.selectionColor
     background: Rectangle {
         id: input
 
@@ -15,12 +17,12 @@ TextFieldStyle {
 
         color: Style.secondColor
         border.width: 1
-        border.color: control.activeFocus ? Style.borderColor : Style.secondColor
+        border.color: Style.secondColor
 
         states: [
             State {
-                name: "hovered"
-                when: control.hovered
+                name: "active"
+                when: control.hovered || control.activeFocus
                 PropertyChanges { target: input.border; color: Style.borderColor }
             }
         ]
@@ -31,7 +33,7 @@ TextFieldStyle {
                 ColorAnimation { property: "color" }
             },
             Transition {
-                to: "hovered"
+                to: "active"
                 ColorAnimation { property: "color" }
             }
         ]

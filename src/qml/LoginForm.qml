@@ -69,6 +69,8 @@ Rectangle {
 
         anchors.fill: parent
 
+        VerticalSpacer {}
+
         InputField {
             id: usernameField
             Layout.fillWidth: true

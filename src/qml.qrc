@@ -26,6 +26,7 @@
         <file>qml/style/DMButtonStyle.qml</file>
         <file>qml/style/DMTextFieldStyle.qml</file>
         <file>qml/style/DMCheckBoxStyle.qml</file>
+        <file>qml/style/DMSpinBoxStyle.qml</file>
         <file>qml/style/qmldir</file>
 
         <file>images/male/1_1.png</file>

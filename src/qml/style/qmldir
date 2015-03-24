@@ -2,3 +2,4 @@ singleton Style 1.0 Style.qml
 DMButtonStyle 1.0 DMButtonStyle.qml
 DMTextFieldStyle 1.0 DMTextFieldStyle.qml
 DMCheckBoxStyle 1.0 DMCheckBoxStyle.qml
+DMSpinBoxStyle 1.0 DMSpinBoxStyle.qml

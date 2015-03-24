@@ -12,7 +12,7 @@ CheckBoxStyle {
         implicitHeight: 4 * Screen.pixelDensity
 
         color: Style.secondColor
-        border.color: "transparent"
+        border.color: Style.secondColor
 
         Rectangle {
             visible: control.checked
@@ -23,8 +23,8 @@ CheckBoxStyle {
 
         states: [
             State {
-                name: "hovered"
-                when: control.hovered
+                name: "active"
+                when: control.hovered || control.pressed
                 PropertyChanges { target: button.border; color: Style.pressedColor }
             }
         ]
@@ -35,7 +35,7 @@ CheckBoxStyle {
                 ColorAnimation { property: "color" }
             },
             Transition {
-                to: "hovered"
+                to: "active"
                 ColorAnimation { property: "color" }
             }
         ]

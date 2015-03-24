@@ -187,6 +187,7 @@ Rectangle {
 
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
+            color: Style.textColor
 
             text: qsTr("Weight")
         }
@@ -198,6 +199,7 @@ Rectangle {
             value: 100
             minimumValue: 1
             maximumValue: 1500
+            style: DMSpinBoxStyle {}
         }
 
         Button {
@@ -206,6 +208,7 @@ Rectangle {
             Layout.fillWidth: true
             isDefault: true
             text: qsTr("Add record")
+            style: DMButtonStyle {}
 
             onClicked: record()
         }
