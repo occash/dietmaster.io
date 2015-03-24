@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.1
 import Enginio 1.0
 import Qt.labs.settings 1.0
 
+import "style"
 import "xregexp.js" as XRegExp
 import "enums.js" as Severity
 
@@ -13,6 +14,8 @@ Rectangle {
     property EnginioClient client: null
 
     signal next()
+
+    color: Style.mainColor
 
     function validateUsername(username) {
         var allowedChars = /^[-\w\._]+$/
@@ -228,6 +231,7 @@ Rectangle {
 
             isDefault: true
             text: enabled ? qsTr("Next") : qsTr("Registering")
+            style: DMButtonStyle {}
 
             onClicked: {
                 registerError.visible = true
