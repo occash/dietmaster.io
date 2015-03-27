@@ -1,84 +1,64 @@
 import QtQuick 2.3
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
-import Enginio 1.0
 
 import "style"
 
-Item {
-    id: centralWindow
+StackView {
+    id: pages
+    initialItem: loginForm
 
-    EnginioClient {
-        id: enginio
+    RemoteAccess {
+        id: remoteAccess
 
-        backendId: "550310bdc8e85c26e701e405"
-        onFinished: console.log("Engino request finished. " + JSON.stringify(reply.data))
-        onError: console.log("Enginio error " + reply.errorCode + ": " + JSON.stringify(reply.data))
+        onLoggedin: {
+            var queryString = {
+                "objectType": "objects.userinfo",
+                "query": {}
+            }
+            var reply = query(queryString)
+            reply.finished.connect(function() {
+                if (!reply.isError) {
+                    if (reply.data.results.length > 0)
+                        pages.push(mainForm)
+                    else
+                        pages.push(infoForm)
+                }
+            })
+        }
     }
 
-    StackView {
-        id: pages
-        initialItem: loginForm
+    LoginForm {
+        id: loginForm
 
-        Component {
-            id: loginForm
+        //LoginForm {
+            client: remoteAccess
+            onRegister: pages.push(userForm)
+        //}
+    }
 
-            LoginForm {
-                //id: loginForm
-                client: enginio
+    Component {
+        id: userForm
 
-                onRegister: pages.push(userForm)
-                onLogedin: {
-                    var queryString = {
-                        "objectType": "objects.userinfo",
-                        "query": {}
-                    }
-                    var reply = client.query(queryString)
-                    reply.finished.connect(function() {
-                        if (!reply.isError) {
-                            if (reply.data.results.length > 0)
-                                pages.push(mainForm)
-                            else
-                                pages.push(infoForm)
-                        }
-                    })
-                }
-            }
+        UserForm {
+            client: remoteAccess
         }
+    }
 
-        Component {
-            id: userForm
+    Component {
+        id: infoForm
 
-            UserForm {
-                //id: userForm
-                client: enginio
-
-                //onNext: pages.push(infoForm)
-            }
+        InfoForm {
+            client: remoteAccess
+            onNext: pages.push(mainForm)
         }
+    }
 
-        Component {
-            id: infoForm
+    Component {
+        id: mainForm
 
-            InfoForm {
-                //id: infoForm
-                client: enginio
-
-                onNext: {
-                    pages.clear()
-                    pages.push(loginForm)
-                    pages.push(mainForm)
-                }
-            }
-        }
-
-        Component {
-            id: mainForm
-
-            MainForm {
-                //id: mainForm
-                client: enginio
-            }
+        MainForm {
+            client: remoteAccess
         }
     }
 }

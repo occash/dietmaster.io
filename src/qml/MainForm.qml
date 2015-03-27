@@ -2,17 +2,15 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
-import QtGraphicalEffects 1.0
-import Enginio 1.0
 
 import "style"
-import "enums.js" as Severity
+import "severity.js" as Severity
 
 Rectangle {
     id: mainForm
     color: Style.mainColor
 
-    property EnginioClient client: null
+    property RemoteAccess client: null
     property var currentProduct
 
     function updateInfo() {
@@ -91,6 +89,7 @@ Rectangle {
             client.create(record)
 
             currentProduct = null
+            productField.selected = true
             productField.text = ""
             weidthField.value = 100
         }
@@ -121,7 +120,7 @@ Rectangle {
 
             Layout.fillWidth: true
             Layout.preferredHeight: parent.width / 4
-            Layout.maximumHeight: parent.height / 10
+            Layout.maximumHeight: parent.height / 9
         }
 
         InputField {
@@ -129,57 +128,48 @@ Rectangle {
             Layout.fillWidth: true
             title: qsTr("Product")
             placeholder: qsTr("Enter product name")
-            errorString: qsTr("Not found in database")
-            severity: Severity.Bad
+
+            property bool selected: false
 
             function check() {
+                if (selected) {
+                    selected = false
+                    return
+                }
+
                 currentProduct = null
-                valid = true
-            }
 
-            function checkFull() {
-                var queryString = {
-                    "objectType": "objects.product",
-                    "limit": 1,
-                    "query": {
-                        "name": text
-                    }
-                }
-                var reply = client.query(queryString)
-
-                /*var q = {
-                    "objectTypes": [0, "objects.product"],
-                    "search": {
-                        "phrase": text + "*",
-                        "properties": ["objectType"]
-                    },
-                    "limit": 10
-                }
-                var reply = client.fullTextSearch(q)*/
-
+                var reply = client.search(text)
                 reply.finished.connect(function() {
-                    valid = reply.data.results.length > 0
                     if (reply.data.results.length > 0) {
-                        currentProduct = reply.data.results[0]
                         list.model = reply.data.results
                         list.visible = true
-                    } else
-                        currentProduct = null
-
-                    /*for (var i = 0; i < reply.data.results.length; ++i) {
-                        console.log(JSON.stringify(reply.data.results))
-                    }*/
+                    }
                 })
             }
 
             onValidate: check()
-            onValidateFull: checkFull()
+            onAccept: list.select(list.currentIndex)
+
+            Keys.onPressed: {
+                if (event.key === Qt.Key_Down)
+                    list.incrementCurrentIndex()
+                else if (event.key === Qt.Key_Up)
+                    list.decrementCurrentIndex()
+            }
         }
 
         SuggestList {
             id: list
             Layout.fillWidth: true
             visible: false
+
+            onSelected: {
+                currentProduct = data
+                visible = false
+                productField.selected = true
+                productField.text = data.name
+            }
         }
 
         Label {
@@ -209,6 +199,7 @@ Rectangle {
             isDefault: true
             text: qsTr("Add record")
             style: DMButtonStyle {}
+            enabled: currentProduct !== null
 
             onClicked: record()
         }

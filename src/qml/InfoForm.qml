@@ -1,12 +1,14 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
-import Enginio 1.0
+
+import "style"
 
 Rectangle {
     id: infoForm
+    color: Style.mainColor
 
-    property EnginioClient client: null
+    property RemoteAccess client: null
 
     signal next()
 
@@ -22,6 +24,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Gender")
+            color: Style.textColor
         }
 
         RowLayout {
@@ -37,6 +40,7 @@ Rectangle {
                 text: qsTr("Male")
                 checked: true
                 exclusiveGroup: genderGroup
+                style: DMRadioButtonStyle {}
             }
             RadioButton {
                 id: femaleRadio
@@ -44,6 +48,7 @@ Rectangle {
                 Layout.fillWidth: true
                 text: qsTr("Female")
                 exclusiveGroup: genderGroup
+                style: DMRadioButtonStyle {}
             }
         }
 
@@ -54,16 +59,15 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Date of birth")
+            color: Style.textColor
         }
 
         TextField {
             id: birthField
 
             Layout.fillWidth: true
-
-            /*placeholderText: qsTr("Enter date of birth")
-            inputMask: "0000-00-00"*/
             text: Qt.formatDate(calendar.selectedDate)
+            style: DMTextFieldStyle {}
         }
 
         Calendar {
@@ -81,6 +85,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Weight")
+            color: Style.mainColor
         }
 
         SpinBox {
@@ -92,6 +97,7 @@ Rectangle {
             maximumValue: 300
 
             value: maleRadio.checked ? 75 : 50
+            style: DMSpinBoxStyle {}
         }
 
         Label {
@@ -101,6 +107,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Height")
+            color: Style.mainColor
         }
 
         SpinBox {
@@ -112,6 +119,7 @@ Rectangle {
             maximumValue: 300
 
             value: maleRadio.checked ? 175 : 160
+            style: DMSpinBoxStyle {}
         }
 
         Label {
@@ -121,6 +129,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Body fat percentage")
+            color: Style.mainColor
         }
 
         SpinBox {
@@ -132,6 +141,7 @@ Rectangle {
             maximumValue: 100
 
             value: fatPanel.fatPercentage
+            style: DMSpinBoxStyle {}
         }
 
         FatPanel {
@@ -148,12 +158,14 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Lifestyle")
+            color: Style.mainColor
         }
 
         ComboBox {
             id: lifestyleCombo
 
             Layout.fillWidth: true
+            style: DMComboBoxStyle {}
 
             model: ListModel {
                 ListElement { text: "No fitness" }
@@ -173,6 +185,7 @@ Rectangle {
 
             isDefault: true
             text: qsTr("Send")
+            style: DMButtonStyle {}
 
             onClicked: {
                 var birth = Date.fromLocaleDateString(Qt.locale(), birthField.text, Locale.ShortFormat)

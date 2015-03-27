@@ -1,7 +1,7 @@
 import QtQuick 2.3
 import QtQuick.Layouts 1.1
 
-RowLayout {
+Row {
     id: rowLayout
 
     property OptimalNutrient nutrient: null
@@ -16,8 +16,8 @@ RowLayout {
     NutritionPanel {
         id: caloriesPanel
 
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        width: parent.width / 4
+        height: parent.height
 
         title: qsTr("Calories")
         maxValue: nutrient.calories
@@ -27,8 +27,8 @@ RowLayout {
     NutritionPanel {
         id: proteinPanel
 
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        width: parent.width / 4
+        height: parent.height
 
         title: qsTr("Protein")
         maxValue: nutrient.protein
@@ -38,8 +38,8 @@ RowLayout {
     NutritionPanel {
         id: fatPanel
 
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        width: parent.width / 4
+        height: parent.height
 
         title: qsTr("Fat")
         maxValue: nutrient.fat
@@ -49,8 +49,8 @@ RowLayout {
     NutritionPanel {
         id: carbohydratePanel
 
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        width: parent.width / 4
+        height: parent.height
 
         title: qsTr("Carbohydrate")
         maxValue: nutrient.carbohydrate

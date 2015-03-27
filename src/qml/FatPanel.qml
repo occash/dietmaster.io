@@ -63,6 +63,7 @@ Grid {
             percent: value
             exclusiveGroup: group
             width: fatPanel.width / 3
+            height: fatPanel.width / 4
         }
     }
 

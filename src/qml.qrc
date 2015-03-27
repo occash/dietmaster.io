@@ -18,10 +18,11 @@
         <file>qml/OptimalNutrient.qml</file>
         <file>qml/DashBoard.qml</file>
         <file>qml/SuggestList.qml</file>
+        <file>qml/RemoteAccess.qml</file>
         <file>qml/xregexp.js</file>
-        <file>qml/enums.js</file>
+        <file>qml/severity.js</file>
+        <file>qml/operation.js</file>
         <file>qml/utils.js</file>
-
         <file>qml/style/Style.qml</file>
         <file>qml/style/DMButtonStyle.qml</file>
         <file>qml/style/DMTextFieldStyle.qml</file>

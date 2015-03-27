@@ -3,7 +3,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 
 import "style"
-import "enums.js" as Severity
+import "severity.js" as Severity
 
 Column {
     id: input
@@ -50,6 +50,7 @@ Column {
     TextField {
         id: field
 
+        inputMethodHints: Qt.ImhNoPredictiveText
         style: DMTextFieldStyle {}
 
         anchors {
