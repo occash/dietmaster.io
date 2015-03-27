@@ -27,8 +27,9 @@
         <file>qml/style/DMTextFieldStyle.qml</file>
         <file>qml/style/DMCheckBoxStyle.qml</file>
         <file>qml/style/DMSpinBoxStyle.qml</file>
+        <file>qml/style/DMRadioButtonStyle.qml</file>
+        <file>qml/style/DMComboBoxStyle.qml</file>
         <file>qml/style/qmldir</file>
-
         <file>images/male/1_1.png</file>
         <file>images/male/1_2.png</file>
         <file>images/male/1_3.png</file>
@@ -39,6 +40,8 @@
         <file>images/male/3_2.png</file>
         <file>images/male/3_3.png</file>
         <file>images/logo.jpg</file>
+        <file>images/icons/arrow_down.png</file>
+        <file>images/icons/arrow_up.png</file>
     </qresource>
     <qresource prefix="/i18n">
         <file alias="dietmaster_ru.qm">i18n/dietmaster_ru.qm</file>

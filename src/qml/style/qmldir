@@ -3,3 +3,5 @@ DMButtonStyle 1.0 DMButtonStyle.qml
 DMTextFieldStyle 1.0 DMTextFieldStyle.qml
 DMCheckBoxStyle 1.0 DMCheckBoxStyle.qml
 DMSpinBoxStyle 1.0 DMSpinBoxStyle.qml
+DMRadioButtonStyle 1.0 DMRadioButtonStyle.qml
+DMComboBoxStyle 1.0 DMComboBoxStyle.qml
