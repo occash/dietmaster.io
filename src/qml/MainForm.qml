@@ -128,8 +128,18 @@ Rectangle {
             Layout.fillWidth: true
             title: qsTr("Product")
             placeholder: qsTr("Enter product name")
+            isDefault: true
 
             property bool selected: false
+            property var reply: null
+
+            function update() {
+                if (reply.data.results.length > 0) {
+                    list.model = reply.data.results
+                    list.visible = true
+                } else
+                    list.visible = false
+            }
 
             function check() {
                 if (selected) {
@@ -139,13 +149,16 @@ Rectangle {
 
                 currentProduct = null
 
-                var reply = client.search(text)
-                reply.finished.connect(function() {
-                    if (reply.data.results.length > 0) {
-                        list.model = reply.data.results
-                        list.visible = true
-                    }
-                })
+                if (reply)
+                    reply.finished.disconnect(update)
+
+                if (text.length === 0) {
+                    list.visible = false
+                    return
+                }
+
+                reply = client.search(text)
+                reply.finished.connect(update)
             }
 
             onValidate: check()
@@ -161,8 +174,10 @@ Rectangle {
 
         SuggestList {
             id: list
-            Layout.fillWidth: true
             visible: false
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: height
 
             onSelected: {
                 currentProduct = data
