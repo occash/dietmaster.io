@@ -9,11 +9,21 @@ ListView {
     clip: true
     focus: true
 
+    signal selected(var data)
+
+    function select(index) {
+        listView.currentIndex = index
+        listView.visible = false
+        selected(listView.currentItem.delegateData)
+    }
+
     delegate: Item {
         id: container
 
         height: 5 * Screen.pixelDensity
         width: parent.width
+
+        property var delegateData: modelData
 
         Text {
             anchors.fill: parent
@@ -25,10 +35,7 @@ ListView {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: {
-                container.ListView.view.currentIndex = index
-                container.ListView.view.visible = false
-            }
+            onClicked: select(index)
         }
     }
     highlight: Rectangle { color: Style.selectionColor }

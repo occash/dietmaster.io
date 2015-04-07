@@ -1,5 +1,7 @@
 import QtQuick 2.0
 
+import "style"
+
 Rectangle {
     id: panel
 
@@ -13,6 +15,7 @@ Rectangle {
     property color badColor: "#ff9896"
 
     color: currentValue > maxValue ? badColor : goodColor
+    border.color: Style.secondColor
 
     Text {
         id: value
@@ -25,6 +28,9 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         text: title
+        elide: Text.ElideRight
+        color: Style.secondColor
+        font.weight: Font.DemiBold
     }
 
     Text {
@@ -37,6 +43,8 @@ Rectangle {
         height: parent.height / 2
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        text: currentValue.toFixed(1) + "/" + maxValue.toFixed(1)
+        text: (maxValue - currentValue).toFixed(1)
+        color: Style.secondColor
+        font.weight: Font.DemiBold
     }
 }

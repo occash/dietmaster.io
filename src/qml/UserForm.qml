@@ -1,21 +1,17 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
-import Enginio 1.0
-import Qt.labs.settings 1.0
 
 import "style"
 import "xregexp.js" as XRegExp
-import "enums.js" as Severity
+import "severity.js" as Severity
+import "operation.js" as Operation
 
 Rectangle {
     id: userForm
-
-    property EnginioClient client: null
-
-    signal next()
-
     color: Style.mainColor
+
+    property RemoteAccess client: null
 
     function validateUsername(username) {
         var allowedChars = /^[-\w\._]+$/
@@ -95,21 +91,6 @@ Rectangle {
         return name.length > 0 && re.test(name)
     }
 
-    Settings {
-        id: config
-
-        property string username
-        property string password
-        property bool autoLogin
-    }
-
-    EnginioOAuth2Authentication {
-        id: user
-
-        user: usernameField.text
-        password: passwordField.text
-    }
-
     ColumnLayout {
         id: layout
 
@@ -132,7 +113,7 @@ Rectangle {
 
             function checkFull() {
                 var queryString = { "query": { "username": text } }
-                var reply = client.query(queryString, Enginio.UserOperation)
+                var reply = client.query(queryString, Operation.User)
                 reply.finished.connect(function() {
                     valid = reply.data.results.length === 0
                     severity = valid ? Severity.Good : Severity.Bad
@@ -179,7 +160,7 @@ Rectangle {
 
             function checkFull() {
                 var queryString = { "query": { "email": text } }
-                var reply = client.query(queryString, Enginio.UserOperation)
+                var reply = client.query(queryString, Operation.User)
                 reply.finished.connect(function() {
                     valid = reply.data.results.length === 0
                     severity = valid ? Severity.Good : Severity.Bad
@@ -254,14 +235,13 @@ Rectangle {
 
                     nextButton.enabled = false
 
-                    var reply = client.create(query, Enginio.UserOperation)
+                    var reply = client.create(query, Operation.User)
                     reply.finished.connect(function() {
                         if (!reply.isError) {
-                            config.username = usernameField.text
-                            config.password = passwordField.text
-                            config.autoLogin = true
-                            client.identity = user
-                            next()
+                            client.username = usernameField.text
+                            client.password = passwordField.text
+                            client.autoLogin = true
+                            client.login()
                         } else {
                             registerError.visible = true
                             registerError.text = reply.errorString

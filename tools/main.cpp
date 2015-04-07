@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <QEventLoop>
+
 
 int main(int argc, char *argv[])
 {
@@ -14,7 +16,7 @@ int main(int argc, char *argv[])
     EnginioClient client;
     client.setBackendId("550310bdc8e85c26e701e405");
 
-    QJsonArray types;
+    /*QJsonArray types;
     types.append("objects.product");
 
     QJsonObject search;
@@ -32,67 +34,80 @@ int main(int argc, char *argv[])
         else
             qDebug() << "The object was created" << reply->data();
         reply->deleteLater();
-    });
+    });*/
 
-    /*QFile file("W:/projects/DietTools/data.csv");
+    QFile file("D:/projects/DietMaster/tools/data.csv");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-       return 1;*/
+       return 1;
 
-    /*QSet<QString> groups;
+    QMap<QString, QString> groups;
     QTextStream in(&file);
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList values = line.split(';');
-        groups.insert(values.at(0));
+        QString name = values.at(0);
+        name = name.simplified();
+        name[0] = name[0].toUpper();
+        groups.insert(name, "");
     }
 
-    foreach (QString group, groups) {
+    for (QString group : groups.keys()) {
+        qDebug() << group;
         QJsonObject object;
         object["objectType"] = "objects.group";
         object["name"] = group;
         EnginioReply *reply = client.create(object);
-        QObject::connect(reply, &EnginioReply::finished, [](EnginioReply *reply) {
-            if (reply->isError())
-                qDebug() << "Ooops! Something went wrong!" << reply->data();
-            else
-                qDebug() << "The object was created" << reply->data();
-            reply->deleteLater();
-        });
-    }*/
 
-    /*QMap<QString, QString> groupMap;
-    groupMap["Молочные продукты"] = "5507f9c2c8e85c1ab802a534";
-    groupMap["Напитки"] = "5507f9c2c8e85c1ab802a531";
-    groupMap["Прочее"] = "5507f9c2c8e85c1ab802a52e";
-    groupMap["Зерновые продукты и изделия из муки"] = "5507f9c2c8e85c1ab802a52b";
-    groupMap["Супы"] = "5507f9c2c8e85c1ab802a528";
-    groupMap["Рыба и морепродукты"] = "5507f9c2c8e85c42e5048594";
-    groupMap["Блюда"] = "5507f9c1c8e85c1ab802a525";
-    groupMap["Жиры, масла и соусы"] = "5507f9c1c8e85c1ab802a51c";
-    groupMap["Фрукты и ягоды"] = "5507f9c1c8e85c1ab802a51b";
-    groupMap["Сладости"] = "5507f9c1c8e85c1ab802a517";
-    groupMap["Мясные продукты"] = "5507f9c1c8e85c42e504858b";
-    groupMap["Овощи"] = "5507f9c1c8e85c42e5048588";
+        QEventLoop loop;
+        QObject::connect(reply, SIGNAL(finished(EnginioReply *)), &loop, SLOT(quit()));
+        loop.exec();
+
+        if (reply->isError())
+            qDebug() << "Ooops! Something went wrong!" << reply->data();
+        else
+        {
+            QJsonObject data = reply->data();
+            QJsonDocument doc(data);
+            qDebug() << doc.toJson();
+            QString id = data["id"].toString();
+            qDebug() << "Group was created" << group << id;
+            groups.insert(group, id);
+        }
+        reply->deleteLater();
+
+        /*QObject::connect(reply, &EnginioReply::finished, [&](EnginioReply *reply) {
+            
+        });*/
+    }
 
     //Группа продуктов;Наименоване продукта;Гликемический индекс;Ккал;Белки;Жиры;Углеводы
-    QTextStream in(&file);
+    in.seek(0);
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList values = line.split(';');
 
+        QString name = values.at(0);
+        name = name.simplified();
+        name[0] = name[0].toUpper();
+
+        QString groupId = groups.value(name, "");
+        qDebug() << "Test" << groupId;
+
         QJsonObject group;
         group["objectType"] = "objects.group";
-        group["id"] = groupMap.value(values.at(0), "Прочее");
+        group["id"] = groups.value(name, "");
+
+        qDebug() << group["id"];
 
         QJsonObject object;
         object["objectType"] = "objects.product";
-        object["name"] = values.at(1);
+        object["name"] = values.at(1).simplified();
         object["group"] = group;
-        object["gi"] =  values.at(2).toDouble();
-        object["calories"] = values.at(3).toDouble();
-        object["protein"] = values.at(4).toDouble();
-        object["fat"] = values.at(5).toDouble();
-        object["carbohydrate"] = values.at(6).toDouble();
+        object["gi"] = 0;//values.at(2).toDouble();
+        object["calories"] = values.at(5).toDouble();
+        object["protein"] = values.at(2).toDouble();
+        object["fat"] = values.at(3).toDouble();
+        object["carbohydrate"] = values.at(4).toDouble();
 
         EnginioReply *reply = client.create(object);
         QObject::connect(reply, &EnginioReply::finished, [](EnginioReply *reply) {
@@ -102,17 +117,7 @@ int main(int argc, char *argv[])
                 qDebug() << "The object was created" << reply->data();
             reply->deleteLater();
         });
-    }*/
-
-    /*QJsonObject query;
-    query["objectType"] = "objects.product";
-    query["query"] = QJsonObject();
-
-    EnginioModel model;
-    model.setClient(&client);
-    model.setQuery(query);
-
-    qDebug() << "Model created";*/
+    }
 
     return a.exec();
 }

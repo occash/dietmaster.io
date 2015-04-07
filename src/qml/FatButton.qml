@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 
+import "style"
+
 Rectangle {
     id: fatButton
 
@@ -10,6 +12,8 @@ Rectangle {
 
     implicitWidth: fatImage.implicitWidth
     implicitHeight: fatImage.implicitHeight
+
+    color: Style.secondColor
 
     property string image: ""
     property real percent: 0.0
@@ -21,15 +25,15 @@ Rectangle {
             exclusiveGroup.bindCheckable(fatButton)
     }
 
-    border.width: 1
-    border.color: (checked || mouseArea.containsMouse) ? "#2ca02c" : "transparent"
+    border.width: 2
+    border.color: (checked || mouseArea.containsMouse) ? Style.selectionColor : Style.secondColor
 
     Image {
         id: fatImage
         anchors.fill: parent
         anchors.margins: 1
         source: "qrc:/images/male/" + image + ".png"
-        fillMode: Image.PreserveAspectFit
+        fillMode: Image.PreserveAspectCrop
         smooth: true
     }
 

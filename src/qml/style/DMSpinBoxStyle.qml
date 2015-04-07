@@ -37,5 +37,27 @@ SpinBoxStyle {
             }
         ]
     }
+    incrementControl: Item {
+        implicitWidth: padding.right
+        Image {
+            source: "qrc:/images/icons/arrow_up.png"
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: 1
+            //opacity: control.enabled ? (styleData.upPressed ? 1 : 0.6) : 0.5
+            width: 3 * Screen.pixelDensity
+            fillMode: Image.PreserveAspectFit
+        }
+    }
+    decrementControl: Item {
+        implicitWidth: padding.right
+        Image {
+            source: "qrc:/images/icons/arrow_down.png"
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: -2
+            //opacity: control.enabled ? (styleData.downPressed ? 1 : 0.6) : 0.5
+            width: 3 * Screen.pixelDensity
+            fillMode: Image.PreserveAspectFit
+        }
+    }
 }
 

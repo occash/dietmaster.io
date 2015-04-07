@@ -1,6 +1,12 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QtQml>
+#include <QQmlContext>
+#include <QQmlEngine>
 #include <QTranslator>
+
+#include "enginiosearch.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +19,8 @@ int main(int argc, char *argv[])
     QTranslator translator;
     if (translator.load(QLocale(), ":/i18n/dietmaster_"))
         app.installTranslator(&translator);
+
+    qmlRegisterType<EnginioSearch>("Search", 1, 0, "EnginioSearch");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
