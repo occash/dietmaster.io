@@ -10,8 +10,8 @@ Text {
 
     text: "<a href=\"xdm\">" + linkText + "</a>"
     textFormat: Text.StyledText
-    color: Style.textColor
-    linkColor: Style.linkColor
+    color: Style.dark.text
+    linkColor: Style.dark.highlight
     horizontalAlignment: Text.AlignHCenter
 
     onLinkActivated: activated()

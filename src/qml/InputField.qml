@@ -14,6 +14,9 @@ Column {
     property int severity: 0
     property bool isDefault: false
 
+    property bool dark: true
+    property DMTheme palette: dark ? Style.dark : Style.light
+
     property alias title: label.text
     property alias text: field.text
     property alias placeholder: field.placeholderText
@@ -36,7 +39,8 @@ Column {
     Label {
         id: label
 
-        color: Style.textColor
+        color: palette.text
+        visible: text.length > 0
 
         anchors {
             left: parent.left
@@ -51,7 +55,7 @@ Column {
         id: field
 
         inputMethodHints: Qt.ImhNoPredictiveText
-        style: DMTextFieldStyle {}
+        style: DMTextFieldStyle { dark: false }
 
         anchors {
             left: parent.left

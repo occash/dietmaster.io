@@ -5,25 +5,28 @@ import QtQuick.Controls.Styles 1.2
 import "."
 
 TextFieldStyle {
-    textColor: Style.textColor
-    selectedTextColor: Style.textColor
-    placeholderTextColor: Style.placeholderColor
-    selectionColor: Style.selectionColor
+    property bool dark: true
+    property DMTheme palette: dark ? Style.dark : Style.light
+
+    textColor: palette.text
+    selectedTextColor: palette.text
+    placeholderTextColor: palette.mid
+    selectionColor: palette.highlight
     background: Rectangle {
         id: input
 
         implicitWidth: 20 * Screen.pixelDensity
         implicitHeight: 6 * Screen.pixelDensity
 
-        color: Style.secondColor
+        color: palette.alternateBase
         border.width: 1
-        border.color: Style.secondColor
+        border.color: palette.dark
 
         states: [
             State {
                 name: "active"
                 when: control.hovered || control.activeFocus
-                PropertyChanges { target: input.border; color: Style.borderColor }
+                PropertyChanges { target: input.border; color: palette.highlight }
             }
         ]
 

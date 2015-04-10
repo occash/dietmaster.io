@@ -11,7 +11,7 @@ ApplicationWindow {
     width: 250
     height: 480
 
-    color: Style.mainColor
+    color: Style.dark.base
     title: qsTr("DietMaster")
 
     Item {
@@ -25,7 +25,7 @@ ApplicationWindow {
             text: qsTr("DietMaster")
         }
 
-        Loader {
+        /*Loader {
             id: loader
             anchors.fill: parent
             anchors.margins: 1 * Screen.pixelDensity
@@ -55,6 +55,6 @@ ApplicationWindow {
                 to: 1
                 duration: 400
             }
-        }
+        }*/
     }
 }

@@ -1,7 +1,10 @@
-singleton Style 1.0 Style.qml
+singleton Style 1.0 DMStyle.qml
 DMButtonStyle 1.0 DMButtonStyle.qml
 DMTextFieldStyle 1.0 DMTextFieldStyle.qml
 DMCheckBoxStyle 1.0 DMCheckBoxStyle.qml
 DMSpinBoxStyle 1.0 DMSpinBoxStyle.qml
 DMRadioButtonStyle 1.0 DMRadioButtonStyle.qml
 DMComboBoxStyle 1.0 DMComboBoxStyle.qml
+DMTheme 1.0 DMTheme.qml
+DMDarkTheme 1.0 DMDarkTheme.qml
+DMLightTheme 1.0 DMLightTheme.qml

@@ -104,124 +104,137 @@ Rectangle {
         user: user
     }
 
-    ColumnLayout {
-        id: layout
+    DashBoard {
+        id: board
+        nutrient: nutrient
 
-        anchors.fill: parent
+        anchors {
+            left: parent.left
+            top: parent.top
+            right: parent.right
+        }
+        height: parent.width / 5 //parent.height / 9
+    }
 
-        Component.onCompleted: {
-            updateNutrient()
-            updateInfo()
+    Flickable {
+        id: flickable
+
+        anchors {
+            left: parent.left
+            top: board.bottom
+            right: parent.right
+            bottom: parent.bottom
         }
 
-        DashBoard {
-            id: board
-            nutrient: nutrient
+        ColumnLayout {
+            id: layout
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.width / 4
-            Layout.maximumHeight: parent.height / 9
-        }
+            anchors.fill: parent
 
-        InputField {
-            id: productField
-            Layout.fillWidth: true
-            title: qsTr("Product")
-            placeholder: qsTr("Enter product name")
-            isDefault: true
-
-            property bool selected: false
-            property var reply: null
-
-            function update() {
-                if (reply.data.results.length > 0) {
-                    list.model = reply.data.results
-                    list.visible = true
-                } else
-                    list.visible = false
+            Component.onCompleted: {
+                updateNutrient()
+                updateInfo()
             }
 
-            function check() {
-                if (selected) {
-                    selected = false
-                    return
+            InputField {
+                id: productField
+                Layout.fillWidth: true
+                title: qsTr("Product")
+                placeholder: qsTr("Enter product name")
+                isDefault: true
+
+                property bool selected: false
+                property var reply: null
+
+                function update() {
+                    if (reply.data.results.length > 0) {
+                        list.model = reply.data.results
+                        list.visible = true
+                    } else
+                        list.visible = false
                 }
 
-                currentProduct = null
+                function check() {
+                    if (selected) {
+                        selected = false
+                        return
+                    }
 
-                if (reply)
-                    reply.finished.disconnect(update)
+                    currentProduct = null
 
-                if (text.length === 0) {
-                    list.visible = false
-                    return
+                    if (reply)
+                        reply.finished.disconnect(update)
+
+                    if (text.length === 0) {
+                        list.visible = false
+                        return
+                    }
+
+                    reply = client.search(text)
+                    reply.finished.connect(update)
                 }
 
-                reply = client.search(text)
-                reply.finished.connect(update)
+                onValidate: check()
+                onAccept: list.select(list.currentIndex)
+
+                Keys.onPressed: {
+                    if (event.key === Qt.Key_Down)
+                        list.incrementCurrentIndex()
+                    else if (event.key === Qt.Key_Up)
+                        list.decrementCurrentIndex()
+                }
             }
 
-            onValidate: check()
-            onAccept: list.select(list.currentIndex)
+            SuggestList {
+                id: list
+                visible: false
 
-            Keys.onPressed: {
-                if (event.key === Qt.Key_Down)
-                    list.incrementCurrentIndex()
-                else if (event.key === Qt.Key_Up)
-                    list.decrementCurrentIndex()
+                Layout.fillWidth: true
+                Layout.preferredHeight: height
+
+                onSelected: {
+                    currentProduct = data
+                    visible = false
+                    productField.selected = true
+                    productField.text = data.name
+                }
             }
-        }
 
-        SuggestList {
-            id: list
-            visible: false
+            Label {
+                id: weigthLabel
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: height
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                color: Style.textColor
 
-            onSelected: {
-                currentProduct = data
-                visible = false
-                productField.selected = true
-                productField.text = data.name
+                text: qsTr("Weight")
             }
-        }
 
-        Label {
-            id: weigthLabel
+            SpinBox {
+                id: weidthField
+                Layout.fillWidth: true
+                decimals: 2
+                value: 100
+                minimumValue: 1
+                maximumValue: 1500
+                style: DMSpinBoxStyle {}
+            }
 
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
-            color: Style.textColor
+            Button {
+                id: toolButton
 
-            text: qsTr("Weight")
-        }
+                Layout.fillWidth: true
+                isDefault: true
+                text: qsTr("Add record")
+                style: DMButtonStyle {}
+                enabled: currentProduct !== null
 
-        SpinBox {
-            id: weidthField
-            Layout.fillWidth: true
-            decimals: 2
-            value: 100
-            minimumValue: 1
-            maximumValue: 1500
-            style: DMSpinBoxStyle {}
-        }
+                onClicked: record()
+            }
 
-        Button {
-            id: toolButton
-
-            Layout.fillWidth: true
-            isDefault: true
-            text: qsTr("Add record")
-            style: DMButtonStyle {}
-            enabled: currentProduct !== null
-
-            onClicked: record()
-        }
-
-        Item {
-            id: spacer
-            Layout.fillHeight: true
+            VerticalSpacer {
+                id: spacer
+            }
         }
     }
 }
