@@ -17,7 +17,6 @@ Rectangle {
     states: [
         State {
             name: "login"
-            //PropertyChanges { target: logo; y: 10 * Screen.pixelDensity }
             PropertyChanges { target: indicator; opacity: 0 }
             PropertyChanges { target: loginForm; opacity: 1 }
         }
@@ -29,9 +28,18 @@ Rectangle {
             to: "login"
 
             SequentialAnimation {
-                NumberAnimation { target: indicator; property: "opacity"; easing.type: Easing.InQuad }
-                //NumberAnimation { target: logo; property: "y" }
-                NumberAnimation { target: loginForm; property: "opacity"; easing.type: Easing.OutQuad }
+                NumberAnimation {
+                    target: indicator
+                    property: "opacity"
+                    duration: 400
+                    easing.type: Easing.OutQuart
+                }
+                NumberAnimation {
+                    target: loginForm
+                    property: "opacity"
+                    duration: 400
+                    easing.type: Easing.InQuart
+                }
             }
         }
     ]
@@ -69,12 +77,7 @@ Rectangle {
 
     BusyIndicator {
         id: indicator
-
-        anchors {
-            left: parent.left
-            top: text.bottom
-            right: parent.right
-        }
+        anchors.centerIn: loginForm
     }
 
     Column {
