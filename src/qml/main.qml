@@ -1,18 +1,15 @@
 import QtQuick 2.2
 import QtQuick.Window 2.0
-import QtQuick.Controls 1.1
 
 import "style"
 
-ApplicationWindow {
+DMWindow {
     id: window
 
-    visible: true
-    width: 250
-    height: 480
-
-    color: Style.dark.base
     title: qsTr("DietMaster")
+    visible: true
+    width: 100 * Screen.pixelDensity
+    height: 150 * Screen.pixelDensity
 
     Item {
         id: central
