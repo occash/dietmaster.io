@@ -4,6 +4,9 @@ import QtGraphicalEffects 1.0
 Item {
     id: item
 
+    implicitWidth: image.implicitWidth
+    implicitHeight: image.implicitHeight
+
     property alias source: image.source
 
     Rectangle {
@@ -20,6 +23,7 @@ Item {
         id: image
         anchors.fill: parent
         visible: false
+        asynchronous: true
     }
 
     OpacityMask {
