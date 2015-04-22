@@ -15,7 +15,7 @@ Rectangle {
     property color badColor: "#ff9896"
 
     color: currentValue > maxValue ? badColor : goodColor
-    border.color: Style.secondColor
+    border.color: Style.dark.alternateBase
 
     Text {
         id: value
@@ -29,7 +29,7 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         text: title
         elide: Text.ElideRight
-        color: Style.secondColor
+        color: Style.dark.alternateBase
         font.weight: Font.DemiBold
     }
 
@@ -44,7 +44,7 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         text: (maxValue - currentValue).toFixed(1)
-        color: Style.secondColor
+        color: Style.dark.alternateBase
         font.weight: Font.DemiBold
     }
 }

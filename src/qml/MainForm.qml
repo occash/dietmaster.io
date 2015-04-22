@@ -8,7 +8,7 @@ import "severity.js" as Severity
 
 Rectangle {
     id: mainForm
-    color: Style.mainColor
+    color: Style.dark.base
 
     property RemoteAccess client: null
     property var currentProduct
@@ -205,7 +205,7 @@ Rectangle {
 
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                color: Style.textColor
+                color: Style.dark.text
 
                 text: qsTr("Weight")
             }

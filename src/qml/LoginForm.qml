@@ -7,7 +7,7 @@ import "style"
 
 Rectangle {
     id: loginForm
-    color: Style.mainColor
+    color: Style.dark.base
 
     property RemoteAccess client: null
 

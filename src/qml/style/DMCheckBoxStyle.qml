@@ -5,18 +5,21 @@ import QtQuick.Controls.Styles 1.2
 import "."
 
 CheckBoxStyle {
+    property bool dark: true
+    property DMTheme palette: dark ? Style.dark : Style.light
+
     indicator: Rectangle {
         id: button
 
         implicitWidth: 4 * Screen.pixelDensity
         implicitHeight: 4 * Screen.pixelDensity
 
-        color: Style.secondColor
-        border.color: Style.secondColor
+        color: palette.alternateBase
+        border.color: palette.alternateBase
 
         Rectangle {
             visible: control.checked
-            color: Style.textColor
+            color: palette.text
             anchors.margins: 1 * Screen.pixelDensity
             anchors.fill: parent
         }
@@ -25,7 +28,7 @@ CheckBoxStyle {
             State {
                 name: "active"
                 when: control.hovered || control.pressed
-                PropertyChanges { target: button.border; color: Style.pressedColor }
+                PropertyChanges { target: button.border; color: palette.highlight }
             }
         ]
 
@@ -42,7 +45,7 @@ CheckBoxStyle {
     }
 
     label: Text {
-        color: Style.textColor
+        color: palette.text
         text: control.text
     }
 }
