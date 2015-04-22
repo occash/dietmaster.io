@@ -19,6 +19,9 @@
         <file>qml/DashBoard.qml</file>
         <file>qml/SuggestList.qml</file>
         <file>qml/RemoteAccess.qml</file>
+        <file>qml/DMWindow.qml</file>
+        <file>qml/DMSizeGrip.qml</file>
+        <file>qml/DMRoundImage.qml</file>
         <file>qml/xregexp.js</file>
         <file>qml/severity.js</file>
         <file>qml/operation.js</file>
