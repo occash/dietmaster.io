@@ -19,6 +19,7 @@
         <file>qml/DashBoard.qml</file>
         <file>qml/SuggestList.qml</file>
         <file>qml/RemoteAccess.qml</file>
+        <file>qml/Gravatar.qml</file>
         <file>qml/DMWindow.qml</file>
         <file>qml/DMSizeGrip.qml</file>
         <file>qml/DMRoundImage.qml</file>
