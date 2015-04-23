@@ -50,6 +50,10 @@
         <file>images/logo.jpg</file>
         <file>images/icons/arrow_down.png</file>
         <file>images/icons/arrow_up.png</file>
+        <file>images/window/close.png</file>
+        <file>images/window/maximize.png</file>
+        <file>images/window/minimize.png</file>
+        <file>images/window/restore.png</file>
     </qresource>
     <qresource prefix="/i18n">
         <file alias="dietmaster_ru.qm">i18n/dietmaster_ru.qm</file>

@@ -10,11 +10,21 @@ Window {
 
     default property alias contents: placeholder.children
 
+    property bool dark: true
+    property DMTheme palette: dark ? Style.dark : Style.light
+
     flags: Qt.FramelessWindowHint |
            Qt.WindowMinimizeButtonHint |
            Qt.Window
 
-    color: Style.dark.base
+    color: palette.base
+
+    function toggleMaximized() {
+        if (window.visibility == Window.Maximized)
+            window.visibility = Window.Windowed
+        else
+            window.visibility = Window.Maximized
+    }
 
     DMSizeGrip {
         id: sizeGrip
@@ -25,23 +35,24 @@ Window {
             id: clientArea
             anchors.fill: parent
 
-            border.color: Style.dark.highlight
+            border.color: window.active ? palette.highlight : palette.button
             border.width: window.visibility == Window.Maximized ||
                           window.visibility == Window.FullScreen ? 0 : 1
-            color: Style.dark.base
+            color: palette.base
 
             Rectangle {
                 id: titleBar
 
-                height: 8 * Screen.pixelDensity
+                height: 7 * Screen.pixelDensity
                 anchors {
                     left: parent.left
                     top: parent.top
                     right: parent.right
                 }
-                anchors.margins: 1
+                anchors.margins: window.visibility == Window.Maximized ||
+                                 window.visibility == Window.FullScreen ? 0 : 1
 
-                color: Style.dark.base
+                color: palette.base
 
                 Image {
                     id: titleIcon
@@ -64,12 +75,13 @@ Window {
                         bottom: parent.bottom
                     }
 
-                    color: Style.dark.text
+                    color: palette.text
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                     text: window.title
-                    renderType: Text.NativeRendering
+                    //renderType: Text.NativeRendering
                     font.pointSize: 10
+                    font.weight: Font.DemiBold
 
                     MouseArea {
                         id: titleDrag
@@ -79,10 +91,8 @@ Window {
                         property point clickPos: Qt.point(0, 0)
 
                         onPressed: {
-                            if (window.visibility == Window.Windowed) {
-                                dragging = true
-                                clickPos = Qt.point(mouse.x, mouse.y)
-                            }
+                            dragging = true
+                            clickPos = Qt.point(mouse.x, mouse.y)
                         }
 
                         onReleased: {
@@ -91,6 +101,21 @@ Window {
 
                         onPositionChanged: {
                             if (dragging) {
+                                if (window.visibility == Window.Maximized) {
+                                    var globalX = window.x + mouse.x
+                                    var globalY = window.y + mouse.y
+
+                                    window.toggleMaximized()
+
+                                    window.x = globalX - window.width / 2
+                                    window.y = globalY - titleBar.height / 2
+
+                                    clickPos.x = window.width / 2
+                                    clickPos.y = titleBar.height / 2
+
+                                    return
+                                }
+
                                 var deltaX = mouse.x - clickPos.x
                                 var deltaY = mouse.y - clickPos.y
                                 window.x += deltaX
@@ -98,12 +123,7 @@ Window {
                             }
                         }
 
-                        onDoubleClicked: {
-                            if (window.visibility == Window.Maximized)
-                                window.visibility = Window.Windowed
-                            else
-                                window.visibility = Window.Maximized
-                        }
+                        onDoubleClicked: window.toggleMaximized()
                     }
                 }
 
@@ -124,29 +144,41 @@ Window {
                                            Style.dark.highlight : control.hovered ?
                                                Style.dark.button : Style.dark.base
                             }
+                            label: Item {
+                                Image {
+                                    anchors.centerIn: parent
+                                    source: control.iconSource
+                                    smooth: false
+                                }
+                            }
                         }
                     }
 
                     Button {
                         id: minimizeButton
-                        width: 7 * Screen.pixelDensity
+                        width: 8 * Screen.pixelDensity
                         height: parent.height
+                        iconSource: "qrc:/images/window/minimize.png"
                         style: titleStyle
                         onClicked: window.showMinimized()
                     }
 
                     Button {
                         id: maximizeButton
-                        width: 7 * Screen.pixelDensity
+                        width: 8 * Screen.pixelDensity
                         height: parent.height
+                        iconSource: window.visibility == Window.Windowed ?
+                                        "qrc:/images/window/maximize.png" :
+                                        "qrc:/images/window/restore.png"
                         style: titleStyle
-                        onClicked: window.showMaximized()
+                        onClicked: window.toggleMaximized()
                     }
 
                     Button {
                         id: closeButton
-                        width: 7 * Screen.pixelDensity
+                        width: 8 * Screen.pixelDensity
                         height: parent.height
+                        iconSource: "qrc:/images/window/close.png"
                         style: titleStyle
                         onClicked: window.close()
                     }

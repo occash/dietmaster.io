@@ -5,19 +5,22 @@ import QtQuick.Controls.Styles 1.2
 import "."
 
 RadioButtonStyle {
+    property bool dark: true
+    property DMTheme palette: dark ? Style.dark : Style.light
+
     indicator: Rectangle {
         id: button
 
         implicitWidth: 4 * Screen.pixelDensity
         implicitHeight: 4 * Screen.pixelDensity
 
-        color: Style.secondColor
-        border.color: Style.secondColor
+        color: palette.alternateBase
+        border.color: palette.alternateBase
         radius: width * 0.5
 
         Rectangle {
             visible: control.checked
-            color: Style.textColor
+            color: palette.text
             anchors.margins: 1 * Screen.pixelDensity
             anchors.fill: parent
             radius: width * 0.5
@@ -27,7 +30,7 @@ RadioButtonStyle {
             State {
                 name: "active"
                 when: control.hovered || control.pressed
-                PropertyChanges { target: button.border; color: Style.pressedColor }
+                PropertyChanges { target: button.border; color: palette.highlight }
             }
         ]
 
@@ -44,7 +47,7 @@ RadioButtonStyle {
     }
 
     label: Text {
-        color: Style.textColor
+        color: palette.text
         text: control.text
     }
 }

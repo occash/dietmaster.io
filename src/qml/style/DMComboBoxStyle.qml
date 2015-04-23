@@ -5,9 +5,12 @@ import QtQuick.Controls.Styles 1.2
 import "."
 
 ComboBoxStyle {
-    textColor: Style.textColor
-    selectedTextColor: Style.textColor
-    selectionColor: Style.selectionColor
+    property bool dark: true
+    property DMTheme palette: dark ? Style.dark : Style.light
+
+    textColor: palette.text
+    selectedTextColor: palette.text
+    selectionColor: palette.highlight
     dropDownButtonWidth: 5 * Screen.pixelDensity
     background: Rectangle {
         id: button
@@ -15,7 +18,7 @@ ComboBoxStyle {
         implicitWidth: 20 * Screen.pixelDensity
         implicitHeight: 5 * Screen.pixelDensity
 
-        color: Style.thirdColor
+        color: palette.button
 
         Image {
             id: imageItem
@@ -33,7 +36,7 @@ ComboBoxStyle {
             State {
                 name: "active"
                 when: control.hovered || control.pressed
-                PropertyChanges { target: button; color: Style.pressedColor }
+                PropertyChanges { target: button; color: palette.highlight }
             }
         ]
 

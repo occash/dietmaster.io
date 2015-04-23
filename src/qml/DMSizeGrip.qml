@@ -17,6 +17,9 @@ MouseArea {
     propagateComposedEvents: true
 
     cursorShape: {
+        if (target.visibility == Window.Maximized)
+            return Qt.ArrowCursor
+
         if (mouseX < delta || mouseX > width - delta)
             if ((mouseX < delta && mouseY < delta) ||
                     (mouseX > width - delta &&
@@ -34,6 +37,11 @@ MouseArea {
     }
 
     onPressed: {
+        if (target.visibility != Window.Windowed) {
+            mouse.accepted = false
+            return
+        }
+
         if (mouse.x < delta || mouse.x > width - delta) {
             resizing = true
             resizeWidth = width / 2 - mouse.x
