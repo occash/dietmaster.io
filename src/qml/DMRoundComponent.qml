@@ -4,10 +4,7 @@ import QtGraphicalEffects 1.0
 Item {
     id: item
 
-    implicitWidth: image.implicitWidth
-    implicitHeight: image.implicitHeight
-
-    property alias source: image.source
+    default property alias children: placeholder.children
 
     Rectangle {
         id: circleMask
@@ -19,11 +16,10 @@ Item {
         radius: Math.max(width/2, height/2)
     }
 
-    Image {
-        id: image
+    Item {
+        id: placeholder
         anchors.fill: parent
         visible: false
-        asynchronous: true
     }
 
     OpacityMask {
@@ -31,7 +27,7 @@ Item {
 
         anchors.fill: parent
         maskSource: circleMask
-        source: image
+        source: placeholder
     }
 }
 
