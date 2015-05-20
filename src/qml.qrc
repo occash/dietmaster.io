@@ -18,11 +18,12 @@
         <file>qml/OptimalNutrient.qml</file>
         <file>qml/DashBoard.qml</file>
         <file>qml/SuggestList.qml</file>
+        <file>qml/RegistrationForm.qml</file>
         <file>qml/RemoteAccess.qml</file>
         <file>qml/Gravatar.qml</file>
         <file>qml/DMWindow.qml</file>
         <file>qml/DMSizeGrip.qml</file>
-        <file>qml/DMRoundImage.qml</file>
+        <file>qml/DMRoundComponent.qml</file>
         <file>qml/xregexp.js</file>
         <file>qml/severity.js</file>
         <file>qml/operation.js</file>
@@ -33,6 +34,7 @@
         <file>qml/style/DMCheckBoxStyle.qml</file>
         <file>qml/style/DMSpinBoxStyle.qml</file>
         <file>qml/style/DMRadioButtonStyle.qml</file>
+        <file>qml/style/DMProgressBarStyle.qml</file>
         <file>qml/style/DMComboBoxStyle.qml</file>
         <file>qml/style/DMDarkTheme.qml</file>
         <file>qml/style/DMLightTheme.qml</file>

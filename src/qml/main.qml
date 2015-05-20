@@ -8,50 +8,62 @@ DMWindow {
 
     title: qsTr("DietMaster")
     visible: true
-    width: 100 * Screen.pixelDensity
+    width: 90 * Screen.pixelDensity
     height: 150 * Screen.pixelDensity
+
+    Loader {
+        id: client
+        asynchronous: true
+        sourceComponent: RemoteAccess {}
+    }
+
+    SplashScreen {
+        anchors.fill: parent
+        logo: "qrc:/images/logo.jpg"
+        text: qsTr("DietMaster")
+        loading: client.state === Loader.Loading
+        client: client.item
+    }
 
     Item {
         id: central
         anchors.fill: parent
 
-        SplashScreen {
-            id: splash
-            anchors.fill: parent
-            logo: "qrc:/images/logo.jpg"
-            text: qsTr("DietMaster")
+        property string sourceComponent: ""
+
+        function loadComponent(component) {
+            fadeIn.stop()
+            fadeOut.start()
+            sourceComponent = component
         }
 
-        /*Loader {
+        Loader {
             id: loader
             anchors.fill: parent
-            anchors.margins: 1 * Screen.pixelDensity
-            source: "CentralWindow.qml"
-            asynchronous: true
-            opacity: 0
-        }
-
-        states: State {
-            name: "loaded"
-            when: loader.status == Loader.Ready
-        }
-
-        transitions: Transition {
-            to: "loaded"
-
-            PropertyAnimation {
-                target: splash
-                properties: "opacity"
-                to: 0
-                duration: 800
+            onLoaded: {
+                fadeOut.stop()
+                fadeIn.start()
             }
 
-            PropertyAnimation {
-                target: loader
-                properties: "opacity"
-                to: 1
-                duration: 400
+            Connections {
+                target: client.item
+                onLoggedin: central.loadComponent("MainForm.qml")
             }
-        }*/
+        }
+
+        NumberAnimation on opacity {
+            id: fadeOut
+            to: 0.0
+            running: false
+            onStopped: {
+                loader.source = central.sourceComponent
+            }
+        }
+
+        NumberAnimation on opacity {
+            id: fadeIn
+            to: 1.0
+            running: false
+        }
     }
 }

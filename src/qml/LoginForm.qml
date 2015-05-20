@@ -7,7 +7,7 @@ import "style"
 
 Rectangle {
     id: loginForm
-    color: Style.dark.base
+    color: Style.light.base
 
     property RemoteAccess client: null
 
@@ -18,7 +18,7 @@ Rectangle {
                 && passwordField.text.length > 0) {
             client.username = usernameField.text
             client.password = passwordField.text
-            client.autoLogin = autologinCheck.checked
+            //client.autoLogin = autologinCheck.checked
             client.login()
         }
     }
@@ -33,10 +33,10 @@ Rectangle {
         InputField {
             id: usernameField
             Layout.fillWidth: true
-            title: qsTr("Username")
-            placeholder: qsTr("Enter username")
+            dark: false
+            placeholder: qsTr("Username")
             isDefault: true
-            text: client.username
+            text: client !== null ? client.username : ""
 
             onAccept: login()
         }
@@ -44,22 +44,22 @@ Rectangle {
         InputField {
             id: passwordField
             Layout.fillWidth: true
-            title: qsTr("Password")
-            placeholder: qsTr("Enter password")
+            dark: false
+            placeholder: qsTr("Password")
             echo: TextInput.Password
-            text: client.password
+            text: client ? client.password: ""
 
             onAccept: login()
         }
 
-        CheckBox {
+        /*CheckBox {
             id: autologinCheck
             Layout.fillWidth: true
             text: qsTr("Auto login")
             checked: client.autoLogin
 
             style: DMCheckBoxStyle {}
-        }
+        }*/
 
         Button {
             id: loginButton
@@ -67,12 +67,12 @@ Rectangle {
             Layout.fillWidth: true
 
             isDefault: true
-            enabled: client.busy ? false : true
-            text: client.busy ? qsTr("Logging in") : qsTr("Login")
+            enabled: client && !client.busy
+            text: (client && client.busy) ? qsTr("Logging in") : qsTr("Login")
 
             onClicked: login()
 
-            style: DMButtonStyle {}
+            style: DMButtonStyle { dark: false }
         }
 
         Link {
@@ -85,7 +85,7 @@ Rectangle {
 
         Label {
             id: errorLabel
-            visible: client.failed
+            visible: client && client.failed
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
             color: Style.colorBad

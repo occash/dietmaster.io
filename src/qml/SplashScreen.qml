@@ -8,6 +8,8 @@ Rectangle {
     id: splash
     color: "white"
 
+    property alias client: loginForm.client
+
     property bool loading: true
     property bool login: false
 
@@ -17,6 +19,7 @@ Rectangle {
     states: [
         State {
             name: "login"
+            when: !loading
             PropertyChanges { target: indicator; opacity: 0 }
             PropertyChanges { target: loginForm; opacity: 1 }
         }
@@ -44,18 +47,11 @@ Rectangle {
         }
     ]
 
-    Timer {
-        interval: 1000
-        running: true
-        onTriggered: state = "login"
-
-    }
-
     Image {
         id: logo
         anchors.left: parent.left
         anchors.right: parent.right
-        y: (parent.height - loginForm.height) / 2 - height / 2
+        y: (parent.height - loginForm.height - text.height) / 2 - height / 2
         asynchronous: true
         fillMode: Image.PreserveAspectFit
     }
@@ -69,21 +65,22 @@ Rectangle {
             right: parent.right
         }
 
-        opacity: 0
         color: Style.dark.base
         font.pointSize: 20
         horizontalAlignment: Text.AlignHCenter
     }
 
-    BusyIndicator {
+    ProgressBar {
         id: indicator
         anchors.centerIn: loginForm
+        indeterminate: true
+        style: DMProgressBarStyle { dark: false }
     }
 
-    Column {
+    LoginForm {
         id: loginForm
-        spacing: 6
         opacity: 0
+        height: 100
 
         anchors {
             left: parent.left
@@ -93,53 +90,6 @@ Rectangle {
             leftMargin: 2 * Screen.pixelDensity
             bottomMargin: 5 * Screen.pixelDensity
             rightMargin: 2 * Screen.pixelDensity
-        }
-
-        InputField {
-            id: usernameField
-
-            width: parent.width
-            dark: false
-
-            placeholder: qsTr("Enter username")
-            isDefault: true
-            //text: client.username
-
-            //onAccept: login()
-        }
-
-        InputField {
-            id: passwordField
-
-            width: parent.width
-            dark: false
-
-            placeholder: qsTr("Enter password")
-            echo: TextInput.Password
-            //text: client.password
-
-            //onAccept: login()
-        }
-
-        Button {
-            id: loginButton
-
-            width: parent.width
-            isDefault: true
-            //enabled: client.busy ? false : true
-            text: qsTr("Login")
-            //text: client.busy ? qsTr("Logging in") : qsTr("Login")
-
-            //onClicked: login()
-
-            style: DMButtonStyle { dark: false }
-        }
-
-        Link {
-            id: registerText
-            width: parent.width
-            linkText: qsTr("Register")
-            //onActivated: register()
         }
     }
 }
