@@ -9,7 +9,7 @@ import "operation.js" as Operation
 
 Rectangle {
     id: userForm
-    color: Style.mainColor
+    color: "transparent"
 
     property RemoteAccess client: null
 
@@ -97,11 +97,41 @@ Rectangle {
         anchors.fill: parent
 
         InputField {
+            id: emailField
+            Layout.fillWidth: true
+            //title: qsTr("E-mail")
+            placeholder: qsTr("E-mail")
+            dark: false
+            isDefault: true
+
+            function check() {
+                valid = validateEmail(text)
+                severity = valid ? Severity.Good : Severity.Bad
+                errorString = qsTr("Invalid e-mail")
+                return valid
+            }
+
+            function checkFull() {
+                var queryString = { "query": { "email": text } }
+                var reply = client.query(queryString, Operation.User)
+                reply.finished.connect(function() {
+                    valid = reply.data.results.length === 0
+                    severity = valid ? Severity.Good : Severity.Bad
+                    errorString = qsTr("E-mail is already in use")
+                })
+                return valid
+            }
+
+            onValidate: check()
+            onValidateFull: checkFull()
+        }
+
+        InputField {
             id: usernameField
             Layout.fillWidth: true
-            title: qsTr("Username")
-            placeholder: qsTr("Enter username")
-            isDefault: true
+            //title: qsTr("Username")
+            placeholder: qsTr("Username")
+            dark: false
 
             function check() {
                 var res = validateUsername(text)
@@ -129,9 +159,10 @@ Rectangle {
         InputField {
             id: passwordField
             Layout.fillWidth: true
-            title: qsTr("Password")
-            placeholder: qsTr("Enter password")
+            //title: qsTr("Password")
+            placeholder: qsTr("Password")
             echo: TextInput.Password
+            dark: false
 
             function check() {
                 var res = validateUsername(text)
@@ -146,38 +177,11 @@ Rectangle {
         }
 
         InputField {
-            id: emailField
-            Layout.fillWidth: true
-            title: qsTr("E-mail")
-            placeholder: qsTr("Enter e-mail")
-
-            function check() {
-                valid = validateEmail(text)
-                severity = valid ? Severity.Good : Severity.Bad
-                errorString = qsTr("Invalid e-mail")
-                return valid
-            }
-
-            function checkFull() {
-                var queryString = { "query": { "email": text } }
-                var reply = client.query(queryString, Operation.User)
-                reply.finished.connect(function() {
-                    valid = reply.data.results.length === 0
-                    severity = valid ? Severity.Good : Severity.Bad
-                    errorString = qsTr("E-mail is already in use")
-                })
-                return valid
-            }
-
-            onValidate: check()
-            onValidateFull: checkFull()
-        }
-
-        InputField {
             id: firstnameField
             Layout.fillWidth: true
-            title: qsTr("First name")
-            placeholder: qsTr("Enter first name")
+            //title: qsTr("First name")
+            placeholder: qsTr("First name")
+            dark: false
 
             function check() {
                 valid = validateName(text)
@@ -192,8 +196,9 @@ Rectangle {
         InputField {
             id: lastnameField
             Layout.fillWidth: true
-            title: qsTr("Last name")
-            placeholder: qsTr("Enter last name")
+            //title: qsTr("Last name")
+            placeholder: qsTr("Last name")
+            dark: false
 
             function check() {
                 valid = validateName(text)
@@ -205,14 +210,14 @@ Rectangle {
             onValidate: check()
         }
 
-        Button {
+        /*Button {
             id: nextButton
 
             Layout.fillWidth: true
 
             isDefault: true
             text: enabled ? qsTr("Next") : qsTr("Registering")
-            style: DMButtonStyle {}
+            style: DMButtonStyle { dark: false }
 
             onClicked: {
                 registerError.visible = true
@@ -259,6 +264,38 @@ Rectangle {
             visible: false
             color: "red"
             wrapMode: Text.WordWrap
+        }*/
+
+        Row {
+            RoundButton {
+                width: 50
+                height: 50
+
+                Image {
+                    anchors.fill: parent
+                    source: "qrc:/images/logo.jpg"
+                }
+
+                onClicked: message.show()
+            }
+
+            RoundButton {
+                width: 50
+                height: 50
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: Style.dark.text
+
+                    Text {
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        renderType: Text.NativeRendering
+                        text: Qt.locale().nativeLanguageName
+                    }
+                }
+            }
         }
 
         Item {

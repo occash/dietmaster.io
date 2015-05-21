@@ -55,7 +55,7 @@ Column {
         id: field
 
         inputMethodHints: Qt.ImhNoPredictiveText
-        style: DMTextFieldStyle { dark: false }
+        style: DMTextFieldStyle { dark: input.dark }
 
         anchors {
             left: parent.left
@@ -63,7 +63,8 @@ Column {
         }
 
         onTextChanged: {
-            validate()
+            //validate()
+            valid = true
             if (text.length > 0)
                 timer.restart()
             else
@@ -76,6 +77,7 @@ Column {
             id: timer
             interval: 400
             onTriggered: {
+                validate()
                 if (input.valid)
                     validateFull()
             }

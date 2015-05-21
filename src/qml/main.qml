@@ -1,9 +1,10 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
 import QtQuick.Window 2.0
 
 import "style"
 
-DMWindow {
+ApplicationWindow {
     id: window
 
     title: qsTr("DietMaster")
@@ -17,7 +18,20 @@ DMWindow {
         sourceComponent: RemoteAccess {}
     }
 
-    SplashScreen {
+    RegistrationForm {
+        id: registrationForm
+        anchors.fill: parent
+    }
+
+    MessageBox {
+        id: message
+        source: registrationForm
+        text: qsTr("Error")
+    }
+
+    Component.onCompleted: console.log(Qt.locale().uiLanguages)
+
+    /*SplashScreen {
         anchors.fill: parent
         logo: "qrc:/images/logo.jpg"
         text: qsTr("DietMaster")
@@ -65,5 +79,5 @@ DMWindow {
             to: 1.0
             running: false
         }
-    }
+    }*/
 }

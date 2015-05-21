@@ -20,7 +20,10 @@
         <file>qml/SuggestList.qml</file>
         <file>qml/RegistrationForm.qml</file>
         <file>qml/RemoteAccess.qml</file>
+        <file>qml/RoundButton.qml</file>
         <file>qml/Gravatar.qml</file>
+        <file>qml/Overlay.qml</file>
+        <file>qml/MessageBox.qml</file>
         <file>qml/DMWindow.qml</file>
         <file>qml/DMSizeGrip.qml</file>
         <file>qml/DMRoundComponent.qml</file>

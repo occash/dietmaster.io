@@ -4,7 +4,8 @@ import QtGraphicalEffects 1.0
 Item {
     id: item
 
-    default property alias children: placeholder.children
+    default property alias data: placeholder.data
+    property alias overlay: mask.data
 
     Rectangle {
         id: circleMask

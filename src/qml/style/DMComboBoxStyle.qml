@@ -59,23 +59,24 @@ ComboBoxStyle {
         verticalAlignment: Text.AlignVCenter
         //horizontalAlignment: Text.AlignHCenter
         anchors.fill: parent
-        color: Style.textColor
+        color: palette.text
+        renderType: Text.NativeRendering
         //font.weight: Font.DemiBold
     }
 
     __dropDownStyle: MenuStyle {
         //font: cbStyle.font
-        __labelColor: Style.textColor
-        __selectedLabelColor: Style.textColor
-        __selectedBackgroundColor: Style.selectionColor
-        __backgroundColor: Style.secondColor
-        __borderColor: Style.secondColor
+        __labelColor: palette.text
+        __selectedLabelColor: palette.text
+        __selectedBackgroundColor: palette.highlight
+        __backgroundColor: palette.alternateBase
+        __borderColor: palette.alternateBase
         __maxPopupHeight: 600
         __menuItemType: "comboboxitem"
         __scrollerStyle: ScrollViewStyle { }
         itemDelegate.background: Rectangle {
             visible: styleData.selected && styleData.enabled
-            color: Style.selectionColor
+            color: palette.highlight
             antialiasing: true
         }
     }
