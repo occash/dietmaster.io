@@ -1,6 +1,7 @@
 TEMPLATE = app
 
-QT += qml quick widgets enginio
+QT += qml quick widgets enginio xml svg
+QTPLUGIN += qsvg
 
 SOURCES += *.cpp
 HEADERS += *.h
