@@ -26,7 +26,24 @@ ApplicationWindow {
     MessageBox {
         id: message
         source: registrationForm
-        text: qsTr("Error")
+
+        Rectangle {
+            //anchors.fill: parent
+            width: 40 * Screen.pixelDensity
+            height: 10 * Screen.pixelDensity
+            color: Style.light.text
+            opacity: 0.7
+
+            Text {
+                anchors.fill: parent
+                text: "Error"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                color: Style.dark.text
+                font.pointSize: 12
+                renderType: Text.NativeRendering
+            }
+        }
     }
 
     Component.onCompleted: console.log(Qt.locale().uiLanguages)

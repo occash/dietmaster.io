@@ -23,7 +23,7 @@ ComboBoxStyle {
         Image {
             id: imageItem
             visible: control.menu !== null
-            source: "qrc:/images/icons/arrow_down.png"
+            source: "qrc:/icons/arrow_down.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 2 * Screen.pixelDensity

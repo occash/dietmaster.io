@@ -24,7 +24,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             color: Style.dark.text
-            font.pointSize: 14
+            font.pixelSize: 5 * Screen.pixelDensity
             renderType: Text.NativeRendering
         }
     }
@@ -42,7 +42,7 @@ Item {
 
         Row {
             anchors.centerIn: parent
-            spacing: 2 * Screen.pixelDensity
+            spacing: 3 * Screen.pixelDensity
 
             Repeater {
                 model: 3
@@ -50,8 +50,8 @@ Item {
                 DMRoundComponent {
                     id: dot
 
-                    width: 2 * Screen.pixelDensity
-                    height: 2 * Screen.pixelDensity
+                    width: 3 * Screen.pixelDensity
+                    height: 3 * Screen.pixelDensity
 
                     Rectangle {
                         anchors.fill: parent

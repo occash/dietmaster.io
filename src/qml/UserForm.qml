@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
+import QtQuick.Window 2.0
 
 import "style"
 import "xregexp.js" as XRegExp
@@ -91,10 +92,64 @@ Rectangle {
         return name.length > 0 && re.test(name)
     }
 
+    Gravatar {
+        id: gravatar
+
+        onFound: {
+            usernameField.text = username
+            firstnameField.text = name
+            lastnameField.text = surname
+        }
+    }
+
     ColumnLayout {
         id: layout
 
         anchors.fill: parent
+
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 6 * Screen.pixelDensity
+
+            RoundButton {
+                width: 12 * Screen.pixelDensity
+                height: 12 * Screen.pixelDensity
+
+                borderWidth: 1
+
+                Image {
+                    anchors.fill: parent
+                    source: "qrc:/logo.jpg"
+                    smooth: false
+                }
+
+                onClicked: message.show()
+            }
+
+            HorizontalSpacer {}
+
+            RoundButton {
+                width: 12 * Screen.pixelDensity
+                height: 12 * Screen.pixelDensity
+
+                borderWidth: 1
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: Style.light.button
+
+                    Text {
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        renderType: Text.NativeRendering
+                        color: Style.dark.text
+                        text: "RU" //Qt.locale().nativeLanguageName
+                        font.pixelSize: 6 * Screen.pixelDensity
+                    }
+                }
+            }
+        }
 
         InputField {
             id: emailField
@@ -112,12 +167,16 @@ Rectangle {
             }
 
             function checkFull() {
+                gravatar.request(text)
+
                 var queryString = { "query": { "email": text } }
                 var reply = client.query(queryString, Operation.User)
                 reply.finished.connect(function() {
                     valid = reply.data.results.length === 0
                     severity = valid ? Severity.Good : Severity.Bad
                     errorString = qsTr("E-mail is already in use")
+                    if (valid)
+                        gravatar.email = text
                 })
                 return valid
             }
@@ -265,38 +324,6 @@ Rectangle {
             color: "red"
             wrapMode: Text.WordWrap
         }*/
-
-        Row {
-            RoundButton {
-                width: 50
-                height: 50
-
-                Image {
-                    anchors.fill: parent
-                    source: "qrc:/images/logo.jpg"
-                }
-
-                onClicked: message.show()
-            }
-
-            RoundButton {
-                width: 50
-                height: 50
-
-                Rectangle {
-                    anchors.fill: parent
-                    color: Style.dark.text
-
-                    Text {
-                        anchors.fill: parent
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        renderType: Text.NativeRendering
-                        text: Qt.locale().nativeLanguageName
-                    }
-                }
-            }
-        }
 
         Item {
             id: spacer

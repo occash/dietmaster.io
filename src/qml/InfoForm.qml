@@ -6,7 +6,7 @@ import "style"
 
 Rectangle {
     id: infoForm
-    color: Style.mainColor
+    color: Style.dark.base
 
     property RemoteAccess client: null
 
@@ -24,7 +24,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Gender")
-            color: Style.textColor
+            color: Style.dark.base
         }
 
         RowLayout {
@@ -59,7 +59,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Date of birth")
-            color: Style.textColor
+            color: Style.dark.text
         }
 
         TextField {
@@ -85,7 +85,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Weight")
-            color: Style.mainColor
+            color: Style.dark.base
         }
 
         SpinBox {
@@ -107,7 +107,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Height")
-            color: Style.mainColor
+            color: Style.dark.base
         }
 
         SpinBox {
@@ -129,7 +129,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Body fat percentage")
-            color: Style.mainColor
+            color: Style.dark.base
         }
 
         SpinBox {
@@ -158,7 +158,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             text: qsTr("Lifestyle")
-            color: Style.mainColor
+            color: Style.dark.base
         }
 
         ComboBox {

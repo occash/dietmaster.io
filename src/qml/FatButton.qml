@@ -13,7 +13,7 @@ Rectangle {
     implicitWidth: fatImage.implicitWidth
     implicitHeight: fatImage.implicitHeight
 
-    color: Style.secondColor
+    color: Style.dark.alternateBase
 
     property string image: ""
     property real percent: 0.0
@@ -26,13 +26,13 @@ Rectangle {
     }
 
     border.width: 2
-    border.color: (checked || mouseArea.containsMouse) ? Style.selectionColor : Style.secondColor
+    border.color: (checked || mouseArea.containsMouse) ? Style.dark.highlight : Style.dark.alternateBase
 
     Image {
         id: fatImage
         anchors.fill: parent
         anchors.margins: 1
-        source: "qrc:/images/male/" + image + ".png"
+        source: "qrc:/male/" + image + ".png"
         fillMode: Image.PreserveAspectCrop
         smooth: true
     }

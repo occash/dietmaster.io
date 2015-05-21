@@ -7,7 +7,7 @@ Overlay {
     id: overlay
     visible: false
 
-    property alias text: message.text
+    default property alias data: container.data
 
     function show() {
         visible = true
@@ -19,27 +19,14 @@ Overlay {
 
     onClicked: hide()
 
-    Rectangle {
-        id: popup
-
+    Item {
+        id: container
         anchors.centerIn: parent
-        width: 40 * Screen.pixelDensity
-        height: 10 * Screen.pixelDensity
-        color: Style.light.text
-        opacity: 0.7
+        width: childrenRect.width + 20
+        height: childrenRect.height + 20
 
-        Text {
-            id: message
-
-            anchors.fill: parent
-            text: ""
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            color: Style.dark.text
-            font.pointSize: 12
-            renderType: Text.NativeRendering
-            //font.weight: Font.DemiBold
-        }
+        //width: 40 * Screen.pixelDensity
+        //height: 10 * Screen.pixelDensity
     }
 }
 
