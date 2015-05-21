@@ -8,7 +8,10 @@ HEADERS += *.h
 TRANSLATIONS += \
     i18n/dietmaster_ru.ts
 
-RESOURCES += qml.qrc
+RESOURCES += \
+	i18n.qrc \
+	images.qrc \
+	qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="dietmaster_ru.qm">i18n/dietmaster_ru.qm</file>
+        <file alias="dietmaster_ru.ts">i18n/dietmaster_ru.ts</file>
+    </qresource>
+</RCC>

@@ -1,66 +1,50 @@
 <RCC>
-    <qresource prefix="/">
-        <file>qml/main.qml</file>
-        <file>qml/LoginForm.qml</file>
-        <file>qml/MainForm.qml</file>
-        <file>qml/NutritionPanel.qml</file>
-        <file>qml/InfoForm.qml</file>
-        <file>qml/FatPanel.qml</file>
-        <file>qml/FatButton.qml</file>
-        <file>qml/UserForm.qml</file>
-        <file>qml/InputField.qml</file>
-        <file>qml/HorizontalSpacer.qml</file>
-        <file>qml/VerticalSpacer.qml</file>
-        <file>qml/CentralWindow.qml</file>
-        <file>qml/SplashScreen.qml</file>
-        <file>qml/Link.qml</file>
-        <file>qml/UserInfo.qml</file>
-        <file>qml/OptimalNutrient.qml</file>
-        <file>qml/DashBoard.qml</file>
-        <file>qml/SuggestList.qml</file>
-        <file>qml/RegistrationForm.qml</file>
-        <file>qml/RemoteAccess.qml</file>
-        <file>qml/RoundButton.qml</file>
-        <file>qml/Gravatar.qml</file>
-        <file>qml/Overlay.qml</file>
-        <file>qml/MessageBox.qml</file>
-        <file>qml/DMWindow.qml</file>
-        <file>qml/DMSizeGrip.qml</file>
-        <file>qml/DMRoundComponent.qml</file>
-        <file>qml/xregexp.js</file>
-        <file>qml/severity.js</file>
-        <file>qml/operation.js</file>
-        <file>qml/utils.js</file>
-        <file>qml/style/DMStyle.qml</file>
-        <file>qml/style/DMButtonStyle.qml</file>
-        <file>qml/style/DMTextFieldStyle.qml</file>
-        <file>qml/style/DMCheckBoxStyle.qml</file>
-        <file>qml/style/DMSpinBoxStyle.qml</file>
-        <file>qml/style/DMRadioButtonStyle.qml</file>
-        <file>qml/style/DMProgressBarStyle.qml</file>
-        <file>qml/style/DMComboBoxStyle.qml</file>
-        <file>qml/style/DMDarkTheme.qml</file>
-        <file>qml/style/DMLightTheme.qml</file>
-        <file>qml/style/DMTheme.qml</file>
-        <file>qml/style/qmldir</file>
-        <file>images/male/1_1.png</file>
-        <file>images/male/1_2.png</file>
-        <file>images/male/1_3.png</file>
-        <file>images/male/2_1.png</file>
-        <file>images/male/2_2.png</file>
-        <file>images/male/2_3.png</file>
-        <file>images/male/3_1.png</file>
-        <file>images/male/3_2.png</file>
-        <file>images/male/3_3.png</file>
-        <file>images/logo.jpg</file>
-        <file>images/icons/arrow_down.png</file>
-        <file>images/icons/arrow_up.png</file>
-        <file>images/window/close.png</file>
-        <file>images/window/maximize.png</file>
-        <file>images/window/minimize.png</file>
-        <file>images/window/restore.png</file>
+    <qresource prefix="/style">
+        <file alias="DMButtonStyle.qml">qml/style/DMButtonStyle.qml</file>
+        <file alias="DMCheckBoxStyle.qml">qml/style/DMCheckBoxStyle.qml</file>
+        <file alias="DMComboBoxStyle.qml">qml/style/DMComboBoxStyle.qml</file>
+        <file alias="DMDarkTheme.qml">qml/style/DMDarkTheme.qml</file>
+        <file alias="DMLightTheme.qml">qml/style/DMLightTheme.qml</file>
+        <file alias="DMProgressBarStyle.qml">qml/style/DMProgressBarStyle.qml</file>
+        <file alias="DMRadioButtonStyle.qml">qml/style/DMRadioButtonStyle.qml</file>
+        <file alias="DMSpinBoxStyle.qml">qml/style/DMSpinBoxStyle.qml</file>
+        <file alias="DMStyle.qml">qml/style/DMStyle.qml</file>
+        <file alias="DMTextFieldStyle.qml">qml/style/DMTextFieldStyle.qml</file>
+        <file alias="DMTheme.qml">qml/style/DMTheme.qml</file>
+        <file alias="qmldir">qml/style/qmldir</file>
     </qresource>
-    <qresource prefix="/i18n">
-        <file alias="dietmaster_ru.qm">i18n/dietmaster_ru.qm</file>
+    <qresource prefix="/">
+        <file alias="CentralWindow.qml">qml/CentralWindow.qml</file>
+        <file alias="DashBoard.qml">qml/DashBoard.qml</file>
+        <file alias="DMRoundComponent.qml">qml/DMRoundComponent.qml</file>
+        <file alias="DMSizeGrip.qml">qml/DMSizeGrip.qml</file>
+        <file alias="DMWindow.qml">qml/DMWindow.qml</file>
+        <file alias="facts.js">qml/facts.js</file>
+        <file alias="FatButton.qml">qml/FatButton.qml</file>
+        <file alias="FatPanel.qml">qml/FatPanel.qml</file>
+        <file alias="Gravatar.qml">qml/Gravatar.qml</file>
+        <file alias="HorizontalSpacer.qml">qml/HorizontalSpacer.qml</file>
+        <file alias="InfoForm.qml">qml/InfoForm.qml</file>
+        <file alias="InputField.qml">qml/InputField.qml</file>
+        <file alias="Link.qml">qml/Link.qml</file>
+        <file alias="LoginForm.qml">qml/LoginForm.qml</file>
+        <file alias="main.qml">qml/main.qml</file>
+        <file alias="MainForm.qml">qml/MainForm.qml</file>
+        <file alias="MessageBox.qml">qml/MessageBox.qml</file>
+        <file alias="NutritionPanel.qml">qml/NutritionPanel.qml</file>
+        <file alias="operation.js">qml/operation.js</file>
+        <file alias="OptimalNutrient.qml">qml/OptimalNutrient.qml</file>
+        <file alias="Overlay.qml">qml/Overlay.qml</file>
+        <file alias="RegistrationForm.qml">qml/RegistrationForm.qml</file>
+        <file alias="RemoteAccess.qml">qml/RemoteAccess.qml</file>
+        <file alias="RoundButton.qml">qml/RoundButton.qml</file>
+        <file alias="severity.js">qml/severity.js</file>
+        <file alias="SplashScreen.qml">qml/SplashScreen.qml</file>
+        <file alias="SuggestList.qml">qml/SuggestList.qml</file>
+        <file alias="UserForm.qml">qml/UserForm.qml</file>
+        <file alias="UserInfo.qml">qml/UserInfo.qml</file>
+        <file alias="utils.js">qml/utils.js</file>
+        <file alias="VerticalSpacer.qml">qml/VerticalSpacer.qml</file>
+        <file alias="xregexp.js">qml/xregexp.js</file>
     </qresource>
 </RCC>
