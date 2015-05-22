@@ -46,8 +46,6 @@ ApplicationWindow {
         }
     }
 
-    Component.onCompleted: console.log(Qt.locale().uiLanguages)
-
     /*SplashScreen {
         anchors.fill: parent
         logo: "qrc:/images/logo.jpg"

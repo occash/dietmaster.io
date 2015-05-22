@@ -22,7 +22,6 @@
         <file alias="facts.js">qml/facts.js</file>
         <file alias="FatButton.qml">qml/FatButton.qml</file>
         <file alias="FatPanel.qml">qml/FatPanel.qml</file>
-        <file alias="Gravatar.qml">qml/Gravatar.qml</file>
         <file alias="HorizontalSpacer.qml">qml/HorizontalSpacer.qml</file>
         <file alias="InfoForm.qml">qml/InfoForm.qml</file>
         <file alias="InputField.qml">qml/InputField.qml</file>
@@ -35,6 +34,8 @@
         <file alias="operation.js">qml/operation.js</file>
         <file alias="OptimalNutrient.qml">qml/OptimalNutrient.qml</file>
         <file alias="Overlay.qml">qml/Overlay.qml</file>
+        <file alias="Provider.qml">qml/Provider.qml</file>
+        <file alias="providers.js">qml/providers.js</file>
         <file alias="RegistrationForm.qml">qml/RegistrationForm.qml</file>
         <file alias="RemoteAccess.qml">qml/RemoteAccess.qml</file>
         <file alias="RoundButton.qml">qml/RoundButton.qml</file>
