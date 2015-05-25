@@ -4,33 +4,13 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QTranslator>
-#include <QLocale>
-#include <QDebug>
 
 #include "enginiosearch.h"
-
-
-void checkLocale()
-{
-    for (int i = 1; i < 256; ++i)
-    {
-        QList<QLocale> locales = QLocale::matchingLocales(QLocale::AnyLanguage,
-                                                          QLocale::AnyScript,
-                                                          (QLocale::Country)i);
-
-        if (!locales.isEmpty()) {
-            qDebug() << "Country" << locales[0].nativeCountryName();
-            foreach (QLocale locale, locales)
-                qDebug() << "Language" << locale.nativeLanguageName();
-        }
-    }
-}
+#include "translator.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-
-    checkLocale();
 
     app.setOrganizationName("Shalby");
     app.setOrganizationDomain("shalby.com");
@@ -40,7 +20,9 @@ int main(int argc, char *argv[])
     if (translator.load(QLocale(), ":/dietmaster_"))
         app.installTranslator(&translator);
 
-    qmlRegisterType<EnginioSearch>("Search", 1, 0, "EnginioSearch");
+    qmlRegisterType<EnginioSearch>("DietMaster", 1, 0, "EnginioSearch");
+    qmlRegisterType<Translator>("DietMaster", 1, 0, "Translator");
+    qmlRegisterType<Country>("DietMaster", 1, 0, "Country");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
