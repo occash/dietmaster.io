@@ -7,6 +7,7 @@ import "style"
 import "xregexp.js" as XRegExp
 import "severity.js" as Severity
 import "operation.js" as Operation
+import "providers.js" as Providers
 
 Rectangle {
     id: userForm
@@ -92,13 +93,17 @@ Rectangle {
         return name.length > 0 && re.test(name)
     }
 
-    Gravatar {
-        id: gravatar
+    Provider {
+        id: provider
 
-        onFound: {
+        onSuccess: {
+            console.log("Success")
             usernameField.text = username
-            firstnameField.text = name
-            lastnameField.text = surname
+            fullnameField.text = fullname
+        }
+
+        onError: {
+            console.log("Error", message)
         }
     }
 
@@ -119,7 +124,7 @@ Rectangle {
 
                 Image {
                     anchors.fill: parent
-                    source: "qrc:/logo.jpg"
+                    source: "qrc:/flags/ru.svg"
                     smooth: false
                 }
 
@@ -160,14 +165,14 @@ Rectangle {
             isDefault: true
 
             function check() {
-                valid = validateEmail(text)
+                valid = true //validateEmail(text)
                 severity = valid ? Severity.Good : Severity.Bad
                 errorString = qsTr("Invalid e-mail")
                 return valid
             }
 
             function checkFull() {
-                gravatar.request(text)
+                provider.request(Providers.Twitter, text)
 
                 var queryString = { "query": { "email": text } }
                 var reply = client.query(queryString, Operation.User)
@@ -176,7 +181,7 @@ Rectangle {
                     severity = valid ? Severity.Good : Severity.Bad
                     errorString = qsTr("E-mail is already in use")
                     if (valid)
-                        gravatar.email = text
+                        provider.request(Providers.Twitter, text)
                 })
                 return valid
             }
@@ -236,23 +241,23 @@ Rectangle {
         }
 
         InputField {
-            id: firstnameField
+            id: fullnameField
             Layout.fillWidth: true
             //title: qsTr("First name")
-            placeholder: qsTr("First name")
+            placeholder: qsTr("Full name")
             dark: false
 
             function check() {
                 valid = validateName(text)
                 severity = valid ? Severity.Good : Severity.Bad
-                errorString = qsTr("Invalid first name")
+                errorString = qsTr("Invalid name")
                 return valid
             }
 
             onValidate: check()
         }
 
-        InputField {
+        /*InputField {
             id: lastnameField
             Layout.fillWidth: true
             //title: qsTr("Last name")
@@ -267,7 +272,7 @@ Rectangle {
             }
 
             onValidate: check()
-        }
+        }*/
 
         /*Button {
             id: nextButton

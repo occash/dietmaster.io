@@ -190,7 +190,6 @@ Rectangle {
             onClicked: {
                 var birth = Date.fromLocaleDateString(Qt.locale(), birthField.text, Locale.ShortFormat)
                 birth.setHours(0, 0, 0, 0)
-                console.log(birth)
                 var query = {
                     "objectType": "objects.userinfo",
                     "gender": maleRadio.checked,
@@ -200,7 +199,6 @@ Rectangle {
                     "fatpercent": fatPercentSpin.value,
                     "lifestyle": lifestyleCombo.currentIndex
                 }
-                console.log(JSON.stringify(query))
                 var reply = client.create(query)
                 reply.finished.connect(function() {
                     if (!reply.isError)
