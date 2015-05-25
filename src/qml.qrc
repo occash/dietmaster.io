@@ -17,6 +17,7 @@
         <file alias="CentralWindow.qml">qml/CentralWindow.qml</file>
         <file alias="DashBoard.qml">qml/DashBoard.qml</file>
         <file alias="DMRoundComponent.qml">qml/DMRoundComponent.qml</file>
+        <file alias="DMRow.qml">qml/DMRow.qml</file>
         <file alias="DMSizeGrip.qml">qml/DMSizeGrip.qml</file>
         <file alias="DMWindow.qml">qml/DMWindow.qml</file>
         <file alias="facts.js">qml/facts.js</file>

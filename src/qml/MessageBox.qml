@@ -21,12 +21,7 @@ Overlay {
 
     Item {
         id: container
-        anchors.centerIn: parent
-        width: childrenRect.width + 20
-        height: childrenRect.height + 20
-
-        //width: 40 * Screen.pixelDensity
-        //height: 10 * Screen.pixelDensity
+        anchors.fill: parent
     }
 }
 

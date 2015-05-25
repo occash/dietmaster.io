@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Window 2.0
+import DietMaster 1.0
 
 import "style"
 
@@ -23,12 +24,13 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    /*
     MessageBox {
         id: message
         source: registrationForm
 
         Rectangle {
-            //anchors.fill: parent
+            anchors.centerIn: parent
             width: 40 * Screen.pixelDensity
             height: 10 * Screen.pixelDensity
             color: Style.light.text
@@ -45,8 +47,56 @@ ApplicationWindow {
             }
         }
     }
+    */
 
-    Component.onCompleted: console.log(Qt.locale().uiLanguages)
+    Translator {
+        id: translator
+    }
+
+    MessageBox {
+        id: message
+        source: registrationForm
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: 5 * Screen.pixelDensity
+            color: Style.light.text
+            opacity: 0.7
+
+            ListView {
+                id: list
+
+                anchors.fill: parent
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
+
+                highlightFollowsCurrentItem: true
+                highlightMoveDuration: 0
+
+                currentIndex: translator.currentCountry
+                model: translator.countries
+                delegate: DMRow {
+                    height: 24
+                    width: parent.width
+                    text: name
+
+                    onClicked: list.currentIndex = index
+
+                    DMRoundComponent {
+                        anchors.fill: parent
+                        anchors.margins: 1 * Screen.pixelDensity
+                        Image {
+                            anchors.fill: parent
+                            source: "qrc:/flags/" + code + ".svg"
+                        }
+                    }
+                }
+                highlight: Rectangle {
+                    color: Style.dark.highlight
+                }
+            }
+        }
+    }
 
     /*SplashScreen {
         anchors.fill: parent
