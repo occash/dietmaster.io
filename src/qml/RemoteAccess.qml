@@ -1,7 +1,7 @@
 import QtQuick 2.3
 import Enginio 1.0
 import Qt.labs.settings 1.0
-import Search 1.0 //Qt bug #45050 workaround
+import DietMaster 1.0 //Qt bug #45050 workaround
 
 import "utils.js" as Utils
 import "operation.js" as Operation

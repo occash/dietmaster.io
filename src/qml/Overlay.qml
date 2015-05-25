@@ -6,18 +6,19 @@ Item {
 
     anchors.fill: source
 
-    /*property string animationTarget: "radius"
+    property string animationTarget: "radius"
     property variant from: 0
-    property variant to: 16*/
+    property variant to: 8
     property variant source: null
     property Component effect: GaussianBlur {
+        deviation: 2
         radius: 8
         samples: 16
     }
 
     signal clicked()
 
-    /*onVisibleChanged: {
+    onVisibleChanged: {
         if (visible) {
             hideAnimation.stop()
             showAnimation.start()
@@ -25,7 +26,7 @@ Item {
             showAnimation.stop()
             hideAnimation.start()
         }
-    }*/
+    }
 
     Loader {
         id: loader
@@ -44,12 +45,13 @@ Item {
         onClicked: overlay.clicked()
     }
 
-    /*PropertyAnimation {
+    PropertyAnimation {
         id: showAnimation
         target: loader.item
         property: animationTarget
         from: overlay.from
         to: overlay.to
+        duration: 800
     }
 
     PropertyAnimation {
@@ -58,6 +60,7 @@ Item {
         property: animationTarget
         from: overlay.to
         to: overlay.from
-    }*/
+        duration: 800
+    }
 }
 
