@@ -29,7 +29,7 @@ ListView {
             anchors.fill: parent
             anchors.leftMargin: 2
             text: modelData.name
-            color: Style.textColor
+            color: Style.dark.text
             verticalAlignment: Text.AlignVCenter
         }
 
@@ -38,7 +38,7 @@ ListView {
             onClicked: select(index)
         }
     }
-    highlight: Rectangle { color: Style.selectionColor }
+    highlight: Rectangle { color: Style.dark.highlight }
     highlightFollowsCurrentItem: true
 }
 

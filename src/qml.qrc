@@ -20,6 +20,7 @@
         <file alias="DMRow.qml">qml/DMRow.qml</file>
         <file alias="DMSizeGrip.qml">qml/DMSizeGrip.qml</file>
         <file alias="DMWindow.qml">qml/DMWindow.qml</file>
+        <file alias="DMRoundImage.qml">qml/DMRoundImage.qml</file>
         <file alias="facts.js">qml/facts.js</file>
         <file alias="FatButton.qml">qml/FatButton.qml</file>
         <file alias="FatPanel.qml">qml/FatPanel.qml</file>
@@ -47,6 +48,8 @@
         <file alias="UserInfo.qml">qml/UserInfo.qml</file>
         <file alias="utils.js">qml/utils.js</file>
         <file alias="VerticalSpacer.qml">qml/VerticalSpacer.qml</file>
+        <file alias="VCard.qml">qml/VCard.qml</file>
+        <file alias="VCardGroup.qml">qml/VCardGroup.qml</file>
         <file alias="xregexp.js">qml/xregexp.js</file>
     </qresource>
 </RCC>

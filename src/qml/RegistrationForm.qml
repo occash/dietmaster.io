@@ -7,6 +7,10 @@ import "style"
 Item {
     id: registrationForm
 
+    property var client: null
+
+    Component.onCompleted: console.log(client)
+
     Rectangle {
         id: header
         color: Style.light.button
@@ -99,9 +103,17 @@ Item {
                 width: pages.width
 
                 Loader {
+                    id: loader
                     anchors.fill: parent
                     anchors.margins: 2 * Screen.pixelDensity
                     source: component
+
+                    Binding {
+                        when: loader.status == Loader.Ready
+                        target: loader.item
+                        property: "client"
+                        value: client
+                    }
                 }
             }
         }

@@ -6,17 +6,18 @@ import "style"
 
 Rectangle {
     id: splash
-    color: "white"
 
     property alias client: loginForm.client
 
-    property bool loading: true
-    property bool login: false
+    //property bool loading: false
+    //property bool login: false
 
     property alias logo: logo.source
     property alias text: text.text
 
-    states: [
+    signal register()
+
+    /*states: [
         State {
             name: "login"
             when: !loading
@@ -45,7 +46,7 @@ Rectangle {
                 }
             }
         }
-    ]
+    ]*/
 
     Image {
         id: logo
@@ -70,17 +71,17 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
     }
 
-    ProgressBar {
+    /*ProgressBar {
         id: indicator
         anchors.centerIn: loginForm
         indeterminate: true
         style: DMProgressBarStyle { dark: false }
-    }
+    }*/
 
     LoginForm {
         id: loginForm
-        opacity: 0
-        height: 100
+        //opacity: 0
+        height: 32 * Screen.pixelDensity
 
         anchors {
             left: parent.left
@@ -91,6 +92,8 @@ Rectangle {
             bottomMargin: 5 * Screen.pixelDensity
             rightMargin: 2 * Screen.pixelDensity
         }
+
+        onRegister: splash.register()
     }
 }
 

@@ -13,15 +13,25 @@ ApplicationWindow {
     width: 90 * Screen.pixelDensity
     height: 150 * Screen.pixelDensity
 
+    /*Flickable {
+        id: flickable
+        anchors.fill: parent
+
+        contentWidth: width
+        contentHeight: vcard.height
+
+        VCard {
+            id:vcard
+
+            width: parent.width
+            height: 800
+        }
+    }*/
+
     Loader {
-        id: client
+        id: remote
         asynchronous: true
         sourceComponent: RemoteAccess {}
-    }
-
-    RegistrationForm {
-        id: registrationForm
-        anchors.fill: parent
     }
 
     /*
@@ -55,7 +65,9 @@ ApplicationWindow {
 
     MessageBox {
         id: message
-        source: registrationForm
+        source: loader.item
+        anchors.fill: parent
+        z: 1
 
         Rectangle {
             anchors.fill: parent
@@ -98,15 +110,52 @@ ApplicationWindow {
         }
     }
 
-    /*SplashScreen {
+    SplashScreen {
         anchors.fill: parent
-        logo: "qrc:/images/logo.jpg"
+        logo: "qrc:/logo.jpg"
         text: qsTr("DietMaster")
-        loading: client.state === Loader.Loading
-        client: client.item
+        //loading: client.state === Loader.Loading
+        client: remote.item
+
+        onRegister: loader.sourceComponent = registrationForm
     }
 
-    Item {
+    Component {
+        id: mainForm
+
+        MainForm {
+            anchors.fill: parent
+            client: remote.item
+        }
+    }
+
+    Component {
+        id: registrationForm
+
+        RegistrationForm {
+            anchors.fill: parent
+            client: remote.item
+        }
+    }
+
+    Loader {
+        id: loader
+        anchors.fill: parent
+    }
+
+    Binding {
+        when: loader.status == Loader.Ready && remote.status == Loader.Ready
+        target: loader.item
+        property: "client"
+        value: remote.item
+    }
+
+    Connections {
+        target: remote.item
+        onLoggedin: loader.sourceComponent = mainForm
+    }
+
+    /*Item {
         id: central
         anchors.fill: parent
 

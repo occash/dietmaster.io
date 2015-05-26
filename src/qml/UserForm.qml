@@ -13,7 +13,7 @@ Rectangle {
     id: userForm
     color: "transparent"
 
-    property RemoteAccess client: null
+    property var client: null
 
     function validateUsername(username) {
         var allowedChars = /^[-\w\._]+$/
@@ -89,11 +89,11 @@ Rectangle {
     }
 
     function validateName(name) {
-        var re = new XRegExp.XRegExp("^\\p{L}*$")
+        var re = new XRegExp.XRegExp("^(?:\\p{L}|\\s)+$")
         return name.length > 0 && re.test(name)
     }
 
-    Provider {
+    /*Provider {
         id: provider
 
         onSuccess: {
@@ -105,7 +105,7 @@ Rectangle {
         onError: {
             console.log("Error", message)
         }
-    }
+    }*/
 
     ColumnLayout {
         id: layout
@@ -165,23 +165,21 @@ Rectangle {
             isDefault: true
 
             function check() {
-                valid = true //validateEmail(text)
+                valid = validateEmail(text)
                 severity = valid ? Severity.Good : Severity.Bad
                 errorString = qsTr("Invalid e-mail")
                 return valid
             }
 
             function checkFull() {
-                provider.request(Providers.Twitter, text)
-
                 var queryString = { "query": { "email": text } }
                 var reply = client.query(queryString, Operation.User)
                 reply.finished.connect(function() {
                     valid = reply.data.results.length === 0
                     severity = valid ? Severity.Good : Severity.Bad
                     errorString = qsTr("E-mail is already in use")
-                    if (valid)
-                        provider.request(Providers.Twitter, text)
+                    /*if (valid)
+                        provider.request(Providers.Twitter, text)*/
                 })
                 return valid
             }

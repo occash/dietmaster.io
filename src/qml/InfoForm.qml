@@ -6,9 +6,9 @@ import "style"
 
 Rectangle {
     id: infoForm
-    color: Style.dark.base
+    color: Style.dark.text
 
-    property RemoteAccess client: null
+    property var client: null
 
     signal next()
 
@@ -40,7 +40,7 @@ Rectangle {
                 text: qsTr("Male")
                 checked: true
                 exclusiveGroup: genderGroup
-                style: DMRadioButtonStyle {}
+                style: DMRadioButtonStyle { dark: false }
             }
             RadioButton {
                 id: femaleRadio
@@ -48,7 +48,7 @@ Rectangle {
                 Layout.fillWidth: true
                 text: qsTr("Female")
                 exclusiveGroup: genderGroup
-                style: DMRadioButtonStyle {}
+                style: DMRadioButtonStyle { dark: false }
             }
         }
 
@@ -67,7 +67,7 @@ Rectangle {
 
             Layout.fillWidth: true
             text: Qt.formatDate(calendar.selectedDate)
-            style: DMTextFieldStyle {}
+            style: DMTextFieldStyle { dark: false }
         }
 
         Calendar {
@@ -97,7 +97,7 @@ Rectangle {
             maximumValue: 300
 
             value: maleRadio.checked ? 75 : 50
-            style: DMSpinBoxStyle {}
+            style: DMSpinBoxStyle { dark: false }
         }
 
         Label {
@@ -119,7 +119,7 @@ Rectangle {
             maximumValue: 300
 
             value: maleRadio.checked ? 175 : 160
-            style: DMSpinBoxStyle {}
+            style: DMSpinBoxStyle { dark: false }
         }
 
         Label {
@@ -141,7 +141,7 @@ Rectangle {
             maximumValue: 100
 
             value: fatPanel.fatPercentage
-            style: DMSpinBoxStyle {}
+            style: DMSpinBoxStyle { dark: false }
         }
 
         FatPanel {
@@ -165,7 +165,7 @@ Rectangle {
             id: lifestyleCombo
 
             Layout.fillWidth: true
-            style: DMComboBoxStyle {}
+            style: DMComboBoxStyle { dark: false }
 
             model: ListModel {
                 ListElement { text: "No fitness" }
@@ -185,7 +185,7 @@ Rectangle {
 
             isDefault: true
             text: qsTr("Send")
-            style: DMButtonStyle {}
+            style: DMButtonStyle { dark: false }
 
             onClicked: {
                 var birth = Date.fromLocaleDateString(Qt.locale(), birthField.text, Locale.ShortFormat)
