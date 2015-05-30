@@ -45,5 +45,6 @@ ButtonStyle {
         anchors.fill: parent
         color: palette.buttonText
         font.weight: Font.DemiBold
+        renderType: Text.NativeRendering
     }
 }

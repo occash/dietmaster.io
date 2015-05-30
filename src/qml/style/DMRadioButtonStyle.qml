@@ -15,7 +15,7 @@ RadioButtonStyle {
         implicitHeight: 4 * Screen.pixelDensity
 
         color: palette.alternateBase
-        border.color: palette.alternateBase
+        border.color: palette.dark
         radius: width * 0.5
 
         Rectangle {
@@ -49,5 +49,6 @@ RadioButtonStyle {
     label: Text {
         color: palette.text
         text: control.text
+        renderType: Text.NativeRendering
     }
 }

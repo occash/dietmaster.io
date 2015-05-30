@@ -19,7 +19,7 @@ SpinBoxStyle {
 
         color: palette.alternateBase
         border.width: 1
-        border.color: palette.alternateBase
+        border.color: palette.dark
 
         states: [
             State {
@@ -43,7 +43,7 @@ SpinBoxStyle {
     incrementControl: Item {
         implicitWidth: padding.right
         Image {
-            source: "qrc:/icons/arrow_up.png"
+            source: "qrc:/icons/" + (dark ? "dark" : "light") + "/arrow_up.png"
             anchors.centerIn: parent
             anchors.verticalCenterOffset: 1
             //opacity: control.enabled ? (styleData.upPressed ? 1 : 0.6) : 0.5
@@ -54,7 +54,7 @@ SpinBoxStyle {
     decrementControl: Item {
         implicitWidth: padding.right
         Image {
-            source: "qrc:/icons/arrow_down.png"
+            source: "qrc:/icons/" + (dark ? "dark" : "light") + "/arrow_down.png"
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -2
             //opacity: control.enabled ? (styleData.downPressed ? 1 : 0.6) : 0.5

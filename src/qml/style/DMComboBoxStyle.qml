@@ -23,7 +23,7 @@ ComboBoxStyle {
         Image {
             id: imageItem
             visible: control.menu !== null
-            source: "qrc:/icons/arrow_down.png"
+            source: "qrc:/icons/" + (dark ? "dark" : "light") + "/arrow_down.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 2 * Screen.pixelDensity
@@ -61,6 +61,7 @@ ComboBoxStyle {
         anchors.fill: parent
         color: palette.text
         renderType: Text.NativeRendering
+        font.family: "Segoe UI"
         //font.weight: Font.DemiBold
     }
 

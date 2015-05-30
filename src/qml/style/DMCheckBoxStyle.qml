@@ -15,7 +15,7 @@ CheckBoxStyle {
         implicitHeight: 4 * Screen.pixelDensity
 
         color: palette.alternateBase
-        border.color: palette.alternateBase
+        border.color: palette.dark
 
         Rectangle {
             visible: control.checked
@@ -47,6 +47,7 @@ CheckBoxStyle {
     label: Text {
         color: palette.text
         text: control.text
+        renderType: Text.NativeRendering
     }
 }
 
