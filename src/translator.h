@@ -7,8 +7,8 @@
 class Country : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(QString code READ code)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QString code READ code NOTIFY codeChanged)
 
 public:
     Country() {}
@@ -16,6 +16,10 @@ public:
 
     QString name() const;
     QString code() const;
+
+signals:
+    void nameChanged();
+    void codeChanged();
 
 private:
     QString m_name;
@@ -26,7 +30,7 @@ private:
 class Translator : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<Country> countries READ countries)
+    Q_PROPERTY(QQmlListProperty<Country> countries READ countries NOTIFY countriesChanged)
     Q_PROPERTY(int currentCountry READ currentCountry WRITE setCurrentCountry NOTIFY currentCountryChanged)
 
 public:
@@ -38,6 +42,7 @@ public:
     void setCurrentCountry(int arg);
 
 signals:
+    void countriesChanged();
     void currentCountryChanged(int arg);
 
 private:
