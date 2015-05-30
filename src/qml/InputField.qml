@@ -22,6 +22,7 @@ Column {
     property alias placeholder: field.placeholderText
     property alias echo: field.echoMode
     property alias errorString: error.text
+    property alias hints: field.inputMethodHints
 
     signal validate()
     signal validateFull()

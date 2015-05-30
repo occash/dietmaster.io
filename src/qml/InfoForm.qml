@@ -6,11 +6,49 @@ import "style"
 
 Rectangle {
     id: infoForm
-    color: Style.dark.text
 
     property var client: null
+    property var user: null
 
-    signal next()
+    function check() {
+        return true
+    }
+
+    Binding {
+        target: user
+        property: "gender"
+        value: genderGroup.current == maleRadio
+    }
+
+    Binding {
+        target: user
+        property: "birthdate"
+        value: Date.fromLocaleDateString(Qt.locale(), birthField.text, Locale.ShortFormat)
+    }
+
+    Binding {
+        target: user
+        property: "height"
+        value: heightSpin.value
+    }
+
+    Binding {
+        target: user
+        property: "weight"
+        value: weightSpin.value
+    }
+
+    Binding {
+        target: user
+        property: "lifestyle"
+        value: lifestyleCombo.currentIndex
+    }
+
+    Binding {
+        target: user
+        property: "diabetic"
+        value: diabeticCheck.checked
+    }
 
     ColumnLayout {
         id: layout
@@ -66,17 +104,18 @@ Rectangle {
             id: birthField
 
             Layout.fillWidth: true
-            text: Qt.formatDate(calendar.selectedDate)
+            text: new Date().toLocaleDateString(Qt.locale(), Locale.ShortFormat)
             style: DMTextFieldStyle { dark: false }
+            inputMethodHints: Qt.ImhDate
         }
 
-        Calendar {
+        /*Calendar {
             id: calendar
             visible: false//birthField.activeFocus
             selectedDate: new Date(1990, 1, 1)
 
             Layout.fillWidth: true
-        }
+        }*/
 
         Label {
             id: weightLabel
@@ -122,7 +161,7 @@ Rectangle {
             style: DMSpinBoxStyle { dark: false }
         }
 
-        Label {
+        /*Label {
             id: fatPercentLabel
 
             Layout.fillWidth: true
@@ -149,7 +188,7 @@ Rectangle {
             visible: fatPercentSpin.activeFocus
 
             Layout.fillWidth: true
-        }
+        }*/
 
         Label {
             id: lifestyleLabel
@@ -178,7 +217,16 @@ Rectangle {
             }
         }
 
-        Button {
+        CheckBox {
+            id: diabeticCheck
+            Layout.fillWidth: true
+            text: qsTr("I'm diabetic")
+            //checked: client.autoLogin
+
+            style: DMCheckBoxStyle { dark: false }
+        }
+
+        /*Button {
             id: loginButton
 
             Layout.fillWidth: true
@@ -205,12 +253,9 @@ Rectangle {
                         next()
                 })
             }
-        }
+        }*/
 
-        Item {
-            id: spacer
-            Layout.fillHeight: true
-        }
+        VerticalSpacer {}
     }
 }
 

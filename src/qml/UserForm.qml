@@ -14,6 +14,16 @@ Rectangle {
     color: "transparent"
 
     property var client: null
+    property var user: null
+
+    function check() {
+        var res = true
+        res &= emailField.check() && emailField.checkFull()
+        res &= usernameField.check() && usernameField.checkFull()
+        res &= passwordField.check()
+        res &= fullnameField.check()
+        return res
+    }
 
     function validateUsername(username) {
         var allowedChars = /^[-\w\._]+$/
@@ -93,19 +103,35 @@ Rectangle {
         return name.length > 0 && re.test(name)
     }
 
-    /*Provider {
-        id: provider
+    Binding {
+        target: user
+        property: "email"
+        value: emailField.text
+    }
 
-        onSuccess: {
-            console.log("Success")
-            usernameField.text = username
-            fullnameField.text = fullname
-        }
+    Binding {
+        target: user
+        property: "username"
+        value: usernameField.text
+    }
 
-        onError: {
-            console.log("Error", message)
-        }
-    }*/
+    Binding {
+        target: user
+        property: "password"
+        value: passwordField.text
+    }
+
+    Binding {
+        target: user
+        property: "firstname"
+        value: firstnameField.text
+    }
+
+    Binding {
+        target: user
+        property: "lastname"
+        value: lastnameField.text
+    }
 
     ColumnLayout {
         id: layout
@@ -163,6 +189,7 @@ Rectangle {
             placeholder: qsTr("E-mail")
             dark: false
             isDefault: true
+            hints: Qt.ImhEmailCharactersOnly
 
             function check() {
                 valid = validateEmail(text)
@@ -239,10 +266,10 @@ Rectangle {
         }
 
         InputField {
-            id: fullnameField
+            id: firstnameField
             Layout.fillWidth: true
             //title: qsTr("First name")
-            placeholder: qsTr("Full name")
+            placeholder: qsTr("First name")
             dark: false
 
             function check() {
@@ -255,83 +282,24 @@ Rectangle {
             onValidate: check()
         }
 
-        /*InputField {
+        InputField {
             id: lastnameField
             Layout.fillWidth: true
-            //title: qsTr("Last name")
+            //title: qsTr("First name")
             placeholder: qsTr("Last name")
             dark: false
 
             function check() {
                 valid = validateName(text)
                 severity = valid ? Severity.Good : Severity.Bad
-                errorString = qsTr("Invalid last name")
+                errorString = qsTr("Invalid name")
                 return valid
             }
 
             onValidate: check()
-        }*/
-
-        /*Button {
-            id: nextButton
-
-            Layout.fillWidth: true
-
-            isDefault: true
-            text: enabled ? qsTr("Next") : qsTr("Registering")
-            style: DMButtonStyle { dark: false }
-
-            onClicked: {
-                registerError.visible = true
-
-                var res = true
-                res &= usernameField.check() && usernameField.checkFull()
-                res &= passwordField.check()
-                res &= emailField.check() && emailField.checkFull()
-                res &= firstnameField.check()
-                res &= lastnameField.check()
-
-                if (res) {
-                    var query = {
-                        "username": usernameField.text,
-                        "password": passwordField.text,
-                        "email": emailField.text,
-                        "firstName": firstnameField.text,
-                        "lastName": lastnameField.text
-                    }
-
-                    nextButton.enabled = false
-
-                    var reply = client.create(query, Operation.User)
-                    reply.finished.connect(function() {
-                        if (!reply.isError) {
-                            client.username = usernameField.text
-                            client.password = passwordField.text
-                            client.autoLogin = true
-                            client.login()
-                        } else {
-                            registerError.visible = true
-                            registerError.text = reply.errorString
-                        }
-
-                        nextButton.enabled = true
-                    })
-                }
-            }
         }
 
-        Label {
-            id: registerError
-            Layout.fillHeight: true
-            visible: false
-            color: "red"
-            wrapMode: Text.WordWrap
-        }*/
-
-        Item {
-            id: spacer
-            Layout.fillHeight: true
-        }
+        VerticalSpacer {}
     }
 }
 

@@ -34,6 +34,10 @@ ApplicationWindow {
         sourceComponent: RemoteAccess {}
     }
 
+    UserInfo {
+        id: userInfo
+    }
+
     /*
     MessageBox {
         id: message
@@ -117,83 +121,30 @@ ApplicationWindow {
         //loading: client.state === Loader.Loading
         client: remote.item
 
-        onRegister: loader.sourceComponent = registrationForm
+        onRegister: loader.source = "RegistrationForm.qml"
     }
 
-    Component {
-        id: mainForm
-
-        MainForm {
-            anchors.fill: parent
-            client: remote.item
-        }
-    }
-
-    Component {
-        id: registrationForm
-
-        RegistrationForm {
-            anchors.fill: parent
-            client: remote.item
-        }
+    Connections {
+        target: remote.item
+        onLoggedin: loader.source = "MainForm.qml"
     }
 
     Loader {
         id: loader
         anchors.fill: parent
+
+        Binding {
+            when: loader.status === Loader.Ready
+            target: loader.item
+            property: "client"
+            value: remote.item
+        }
+
+        Binding {
+            when: loader.status === Loader.Ready
+            target: loader.item
+            property: "user"
+            value: userInfo
+        }
     }
-
-    Binding {
-        when: loader.status == Loader.Ready && remote.status == Loader.Ready
-        target: loader.item
-        property: "client"
-        value: remote.item
-    }
-
-    Connections {
-        target: remote.item
-        onLoggedin: loader.sourceComponent = mainForm
-    }
-
-    /*Item {
-        id: central
-        anchors.fill: parent
-
-        property string sourceComponent: ""
-
-        function loadComponent(component) {
-            fadeIn.stop()
-            fadeOut.start()
-            sourceComponent = component
-        }
-
-        Loader {
-            id: loader
-            anchors.fill: parent
-            onLoaded: {
-                fadeOut.stop()
-                fadeIn.start()
-            }
-
-            Connections {
-                target: client.item
-                onLoggedin: central.loadComponent("MainForm.qml")
-            }
-        }
-
-        NumberAnimation on opacity {
-            id: fadeOut
-            to: 0.0
-            running: false
-            onStopped: {
-                loader.source = central.sourceComponent
-            }
-        }
-
-        NumberAnimation on opacity {
-            id: fadeIn
-            to: 1.0
-            running: false
-        }
-    }*/
 }

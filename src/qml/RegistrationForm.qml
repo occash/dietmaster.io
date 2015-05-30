@@ -3,13 +3,42 @@ import QtQuick.Window 2.0
 import QtGraphicalEffects 1.0
 
 import "style"
+import "operation.js" as Operation
 
 Item {
     id: registrationForm
 
     property var client: null
+    property var user: null
 
-    Component.onCompleted: console.log(client)
+    /*Provider {
+        id: provider
+
+        onSuccess: {
+            console.log("Success")
+            usernameField.text = username
+            fullnameField.text = fullname
+        }
+
+        onError: {
+            console.log("Error", message)
+        }
+    }*/
+
+    function register() {
+        var reply = client.create(user.create(), Operation.User)
+        reply.finished.connect(function() {
+            if (!reply.isError) {
+                client.username = user.username
+                client.password = user.password
+                client.login()
+            } else {
+                /*registerError.visible = true
+                registerError.text = reply.errorString*/
+                console.log("Error", reply.errorString)
+            }
+        })
+    }
 
     Rectangle {
         id: header
@@ -72,7 +101,7 @@ Item {
 
         ListElement { component: "UserForm.qml" }
         ListElement { component: "InfoForm.qml" }
-        ListElement { component: "UserForm.qml" }
+        ListElement { component: "ExtraForm.qml" }
     }
 
     Rectangle {
@@ -113,6 +142,19 @@ Item {
                         target: loader.item
                         property: "client"
                         value: client
+                    }
+
+                    Binding {
+                        when: loader.status == Loader.Ready
+                        target: loader.item
+                        property: "user"
+                        value: user
+                    }
+
+                    Connections {
+                        target: loader.item
+                        ignoreUnknownSignals: true
+                        onRegister: register()
                     }
                 }
             }

@@ -52,7 +52,7 @@ Row {
         width: parent.width / 4
         height: parent.height
 
-        title: qsTr("Carbohydrate")
+        title: qsTr("Carbs")
         maxValue: nutrient.carbohydrate
         currentValue: 0
     }

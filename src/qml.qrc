@@ -26,6 +26,7 @@
         <file alias="FatPanel.qml">qml/FatPanel.qml</file>
         <file alias="HorizontalSpacer.qml">qml/HorizontalSpacer.qml</file>
         <file alias="InfoForm.qml">qml/InfoForm.qml</file>
+        <file alias="ExtraForm.qml">qml/ExtraForm.qml</file>
         <file alias="InputField.qml">qml/InputField.qml</file>
         <file alias="Link.qml">qml/Link.qml</file>
         <file alias="LoginForm.qml">qml/LoginForm.qml</file>
