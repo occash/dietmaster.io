@@ -125,6 +125,7 @@ Item {
             snapMode: ListView.SnapOneItem
             boundsBehavior: Flickable.StopAtBounds
             clip: true
+            cacheBuffer: width * 2
 
             model: dataModel
             delegate: Item {
