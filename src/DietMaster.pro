@@ -26,3 +26,12 @@ DISTFILES += \
     qml/style/*.qml \
     qml/style/qmldir
 
+android {
+DISTFILES += \
+    android/* \
+    android/gradle/wrapper/* \
+    android/res/values/*
+}
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
