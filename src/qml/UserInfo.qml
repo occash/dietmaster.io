@@ -23,6 +23,11 @@ QtObject {
     property real neck: 50
     property real hip: 35
 
+    //Social info
+    property url photo: "photo-default.png"
+    property url backgroundImage: ""
+    property color backgroundColor: "#607d8b"
+
     property int age: 30
     property real fatpercent: 0.2
 

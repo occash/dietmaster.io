@@ -65,7 +65,7 @@ Item {
     Rectangle {
         id: pageIndicator
         color: Style.light.button
-        height: 4 * Screen.pixelDensity
+        height: 5 * Screen.pixelDensity
 
         anchors {
             left: parent.left
@@ -74,6 +74,7 @@ Item {
         }
 
         Row {
+            id: dots
             anchors.centerIn: parent
             spacing: 3 * Screen.pixelDensity
 

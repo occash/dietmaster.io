@@ -22,11 +22,6 @@ Rectangle {
         }
      }
 
-    Component.onCompleted: {
-        console.log(client)
-        console.log(user)
-    }
-
     function updateInfo() {
         var queryString = {
             "objectType": "objects.userinfo",
@@ -109,17 +104,25 @@ Rectangle {
         }
     }
 
-    Item {
-        anchors.fill: parent
-        anchors.margins: 2 * Screen.pixelDensity
+    VCard {
+        id: board
+
+        user: mainForm.user
+        height: 28 * Screen.pixelDensity
+
+        anchors {
+            left: parent.left
+            top: parent.top
+            right: parent.right
+        }
 
         OptimalNutrient {
             id: nutrient
             user: mainForm.user
         }
 
-        DashBoard {
-            id: board
+        /*DashBoard {
+            id: dashboard
             nutrient: nutrient
 
             anchors {
@@ -127,123 +130,62 @@ Rectangle {
                 top: parent.top
                 right: parent.right
             }
-            height: parent.width / 5 //parent.height / 9
+            height: parent.height / 2
+        }*/
+    }
+
+    HomeForm {
+        anchors {
+            left: parent.left
+            top: board.bottom
+            right: parent.right
+            bottom: buttons.top
+        }
+    }
+
+    Rectangle {
+        id: buttons
+        height: 11 * Screen.pixelDensity
+        color: Style.light.button
+
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+            right: parent.right
         }
 
-        Flickable {
-            id: flickable
+        ExclusiveGroup {
+            id: group
+        }
 
-            anchors {
-                left: parent.left
-                top: board.bottom
-                right: parent.right
-                bottom: parent.bottom
+        RowLayout {
+            anchors.fill: parent
+            spacing: 0
+
+            Button {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                iconSource: "home.png"
+                style: DMButtonStyle { dark: false }
+                exclusiveGroup: group
+                checkable: true
+                checked: true
             }
-
-            ColumnLayout {
-                id: layout
-
-                anchors.fill: parent
-
-                InputField {
-                    id: productField
-                    Layout.fillWidth: true
-                    title: qsTr("Product")
-                    placeholder: qsTr("Enter product name")
-                    isDefault: true
-
-                    property bool selected: false
-                    property var reply: null
-
-                    function update() {
-                        if (reply.data.results.length > 0) {
-                            list.model = reply.data.results
-                            list.visible = true
-                        } else
-                            list.visible = false
-                    }
-
-                    function check() {
-                        if (selected) {
-                            selected = false
-                            return
-                        }
-
-                        currentProduct = null
-
-                        if (reply)
-                            reply.finished.disconnect(update)
-
-                        if (text.length === 0) {
-                            list.visible = false
-                            return
-                        }
-
-                        reply = client.search(text)
-                        reply.finished.connect(update)
-                    }
-
-                    onValidate: check()
-                    onAccept: list.select(list.currentIndex)
-
-                    Keys.onPressed: {
-                        if (event.key === Qt.Key_Down)
-                            list.incrementCurrentIndex()
-                        else if (event.key === Qt.Key_Up)
-                            list.decrementCurrentIndex()
-                    }
-                }
-
-                SuggestList {
-                    id: list
-                    visible: false
-
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: height
-
-                    onSelected: {
-                        currentProduct = data
-                        visible = false
-                        productField.selected = true
-                        productField.text = data.name
-                    }
-                }
-
-                Label {
-                    id: weigthLabel
-
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    color: Style.dark.text
-
-                    text: qsTr("Weight")
-                }
-
-                SpinBox {
-                    id: weidthField
-                    Layout.fillWidth: true
-                    decimals: 2
-                    value: 100
-                    minimumValue: 1
-                    maximumValue: 1500
-                    style: DMSpinBoxStyle {}
-                }
-
-                Button {
-                    id: toolButton
-
-                    Layout.fillWidth: true
-                    isDefault: true
-                    text: qsTr("Add record")
-                    style: DMButtonStyle {}
-                    enabled: currentProduct !== null
-
-                    onClicked: record()
-                }
-
-                VerticalSpacer {
-                    id: spacer
-                }
+            Button {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                iconSource: "stats.png"
+                style: DMButtonStyle { dark: false }
+                exclusiveGroup: group
+                checkable: true
+            }
+            Button {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                iconSource: "tools.png"
+                style: DMButtonStyle { dark: false }
+                exclusiveGroup: group
+                checkable: true
             }
         }
     }

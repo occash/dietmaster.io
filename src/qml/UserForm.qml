@@ -138,7 +138,7 @@ Rectangle {
 
         anchors.fill: parent
 
-        Row {
+        /*Row {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 6 * Screen.pixelDensity
 
@@ -180,7 +180,7 @@ Rectangle {
                     }
                 }
             }
-        }
+        }*/
 
         InputField {
             id: emailField

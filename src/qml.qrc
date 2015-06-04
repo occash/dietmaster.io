@@ -51,6 +51,7 @@
         <file alias="VerticalSpacer.qml">qml/VerticalSpacer.qml</file>
         <file alias="VCard.qml">qml/VCard.qml</file>
         <file alias="VCardGroup.qml">qml/VCardGroup.qml</file>
+        <file alias="HomeForm.qml">qml/HomeForm.qml</file>
         <file alias="xregexp.js">qml/xregexp.js</file>
     </qresource>
 </RCC>

@@ -6,15 +6,13 @@ import "style"
 Rectangle {
     id: vcard
 
-    property string userPhoto: "https://lh3.googleusercontent.com/-S8d0_Ws_sJY/AAAAAAAAAAI/AAAAAAAABAc/v4FZ2mpFCy4/s120-c/photo.jpg"
-    property string backgroundImage: "https://lh3.googleusercontent.com/-MClGeXiAM-0/Uica-OFcG5I/AAAAAAAAA2Q/Olt_LZXcQmU/s923-fcrop64=1,00000c6ffffff44b/World_Scotland_Scotland_Cairngorms_007813_.jpg"
-    property color backgroundColor: "orange"
+    property var user: null
 
     Component {
         id: picture
 
         Image {
-            source: backgroundImage
+            source: user.backgroundImage
             fillMode: Image.PreserveAspectCrop
             smooth: true
         }
@@ -24,36 +22,32 @@ Rectangle {
         id: solid
 
         Rectangle {
-            color: backgroundColor
+            color: user.backgroundColor
         }
     }
 
     Item {
         id: header
-
-        height: 48 * Screen.pixelDensity
-        anchors {
-            left: parent.left
-            top: parent.top
-            right: parent.right
-        }
+        anchors.fill: parent
 
         Loader {
-            id: loader1
+            id: loader
             anchors.fill: parent
-            sourceComponent: backgroundImage ? picture : solid
+            sourceComponent: user.backgroundImage.length > 0 ? picture : solid
         }
 
         DMRoundImage {
             id: photo
 
-            width: 24 * Screen.pixelDensity
-            height: 24 * Screen.pixelDensity
+            width: 15 * Screen.pixelDensity
+            height: 15 * Screen.pixelDensity
             anchors.left: parent.left
             anchors.leftMargin: 2 * Screen.pixelDensity
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 2 * Screen.pixelDensity
-            source: userPhoto
+
+            source: user.photo
+            color: "white"
         }
 
         Text {
@@ -69,14 +63,14 @@ Rectangle {
             color: "#e1dada"
             text: qsTr("Artyom Shal")
             horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
+            verticalAlignment: Text.AlignTop
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
             font.family: "Tahoma"
-            font.pixelSize: 20
+            font.pixelSize: 6 * Screen.pixelDensity
         }
 
-        Text {
+        /*Text {
             id: nickname
 
             anchors.left: photo.right
@@ -89,30 +83,12 @@ Rectangle {
             color: "#e1dada"
             text: qsTr("occash")
             horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
+            verticalAlignment: Text.AlignTop
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
             font.family: "Tahoma"
-            font.pixelSize: 16
-        }
-    }
-
-    VCardGroup {
-        anchors.left: parent.left
-        anchors.top: header.bottom
-        anchors.right: parent.right
-        anchors.margins: 2 * Screen.pixelDensity
-        height: 24 * Screen.pixelDensity
-
-        title: "Basic Information"
-        model: ListModel {
-            id: detaiModel
-
-            ListElement {
-                title: qsTr("Gender")
-                value: "Male"
-            }
-        }
+            font.pixelSize: 5 * Screen.pixelDensity
+        }*/
     }
 }
 

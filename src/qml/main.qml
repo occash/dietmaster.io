@@ -10,8 +10,9 @@ ApplicationWindow {
 
     title: qsTr("DietMaster")
     visible: true
-    width: 90 * Screen.pixelDensity
-    height: 150 * Screen.pixelDensity
+    width: 69 * Screen.pixelDensity
+    height: 122 * Screen.pixelDensity
+    contentOrientation: Qt.PortraitOrientation
 
     /*Flickable {
         id: flickable
@@ -63,7 +64,7 @@ ApplicationWindow {
     }
     */
 
-    Translator {
+    /*Translator {
         id: translator
     }
 
@@ -112,7 +113,7 @@ ApplicationWindow {
                 }
             }
         }
-    }
+    }*/
 
     SplashScreen {
         anchors.fill: parent

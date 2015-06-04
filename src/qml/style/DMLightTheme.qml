@@ -9,5 +9,5 @@ DMTheme {
     button: "#607d8b"
     buttonText: "#fafafa"
     mid: "#607d8b" //placeholder
-    dark: "#607d8b"
+    dark: "#3b4c54"
 }
