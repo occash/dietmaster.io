@@ -134,13 +134,36 @@ Rectangle {
         }*/
     }
 
-    HomeForm {
+    Component {
+        id: homeForm
+
+        HomeForm {}
+    }
+
+    Component {
+        id: statsForm
+
+        StatsForm {}
+    }
+
+    Component {
+        id: toolsForm
+
+        ToolsForm {}
+    }
+
+    Loader {
+        id: view
+
         anchors {
             left: parent.left
             top: board.bottom
             right: parent.right
             bottom: buttons.top
         }
+
+        asynchronous: true
+        sourceComponent: homeForm
     }
 
     Rectangle {
@@ -170,6 +193,11 @@ Rectangle {
                 exclusiveGroup: group
                 checkable: true
                 checked: true
+                onCheckedChanged: {
+                    if (checked) {
+                        view.sourceComponent = homeForm
+                    }
+                }
             }
             Button {
                 Layout.fillHeight: true
@@ -178,6 +206,11 @@ Rectangle {
                 style: DMButtonStyle { dark: false }
                 exclusiveGroup: group
                 checkable: true
+                onCheckedChanged: {
+                    if (checked) {
+                        view.sourceComponent = statsForm
+                    }
+                }
             }
             Button {
                 Layout.fillHeight: true
@@ -186,6 +219,11 @@ Rectangle {
                 style: DMButtonStyle { dark: false }
                 exclusiveGroup: group
                 checkable: true
+                onCheckedChanged: {
+                    if (checked) {
+                        view.sourceComponent = toolsForm
+                    }
+                }
             }
         }
     }

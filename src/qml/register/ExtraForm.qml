@@ -41,24 +41,9 @@ Rectangle {
 
         anchors.fill: parent
 
-        Rectangle {
-            id: warning
-
-            color: Style.light.button
+        Alert {
             Layout.fillWidth: true
-            height: 12 * Screen.pixelDensity
-
-            Text {
-                id: genderLabel
-                anchors.fill: parent
-                anchors.margins: 1 * Screen.pixelDensity
-                text: qsTr("These fields are not required, but it is recommended to fill them in.")
-                color: Style.dark.text
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                renderType: Text.NativeRendering
-            }
+            text: qsTr("These fields are not required, but it is recommended to fill them in.")
         }
 
         Label {
