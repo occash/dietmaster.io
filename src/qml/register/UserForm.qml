@@ -3,11 +3,12 @@ import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
-import "style"
-import "xregexp.js" as XRegExp
-import "severity.js" as Severity
-import "operation.js" as Operation
-import "providers.js" as Providers
+import ".."
+import "../style"
+import "../js/xregexp.js" as XRegExp
+import "../js/severity.js" as Severity
+import "../js/operation.js" as Operation
+import "../js/providers.js" as Providers
 
 Rectangle {
     id: userForm

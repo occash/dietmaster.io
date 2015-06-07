@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
 import "style"
-import "severity.js" as Severity
+import "js/severity.js" as Severity
 
 Column {
     id: input

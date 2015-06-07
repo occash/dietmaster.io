@@ -2,7 +2,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 
-import "style"
+import ".."
+import "../style"
 
 Rectangle {
     id: infoForm

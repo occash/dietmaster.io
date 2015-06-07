@@ -1,6 +1,6 @@
 import QtQuick 2.3
 
-import "providers.js" as Providers
+import "js/providers.js" as Providers
 
 Item {
     id: provider

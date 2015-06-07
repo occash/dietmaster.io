@@ -1,4 +1,10 @@
 <RCC>
+    <qresource prefix="/register">
+        <file alias="ExtraForm.qml">qml/register/ExtraForm.qml</file>
+        <file alias="InfoForm.qml">qml/register/InfoForm.qml</file>
+        <file alias="RegistrationForm.qml">qml/register/RegistrationForm.qml</file>
+        <file alias="UserForm.qml">qml/register/UserForm.qml</file>
+    </qresource>
     <qresource prefix="/style">
         <file alias="DMButtonStyle.qml">qml/style/DMButtonStyle.qml</file>
         <file alias="DMCheckBoxStyle.qml">qml/style/DMCheckBoxStyle.qml</file>
@@ -13,20 +19,29 @@
         <file alias="DMTheme.qml">qml/style/DMTheme.qml</file>
         <file alias="qmldir">qml/style/qmldir</file>
     </qresource>
+    <qresource prefix="/js">
+        <file alias="chart.js">qml/js/chart.js</file>
+        <file alias="facts.js">qml/js/facts.js</file>
+        <file alias="operation.js">qml/js/operation.js</file>
+        <file alias="providers.js">qml/js/providers.js</file>
+        <file alias="severity.js">qml/js/severity.js</file>
+        <file alias="utils.js">qml/js/utils.js</file>
+        <file alias="xregexp.js">qml/js/xregexp.js</file>
+    </qresource>
     <qresource prefix="/">
+        <file alias="Alert.qml">qml/Alert.qml</file>
         <file alias="CentralWindow.qml">qml/CentralWindow.qml</file>
+        <file alias="Chart.qml">qml/Chart.qml</file>
         <file alias="DashBoard.qml">qml/DashBoard.qml</file>
         <file alias="DMRoundComponent.qml">qml/DMRoundComponent.qml</file>
+        <file alias="DMRoundImage.qml">qml/DMRoundImage.qml</file>
         <file alias="DMRow.qml">qml/DMRow.qml</file>
         <file alias="DMSizeGrip.qml">qml/DMSizeGrip.qml</file>
         <file alias="DMWindow.qml">qml/DMWindow.qml</file>
-        <file alias="DMRoundImage.qml">qml/DMRoundImage.qml</file>
-        <file alias="facts.js">qml/facts.js</file>
         <file alias="FatButton.qml">qml/FatButton.qml</file>
         <file alias="FatPanel.qml">qml/FatPanel.qml</file>
+        <file alias="HomeForm.qml">qml/HomeForm.qml</file>
         <file alias="HorizontalSpacer.qml">qml/HorizontalSpacer.qml</file>
-        <file alias="InfoForm.qml">qml/InfoForm.qml</file>
-        <file alias="ExtraForm.qml">qml/ExtraForm.qml</file>
         <file alias="InputField.qml">qml/InputField.qml</file>
         <file alias="Link.qml">qml/Link.qml</file>
         <file alias="LoginForm.qml">qml/LoginForm.qml</file>
@@ -34,24 +49,19 @@
         <file alias="MainForm.qml">qml/MainForm.qml</file>
         <file alias="MessageBox.qml">qml/MessageBox.qml</file>
         <file alias="NutritionPanel.qml">qml/NutritionPanel.qml</file>
-        <file alias="operation.js">qml/operation.js</file>
         <file alias="OptimalNutrient.qml">qml/OptimalNutrient.qml</file>
         <file alias="Overlay.qml">qml/Overlay.qml</file>
         <file alias="Provider.qml">qml/Provider.qml</file>
-        <file alias="providers.js">qml/providers.js</file>
-        <file alias="RegistrationForm.qml">qml/RegistrationForm.qml</file>
         <file alias="RemoteAccess.qml">qml/RemoteAccess.qml</file>
         <file alias="RoundButton.qml">qml/RoundButton.qml</file>
-        <file alias="severity.js">qml/severity.js</file>
         <file alias="SplashScreen.qml">qml/SplashScreen.qml</file>
+        <file alias="StatsForm.qml">qml/StatsForm.qml</file>
         <file alias="SuggestList.qml">qml/SuggestList.qml</file>
-        <file alias="UserForm.qml">qml/UserForm.qml</file>
+        <file alias="ToolsForm.qml">qml/ToolsForm.qml</file>
         <file alias="UserInfo.qml">qml/UserInfo.qml</file>
-        <file alias="utils.js">qml/utils.js</file>
-        <file alias="VerticalSpacer.qml">qml/VerticalSpacer.qml</file>
         <file alias="VCard.qml">qml/VCard.qml</file>
+        <file alias="VCardEntry.qml">qml/VCardEntry.qml</file>
         <file alias="VCardGroup.qml">qml/VCardGroup.qml</file>
-        <file alias="HomeForm.qml">qml/HomeForm.qml</file>
-        <file alias="xregexp.js">qml/xregexp.js</file>
+        <file alias="VerticalSpacer.qml">qml/VerticalSpacer.qml</file>
     </qresource>
 </RCC>

@@ -22,9 +22,11 @@ include(deployment.pri)
 
 DISTFILES += \
     qml/*.qml \
-    qml/*.js \
+    qml/js/*.js \
+    qml/register/*.qml \
     qml/style/*.qml \
-    qml/style/qmldir
+    qml/style/qmldir \
+    qml/Alert.qml
 
 android {
 DISTFILES += \

@@ -122,7 +122,7 @@ ApplicationWindow {
         //loading: client.state === Loader.Loading
         client: remote.item
 
-        onRegister: loader.source = "RegistrationForm.qml"
+        onRegister: loader.source = "register/RegistrationForm.qml"
     }
 
     Connections {

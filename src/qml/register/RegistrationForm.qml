@@ -2,8 +2,9 @@ import QtQuick 2.3
 import QtQuick.Window 2.0
 import QtGraphicalEffects 1.0
 
-import "style"
-import "operation.js" as Operation
+import ".."
+import "../style"
+import "../js/operation.js" as Operation
 
 Item {
     id: registrationForm
