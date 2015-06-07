@@ -1,39 +1,39 @@
-import QtQuick 2.0
+import QtQuick 2.3
+import QtQuick.Window 2.0
 
-Rectangle {
-    id: rectangle1
-    width: 100
-    height: 62
-    color: "#ffffff"
+import "style"
+
+Item {
+    id: entry
+
+    property alias title: titleText.text
+    property alias value: valueText.text
 
     Text {
-        id: title
-        width: 104
-        text: "Gender"
+        id: titleText
+
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
+        width: 24 * Screen.pixelDensity
+
+        color: Style.dark.text
         font.family: "Tahoma"
         verticalAlignment: Text.AlignVCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        font.pixelSize: 16
+        font.pixelSize: 14
     }
 
     Text {
-        id: value
-        text: qsTr("Text")
-        verticalAlignment: Text.AlignVCenter
+        id: valueText
+
         anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: title.right
-        anchors.leftMargin: 0
+        anchors.left: titleText.right
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
         anchors.top: parent.top
-        anchors.topMargin: 0
-        font.pixelSize: 16
+
+        color: Style.dark.text
+        verticalAlignment: Text.AlignVCenter
+        font.pixelSize: 14
     }
 }
 

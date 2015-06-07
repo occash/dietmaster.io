@@ -28,7 +28,7 @@ Item {
             InputField {
                 id: productField
                 Layout.fillWidth: true
-                width: flickable.width
+                width: parent.width
                 //title: qsTr("Product")
                 placeholder: qsTr("Enter product name")
                 isDefault: true
@@ -80,7 +80,7 @@ Item {
                 visible: false
 
                 Layout.fillWidth: true
-                width: flickable.width
+                width: parent.width
                 height: 100
 
                 //Layout.fillWidth: true
@@ -108,7 +108,7 @@ Item {
             SpinBox {
                 id: weidthField
                 Layout.fillWidth: true
-                width: flickable.width
+                width: parent.width
                 decimals: 2
                 value: 100
                 minimumValue: 1
@@ -120,7 +120,7 @@ Item {
                 id: toolButton
 
                 Layout.fillWidth: true
-                width: flickable.width
+                width: parent.width
                 isDefault: true
                 text: qsTr("Add record")
                 style: DMButtonStyle {}

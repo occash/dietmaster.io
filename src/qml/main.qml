@@ -14,21 +14,6 @@ ApplicationWindow {
     height: 122 * Screen.pixelDensity
     contentOrientation: Qt.PortraitOrientation
 
-    /*Flickable {
-        id: flickable
-        anchors.fill: parent
-
-        contentWidth: width
-        contentHeight: vcard.height
-
-        VCard {
-            id:vcard
-
-            width: parent.width
-            height: 800
-        }
-    }*/
-
     Loader {
         id: remote
         asynchronous: true
