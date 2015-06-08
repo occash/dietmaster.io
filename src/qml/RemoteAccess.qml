@@ -3,8 +3,8 @@ import Enginio 1.0
 import Qt.labs.settings 1.0
 import DietMaster 1.0 //Qt bug #45050 workaround
 
-import "utils.js" as Utils
-import "operation.js" as Operation
+import "js/utils.js" as Utils
+import "js/operation.js" as Operation
 
 Item {
     id: remoteAccess

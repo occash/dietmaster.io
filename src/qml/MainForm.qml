@@ -168,7 +168,7 @@ Rectangle {
 
     Rectangle {
         id: buttons
-        height: 11 * Screen.pixelDensity
+        height: 10 * Screen.pixelDensity
         color: Style.light.button
 
         anchors {

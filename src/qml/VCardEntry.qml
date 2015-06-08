@@ -15,12 +15,14 @@ Item {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.top: parent.top
+        anchors.leftMargin: 2 * Screen.pixelDensity
         width: 24 * Screen.pixelDensity
 
         color: Style.dark.text
         font.family: "Tahoma"
         verticalAlignment: Text.AlignVCenter
-        font.pixelSize: 14
+        font.pixelSize: 3 * Screen.pixelDensity
+        renderType: Text.NativeRendering
     }
 
     Text {
@@ -30,10 +32,14 @@ Item {
         anchors.left: titleText.right
         anchors.bottom: parent.bottom
         anchors.top: parent.top
+        anchors.rightMargin: 2 * Screen.pixelDensity
 
         color: Style.dark.text
+        font.family: "Tahoma"
         verticalAlignment: Text.AlignVCenter
-        font.pixelSize: 14
+        horizontalAlignment: Text.AlignRight
+        font.pixelSize: 3 * Screen.pixelDensity
+        renderType: Text.NativeRendering
     }
 }
 

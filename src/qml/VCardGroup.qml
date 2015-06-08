@@ -9,12 +9,13 @@ Rectangle {
     property alias title: entryTitle.text
     property alias model: repeater.model
 
+    height: (8 + 5 * model.count) * Screen.pixelDensity
     color: Style.dark.alternateBase
 
     Text {
         id: entryTitle
 
-        height: 8 * Screen.pixelDensity
+        height: 6 * Screen.pixelDensity
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.top: parent.top
@@ -23,8 +24,9 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        renderType: Text.NativeRendering
         font.family: "Tahoma"
-        font.pixelSize: 16
+        font.pixelSize: 3.5 * Screen.pixelDensity
     }
 
     Column {
@@ -41,7 +43,7 @@ Rectangle {
                 id: entry
 
                 width: parent.width
-                height: 8 * Screen.pixelDensity
+                height: 5 * Screen.pixelDensity
 
                 title: model.title
                 value: model.value

@@ -40,6 +40,7 @@
         <file alias="DMWindow.qml">qml/DMWindow.qml</file>
         <file alias="FatButton.qml">qml/FatButton.qml</file>
         <file alias="FatPanel.qml">qml/FatPanel.qml</file>
+        <file alias="Form.qml">qml/Form.qml</file>
         <file alias="HomeForm.qml">qml/HomeForm.qml</file>
         <file alias="HorizontalSpacer.qml">qml/HorizontalSpacer.qml</file>
         <file alias="InputField.qml">qml/InputField.qml</file>

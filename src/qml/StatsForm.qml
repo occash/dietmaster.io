@@ -4,7 +4,7 @@ import QtQuick.Window 2.0
 import "style"
 
 Item {
-    id: homeForm
+    id: statsForm
     clip: true
 
     Flickable {
@@ -39,7 +39,6 @@ Item {
             id: info
             model: infoModel
             title: "Parameters"
-            height: 32 * Screen.pixelDensity
 
             anchors{
                 top: parent.top
@@ -48,8 +47,8 @@ Item {
             }
         }
 
-        Chart {
-            id: chart
+        Item {
+            id: chartContainer
 
             anchors{
                 top: info.bottom
@@ -58,44 +57,49 @@ Item {
                 bottom: parent.bottom
             }
 
-            animation: false
-            chartAnimationEasing: Easing.InOutElastic
-            chartAnimationDuration: 2000
+            Chart {
+                id: chart
 
-            chartType: "Pie"
-            chartOptions: {
-                "segmentStrokeWidth": 1,
-                "segmentStrokeColor": Style.dark.alternateBase,
-                "tooltipFontSize": 4 * Screen.pixelDensity
-            }
+                anchors.fill: parent
+                anchors.margins: 2 * Screen.pixelDensity
 
-            chartData: [
-                {
-                    value: 300,
-                    color:"#1f77b4",
-                    highlight: "#aec7e8",
-                    label: "Protein"
-                },
-                {
-                    value: 50,
-                    color: "#ff7f0e",
-                    highlight: "#ffbb78",
-                    label: "Fat"
-                },
-                {
-                    value: 100,
-                    color: "#2ca02c",
-                    highlight: "#98df8a",
-                    label: "Carbs"
-                },
-                {
-                    value: 40,
-                    color: "#d62728",
-                    highlight: "#ff9896",
-                    label: "Alcohol"
+                animation: false
+                chartAnimationEasing: Easing.InOutElastic
+                chartAnimationDuration: 2000
+
+                chartType: "Pie"
+                chartOptions: {
+                    "segmentStrokeWidth": 1,
+                    "segmentStrokeColor": Style.dark.alternateBase,
+                    "tooltipFontSize": 4 * Screen.pixelDensity
                 }
-
-            ]
+                chartData: [
+                    {
+                        value: 300,
+                        color:"#1f77b4",
+                        highlight: "#aec7e8",
+                        label: "Protein"
+                    },
+                    {
+                        value: 50,
+                        color: "#ff7f0e",
+                        highlight: "#ffbb78",
+                        label: "Fat"
+                    },
+                    {
+                        value: 100,
+                        color: "#2ca02c",
+                        highlight: "#98df8a",
+                        label: "Carbs"
+                    },
+                    {
+                        value: 40,
+                        color: "#d62728",
+                        highlight: "#ff9896",
+                        label: "Alcohol"
+                    }
+                ]
+            }
         }
     }
 }

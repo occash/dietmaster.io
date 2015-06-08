@@ -33,7 +33,7 @@ Rectangle {
         Loader {
             id: loader
             anchors.fill: parent
-            sourceComponent: user.backgroundImage.length > 0 ? picture : solid
+            sourceComponent: user.backgroundImage ? picture : solid
         }
 
         DMRoundImage {
@@ -50,7 +50,7 @@ Rectangle {
             color: "white"
         }
 
-        Text {
+        /*Text {
             id: name
 
             anchors.left: photo.right
@@ -67,7 +67,39 @@ Rectangle {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
             font.family: "Tahoma"
-            font.pixelSize: 6 * Screen.pixelDensity
+            font.pixelSize: 4 * Screen.pixelDensity
+        }*/
+
+        VCardGroup {
+            id: nutrition
+
+            opacity: 0.7
+
+            anchors {
+                left: photo.right
+                top: parent.top
+                right: parent.right
+                bottom: parent.bottom
+                margins: 2 * Screen.pixelDensity
+            }
+
+            title: "Nutrition"
+            model: ListModel {
+                ListElement {
+                    title: "Protein"
+                    value: 150
+                }
+
+                ListElement {
+                    title: "Fat"
+                    value: 15
+                }
+
+                ListElement {
+                    title: "Carbs"
+                    value: 30
+                }
+            }
         }
 
         /*Text {
