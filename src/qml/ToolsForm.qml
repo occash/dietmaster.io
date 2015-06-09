@@ -8,6 +8,59 @@ Item {
     id: toolsForm
     clip: true
 
+    property var user: null
+
+    ListModel { id: basicModel; dynamicRoles: true }
+    ListModel { id: physicalModel; dynamicRoles: true }
+    ListModel { id: extraModel; dynamicRoles: true }
+
+    onUserChanged: {
+        if (!user)
+            return
+
+        basicModel.clear()
+        basicModel.append({
+            "title": qsTr("Gender"),
+            "value": user.gender ? qsTr("Male") : qsTr("Female")
+        })
+        basicModel.append({
+            "title": qsTr("Birthday"),
+            "value": user.birthdate.toLocaleDateString()
+        })
+
+        physicalModel.clear()
+        physicalModel.append({
+            "title": qsTr("Height"),
+            "value": user.height
+        })
+        physicalModel.append({
+            "title": qsTr("Weight"),
+            "value": user.weight
+        })
+        physicalModel.append({
+            "title": qsTr("Activity"),
+            "value": user.lifestyle
+        })
+        physicalModel.append({
+            "title": qsTr("Diabetic"),
+            "value": user.diabetic ? qsTr("Yes") : qsTr("No")
+        })
+
+        extraModel.clear()
+        extraModel.append({
+            "title": qsTr("Weist"),
+            "value": user.abdomen
+        })
+        extraModel.append({
+            "title": qsTr("Neck"),
+            "value": user.neck
+        })
+        extraModel.append({
+            "title": qsTr("Hip"),
+            "value": user.hip
+        })
+    }
+
     Flickable {
         id: flickable
 
@@ -29,17 +82,7 @@ Item {
 
                 width: parent.width
                 title: "Basic info"
-                model: ListModel {
-                    ListElement {
-                        title: "Gender"
-                        value: "Male"
-                    }
-
-                    ListElement {
-                        title: "Birthday"
-                        value: "23.06.1989"
-                    }
-                }
+                model: basicModel
             }
 
             VCardGroup {
@@ -47,27 +90,7 @@ Item {
 
                 width: parent.width
                 title: "Physical info"
-                model: ListModel {
-                    ListElement {
-                        title: "Height"
-                        value: "182"
-                    }
-
-                    ListElement {
-                        title: "Weight"
-                        value: "92"
-                    }
-
-                    ListElement {
-                        title: "Activity"
-                        value: "No activity"
-                    }
-
-                    ListElement {
-                        title: "Diabetic"
-                        value: "No"
-                    }
-                }
+                model: physicalModel
             }
 
             VCardGroup {
@@ -75,22 +98,7 @@ Item {
 
                 width: parent.width
                 title: "Extra info"
-                model: ListModel {
-                    ListElement {
-                        title: "Weist"
-                        value: 105
-                    }
-
-                    ListElement {
-                        title: "Neck"
-                        value: 55
-                    }
-
-                    ListElement {
-                        title: "Hip"
-                        value: 24
-                    }
-                }
+                model: extraModel
             }
         }
     }

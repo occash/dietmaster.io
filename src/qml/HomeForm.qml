@@ -9,6 +9,37 @@ Item {
     id: homeForm
     clip: true
 
+    function record() {
+        if (currentProduct) {
+            var weight = weidthField.value
+            var factor = weight / 100.0
+
+            board.calories += currentProduct.calories * factor
+            board.protein += currentProduct.protein * factor
+            board.fat += currentProduct.fat * factor
+            board.carbohydrate += currentProduct.carbohydrate * factor
+
+            var currentDate = new Date()
+            currentDate.setHours(0, 0, 0, 0)
+
+            var record = {
+                "objectType": "objects.record",
+                "date": currentDate,
+                "product": {
+                    "id": currentProduct.id,
+                    "objectType": "objects.product"
+                },
+                "weight": weidthField.value
+            }
+            client.create(record)
+
+            currentProduct = null
+            productField.selected = true
+            productField.text = ""
+            weidthField.value = 100
+        }
+    }
+
     Flickable {
         id: flickable
 

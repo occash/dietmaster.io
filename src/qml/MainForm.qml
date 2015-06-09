@@ -6,6 +6,7 @@ import QtQuick.Window 2.0
 
 import "style"
 import "js/severity.js" as Severity
+import "js/operation.js" as Operation
 
 Rectangle {
     id: mainForm
@@ -17,91 +18,24 @@ Rectangle {
 
     onClientChanged:  {
         if (client) {
-            updateNutrient()
             updateInfo()
         }
      }
 
     function updateInfo() {
         var queryString = {
-            "objectType": "objects.userinfo",
+            "objectType": "users",
             "limit": 1,
-            "query": {}
-        }
-        var reply = client.query(queryString)
-        reply.finished.connect(function() {
-            if (!reply.isError)
-                user.update(reply.data.results[0])
-        })
-    }
-
-    function updateNutrient() {
-        var currentDate = new Date()
-        currentDate.setHours(0, 0, 0, 0)
-
-        var queryString = {
-            "objectType": "objects.record",
-            "limit": 100,
             "query": {
-                "date": currentDate
-            },
-            "include": {
-                "product": {}
+                "username": client.username
             }
         }
-        var reply = client.query(queryString)
-
+        var reply = client.query(queryString, Operation.User)
         reply.finished.connect(function() {
-            var totalCalories = 0
-            var totalProtein = 0
-            var totalFat = 0
-            var totalCarbohydrate = 0
-
-            for (var i = 0; i < reply.data.results.length; ++i) {
-                var factor = reply.data.results[i].weight / 100.0
-
-                totalCalories += reply.data.results[i].product.calories * factor
-                totalProtein += reply.data.results[i].product.protein * factor
-                totalFat += reply.data.results[i].product.fat * factor
-                totalCarbohydrate += reply.data.results[i].product.carbohydrate * factor
+            if (!reply.isError) {
+                user.update(reply.data.results[0])
             }
-
-            board.calories = totalCalories
-            board.protein = totalProtein
-            board.fat = totalFat
-            board.carbohydrate = totalCarbohydrate
         })
-    }
-
-    function record() {
-        if (currentProduct) {
-            var weight = weidthField.value
-            var factor = weight / 100.0
-
-            board.calories += currentProduct.calories * factor
-            board.protein += currentProduct.protein * factor
-            board.fat += currentProduct.fat * factor
-            board.carbohydrate += currentProduct.carbohydrate * factor
-
-            var currentDate = new Date()
-            currentDate.setHours(0, 0, 0, 0)
-
-            var record = {
-                "objectType": "objects.record",
-                "date": currentDate,
-                "product": {
-                    "id": currentProduct.id,
-                    "objectType": "objects.product"
-                },
-                "weight": weidthField.value
-            }
-            client.create(record)
-
-            currentProduct = null
-            productField.selected = true
-            productField.text = ""
-            weidthField.value = 100
-        }
     }
 
     VCard {
@@ -115,23 +49,6 @@ Rectangle {
             top: parent.top
             right: parent.right
         }
-
-        OptimalNutrient {
-            id: nutrient
-            user: mainForm.user
-        }
-
-        /*DashBoard {
-            id: dashboard
-            nutrient: nutrient
-
-            anchors {
-                left: parent.left
-                top: parent.top
-                right: parent.right
-            }
-            height: parent.height / 2
-        }*/
     }
 
     Component {
@@ -164,6 +81,13 @@ Rectangle {
 
         asynchronous: true
         sourceComponent: homeForm
+
+        Binding {
+            when: view.status === Loader.Ready
+            target: view.item
+            property: "user"
+            value: mainForm.user
+        }
     }
 
     Rectangle {

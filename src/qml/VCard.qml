@@ -6,7 +6,63 @@ import "style"
 Rectangle {
     id: vcard
 
-    property var user: null
+    property UserInfo user: null
+
+    ListModel { id: nutritionModel }
+
+    onUserChanged: {
+        nutritionModel.clear()
+        nutritionModel.append({
+            "title": "Protein",
+            "value": user.nutrition.protein
+        })
+        nutritionModel.append({
+            "title": "Fat",
+            "value": user.nutrition.fat
+        })
+        nutritionModel.append({
+            "title": "Carbs",
+            "value": user.nutrition.carbohydrate
+        })
+    }
+
+    function updateNutrient() {
+        var currentDate = new Date()
+        currentDate.setHours(0, 0, 0, 0)
+
+        var queryString = {
+            "objectType": "objects.record",
+            "limit": 100,
+            "query": {
+                "date": currentDate
+            },
+            "include": {
+                "product": {}
+            }
+        }
+        var reply = client.query(queryString)
+
+        reply.finished.connect(function() {
+            var totalCalories = 0
+            var totalProtein = 0
+            var totalFat = 0
+            var totalCarbohydrate = 0
+
+            for (var i = 0; i < reply.data.results.length; ++i) {
+                var factor = reply.data.results[i].weight / 100.0
+
+                totalCalories += reply.data.results[i].product.calories * factor
+                totalProtein += reply.data.results[i].product.protein * factor
+                totalFat += reply.data.results[i].product.fat * factor
+                totalCarbohydrate += reply.data.results[i].product.carbohydrate * factor
+            }
+
+            board.calories = totalCalories
+            board.protein = totalProtein
+            board.fat = totalFat
+            board.carbohydrate = totalCarbohydrate
+        })
+    }
 
     Component {
         id: picture
@@ -83,23 +139,8 @@ Rectangle {
                 margins: 2 * Screen.pixelDensity
             }
 
-            title: "Nutrition"
-            model: ListModel {
-                ListElement {
-                    title: "Protein"
-                    value: 150
-                }
-
-                ListElement {
-                    title: "Fat"
-                    value: 15
-                }
-
-                ListElement {
-                    title: "Carbs"
-                    value: 30
-                }
-            }
+            title: user.firstname + " " + user.lastname
+            model: nutritionModel
         }
 
         /*Text {
