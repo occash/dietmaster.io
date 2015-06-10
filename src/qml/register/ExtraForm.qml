@@ -117,7 +117,7 @@ Rectangle {
 
             Layout.fillWidth: true
 
-            isDefault: true
+            //isDefault: true
             text: qsTr("Send")
             style: DMButtonStyle { dark: false }
 

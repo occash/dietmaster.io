@@ -189,7 +189,7 @@ Rectangle {
             //title: qsTr("E-mail")
             placeholder: qsTr("E-mail")
             dark: false
-            isDefault: true
+            //isDefault: true
             hints: Qt.ImhEmailCharactersOnly
 
             function check() {

@@ -62,7 +62,7 @@ Item {
                 width: parent.width
                 //title: qsTr("Product")
                 placeholder: qsTr("Enter product name")
-                isDefault: true
+                //isDefault: true
 
                 property bool selected: false
                 property var reply: null
@@ -152,7 +152,7 @@ Item {
 
                 Layout.fillWidth: true
                 width: parent.width
-                isDefault: true
+                //isDefault: true
                 text: qsTr("Add record")
                 style: DMButtonStyle {}
                 enabled: currentProduct !== null

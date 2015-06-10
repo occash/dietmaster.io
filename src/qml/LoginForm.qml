@@ -35,7 +35,7 @@ Rectangle {
             Layout.fillWidth: true
             dark: false
             placeholder: qsTr("Username")
-            isDefault: true
+            //isDefault: true
             text: client !== null ? client.username : ""
 
             onAccept: login()
@@ -66,7 +66,7 @@ Rectangle {
 
             Layout.fillWidth: true
 
-            isDefault: true
+            //isDefault: true
             enabled: client && !client.busy
             text: (client && client.busy) ? qsTr("Logging in") : qsTr("Login")
 
