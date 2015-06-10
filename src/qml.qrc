@@ -59,6 +59,7 @@
         <file alias="StatsForm.qml">qml/StatsForm.qml</file>
         <file alias="SuggestList.qml">qml/SuggestList.qml</file>
         <file alias="ToolsForm.qml">qml/ToolsForm.qml</file>
+        <file alias="ImageForm.qml">qml/ImageForm.qml</file>
         <file alias="UserInfo.qml">qml/UserInfo.qml</file>
         <file alias="VCard.qml">qml/VCard.qml</file>
         <file alias="VCardEntry.qml">qml/VCardEntry.qml</file>

@@ -29,6 +29,7 @@ DISTFILES += \
     qml/Alert.qml
 
 android {
+QT += androidextras
 DISTFILES += \
     android/* \
     android/gradle/wrapper/* \
