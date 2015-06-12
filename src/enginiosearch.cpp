@@ -8,24 +8,31 @@ EnginioSearch::EnginioSearch(QObject *parent)
 
 EnginioReply *EnginioSearch::search(QString text)
 {
-    /*var q = {
-        "objectTypes": [0, "objects.product"],
+    /* Request documentation
+    {
+        "objectTypes": ["objects.product"],
         "search": {
-            "phrase": text + "*",
-            "properties": ["objectType"]
+            "phrase": text + "*"
         },
-        "limit": 10
+        "iclude": {
+            "group": {}
+        }
     }
-    var reply = client.fullTextSearch(q)*/
+    */
+
     QJsonArray types;
     types.append("objects.product");
 
     QJsonObject search;
     search["phrase"] = text + "*";
 
+    QJsonObject include;
+    include["group"] = QJsonObject();
+
     QJsonObject query;
     query["objectTypes"] = types;
     query["search"] = search;
+    query["include"] = include;
 
     return m_client.fullTextSearch(query);
 }
