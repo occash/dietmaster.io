@@ -256,10 +256,12 @@
     <qresource prefix="/icons/dark">
         <file alias="arrow_down.png">images/icons/dark/arrow_down.png</file>
         <file alias="arrow_up.png">images/icons/dark/arrow_up.png</file>
+        <file alias="close.png">images/icons/dark/close.png</file>
     </qresource>
     <qresource prefix="/icons/light">
         <file alias="arrow_down.png">images/icons/light/arrow_down.png</file>
         <file alias="arrow_up.png">images/icons/light/arrow_up.png</file>
+        <file alias="close.png">images/icons/light/close.png</file>
     </qresource>
     <qresource prefix="/">
         <file alias="logo.jpg">images/logo.jpg</file>

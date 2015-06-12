@@ -9,78 +9,51 @@ Rectangle {
 
     property alias client: loginForm.client
 
-    //property bool loading: false
-    //property bool login: false
-
     property alias logo: logo.source
     property alias text: text.text
 
     signal register()
 
-    /*states: [
-        State {
-            name: "login"
-            when: !loading
-            PropertyChanges { target: indicator; opacity: 0 }
-            PropertyChanges { target: loginForm; opacity: 1 }
-        }
-
-    ]
-
-    transitions: [
-        Transition {
-            to: "login"
-
-            SequentialAnimation {
-                NumberAnimation {
-                    target: indicator
-                    property: "opacity"
-                    duration: 400
-                    easing.type: Easing.OutQuart
-                }
-                NumberAnimation {
-                    target: loginForm
-                    property: "opacity"
-                    duration: 400
-                    easing.type: Easing.InQuart
-                }
-            }
-        }
-    ]*/
-
-    Image {
-        id: logo
-        anchors.left: parent.left
-        anchors.right: parent.right
-        y: (parent.height - loginForm.height - text.height) / 2 - height / 2
-        asynchronous: true
-        fillMode: Image.PreserveAspectFit
-    }
-
-    Text {
-        id: text
+    Item {
+        id: logoContainer
 
         anchors {
-            top: logo.bottom
             left: parent.left
+            bottom: loginForm.top
             right: parent.right
+            top: parent.top
         }
 
-        color: Style.dark.base
-        font.pointSize: 20
-        horizontalAlignment: Text.AlignHCenter
-    }
+        Image {
+            id: logo
 
-    /*ProgressBar {
-        id: indicator
-        anchors.centerIn: loginForm
-        indeterminate: true
-        style: DMProgressBarStyle { dark: false }
-    }*/
+            anchors.centerIn: parent
+            width: parent.width - text.height
+            height: parent.width - text.height
+
+            asynchronous: true
+            fillMode: Image.PreserveAspectFit
+            source: "logo.jpg"
+        }
+
+        Text {
+            id: text
+
+            anchors {
+                bottom: parent.bottom
+                left: parent.left
+                right: parent.right
+            }
+
+            text: qsTr("DietMaster")
+            color: Style.dark.base
+            font.pixelSize: 6 * Screen.pixelDensity
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
 
     LoginForm {
         id: loginForm
-        //opacity: 0
         height: 32 * Screen.pixelDensity
 
         anchors {

@@ -9,7 +9,7 @@ Rectangle {
     id: loginForm
     color: Style.light.base
 
-    property RemoteAccess client: null
+    property var client: null
 
     signal register()
 

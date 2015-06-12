@@ -33,6 +33,7 @@
         <file alias="CentralWindow.qml">qml/CentralWindow.qml</file>
         <file alias="Chart.qml">qml/Chart.qml</file>
         <file alias="DashBoard.qml">qml/DashBoard.qml</file>
+        <file alias="DiaryForm.qml">qml/DiaryForm.qml</file>
         <file alias="DMRoundComponent.qml">qml/DMRoundComponent.qml</file>
         <file alias="DMRoundImage.qml">qml/DMRoundImage.qml</file>
         <file alias="DMRow.qml">qml/DMRow.qml</file>
@@ -46,6 +47,7 @@
         <file alias="InputField.qml">qml/InputField.qml</file>
         <file alias="Link.qml">qml/Link.qml</file>
         <file alias="LoginForm.qml">qml/LoginForm.qml</file>
+        <file alias="ProductForm.qml">qml/ProductForm.qml</file>
         <file alias="main.qml">qml/main.qml</file>
         <file alias="MainForm.qml">qml/MainForm.qml</file>
         <file alias="MessageBox.qml">qml/MessageBox.qml</file>

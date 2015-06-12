@@ -1,5 +1,6 @@
 import QtQuick 2.3
 import QtQuick.Window 2.0
+import QtGraphicalEffects 1.0
 
 import "style"
 
@@ -13,16 +14,20 @@ Rectangle {
     onUserChanged: {
         nutritionModel.clear()
         nutritionModel.append({
+            "title": "Calories",
+            "value": user.nutrition.calories.toFixed()
+        })
+        nutritionModel.append({
             "title": "Protein",
-            "value": user.nutrition.protein
+            "value": user.nutrition.protein.toFixed()
         })
         nutritionModel.append({
             "title": "Fat",
-            "value": user.nutrition.fat
+            "value": user.nutrition.fat.toFixed()
         })
         nutritionModel.append({
             "title": "Carbs",
-            "value": user.nutrition.carbohydrate
+            "value": user.nutrition.carbohydrate.toFixed()
         })
     }
 
@@ -106,30 +111,10 @@ Rectangle {
             color: "white"
         }
 
-        /*Text {
-            id: name
-
-            anchors.left: photo.right
-            anchors.top: photo.top
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: photo.height / 2
-            anchors.leftMargin: 2 * Screen.pixelDensity
-
-            color: "#e1dada"
-            text: qsTr("Artyom Shal")
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignTop
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-            font.family: "Tahoma"
-            font.pixelSize: 4 * Screen.pixelDensity
-        }*/
-
         VCardGroup {
             id: nutrition
 
-            opacity: 0.7
+            background.opacity: 0.7
 
             anchors {
                 left: photo.right
@@ -139,29 +124,11 @@ Rectangle {
                 margins: 2 * Screen.pixelDensity
             }
 
+            titleHeight: 5 * Screen.pixelDensity
+            entryHeight: 4.5 * Screen.pixelDensity
             title: user.firstname + " " + user.lastname
             model: nutritionModel
         }
-
-        /*Text {
-            id: nickname
-
-            anchors.left: photo.right
-            anchors.top: name.bottom
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 2 * Screen.pixelDensity
-            anchors.leftMargin: 2 * Screen.pixelDensity
-
-            color: "#e1dada"
-            text: qsTr("occash")
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignTop
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-            font.family: "Tahoma"
-            font.pixelSize: 5 * Screen.pixelDensity
-        }*/
     }
 }
 

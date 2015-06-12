@@ -46,10 +46,8 @@ int main(int argc, char *argv[])
     imagePath = dcimDir.toString() + "/Camera";
 #else
     QStringList imagePaths = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
-    imagePath = imagePaths[0];
+    imagePath = "/" + imagePaths[0];
 #endif
-
-    qDebug() << imagePath;
 
     QQmlApplicationEngine engine;
 

@@ -3,6 +3,7 @@ import QtQuick.Window 2.0
 import QtQuick.Layouts 1.1
 
 import "style"
+import "js/facts.js" as Facts
 
 Item {
     id: toolsForm
@@ -39,7 +40,7 @@ Item {
         })
         physicalModel.append({
             "title": qsTr("Activity"),
-            "value": user.lifestyle
+            "value": Facts.activityString(user.lifestyle)
         })
         physicalModel.append({
             "title": qsTr("Diabetic"),
@@ -48,17 +49,18 @@ Item {
 
         extraModel.clear()
         extraModel.append({
-            "title": qsTr("Weist"),
+            "title": qsTr("Waist"),
             "value": user.abdomen
         })
         extraModel.append({
             "title": qsTr("Neck"),
             "value": user.neck
         })
-        extraModel.append({
-            "title": qsTr("Hip"),
-            "value": user.hip
-        })
+        if (!user.gender)
+            extraModel.append({
+                "title": qsTr("Hip"),
+                "value": user.hip
+            })
     }
 
     Flickable {

@@ -2,6 +2,8 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import QtQuick.Window 2.0
 import QtQuick.Layouts 1.1
+import QtQuick.Controls.Styles 1.2
+import Enginio 1.0
 
 import "style"
 
@@ -9,7 +11,10 @@ Item {
     id: homeForm
     clip: true
 
-    function record() {
+    property var client: null
+    property var user: null
+
+    function record(product) {
         if (currentProduct) {
             var weight = weidthField.value
             var factor = weight / 100.0
@@ -40,11 +45,95 @@ Item {
         }
     }
 
-    Flickable {
+    TextField {
+        id: searchBox
+
+        anchors {
+            left: parent.left
+            top: parent.top
+            right: parent.right
+        }
+
+        style: DMTextFieldStyle {}
+        placeholderText: qsTr("Search product")
+        inputMethodHints: Qt.ImhNoPredictiveText
+
+        onAccepted: {
+            var reply = client.search(searchBox.text)
+            reply.finished.connect(function() {
+                if (!reply.isError)
+                    suggestList.model = reply.data.results
+            })
+        }
+
+        Button {
+            id: searchImage
+
+            visible: searchBox.text
+            width: height
+            anchors {
+                top: parent.top
+                right: parent.right
+                bottom: parent.bottom
+            }
+
+            iconSource: "icons/dark/close.png"
+            smooth: true
+
+            style: ButtonStyle {
+                background: Item {}
+                label: Image {
+                    clip: true
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    source: control.iconSource
+                    smooth: true
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
+
+            onClicked: searchBox.text = ""
+        }
+    }
+
+    DiaryForm {
+        id: productForm
+
+        anchors {
+            left: parent.left
+            top: searchBox.bottom
+            right: parent.right
+            bottom: parent.bottom
+        }
+    }
+
+    SuggestList {
+        id: suggestList
+        visible: searchBox.text.length
+
+        anchors {
+            left: parent.left
+            top: searchBox.bottom
+            right: parent.right
+            bottom: parent.bottom
+        }
+
+        onSelected: {
+            productForm.product = data
+            suggestList.visible = false
+        }
+    }
+
+    /*Flickable {
         id: flickable
 
-        anchors.fill: parent
-        anchors.margins: 2 * Screen.pixelDensity
+        anchors {
+            left: parent.left
+            top: searchBox.bottom
+            right: parent.right
+            bottom: parent.bottom
+            margins: 2 * Screen.pixelDensity
+        }
 
         contentWidth: width
         contentHeight: flickable.height + 1
@@ -106,25 +195,6 @@ Item {
                 }
             }
 
-            SuggestList {
-                id: list
-                visible: false
-
-                Layout.fillWidth: true
-                width: parent.width
-                height: 100
-
-                //Layout.fillWidth: true
-                Layout.preferredHeight: height
-
-                onSelected: {
-                    currentProduct = data
-                    visible = false
-                    productField.selected = true
-                    productField.text = data.name
-                }
-            }
-
             Label {
                 id: weigthLabel
 
@@ -164,6 +234,6 @@ Item {
                 id: spacer
             }
         }
-    }
+    }*/
 }
 

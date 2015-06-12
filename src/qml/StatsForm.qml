@@ -2,10 +2,34 @@ import QtQuick 2.3
 import QtQuick.Window 2.0
 
 import "style"
+import "js/facts.js" as Facts
 
 Item {
     id: statsForm
     clip: true
+
+    property var client: null
+    property var user: null
+
+    ListModel { id: infoModel }
+
+    onUserChanged: {
+        if (!user)
+            return
+
+        infoModel.append({
+            "title": qsTr("Body Mass Index"),
+            "value": Facts.bmi(user).toFixed()
+        })
+        infoModel.append({
+            "title": qsTr("Body Fat Percentage"),
+            "value": Facts.bfp(user).toFixed() + "%"
+        })
+        infoModel.append({
+            "title": qsTr("Basal Metabolic Rate"),
+            "value": Facts.bmr(user).toFixed()
+        })
+    }
 
     Flickable {
         id: flickable
@@ -15,25 +39,6 @@ Item {
 
         contentWidth: width
         contentHeight: flickable.height + 1
-
-        ListModel {
-            id: infoModel
-
-            ListElement {
-                title: "BMI"
-                value: 1.2
-            }
-
-            ListElement {
-                title: "BFP"
-                value: 0.25
-            }
-
-            ListElement {
-                title: "BMR"
-                value: 2000
-            }
-        }
 
         VCardGroup {
             id: info

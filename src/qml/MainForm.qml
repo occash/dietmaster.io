@@ -69,6 +69,12 @@ Rectangle {
         ToolsForm {}
     }
 
+    Component {
+        id: imageForm
+
+        ImageForm {}
+    }
+
     Loader {
         id: view
 
@@ -81,6 +87,13 @@ Rectangle {
 
         asynchronous: true
         sourceComponent: homeForm
+
+        Binding {
+            when: view.status === Loader.Ready
+            target: view.item
+            property: "client"
+            value: mainForm.client
+        }
 
         Binding {
             when: view.status === Loader.Ready
