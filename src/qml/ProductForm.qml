@@ -1,5 +1,8 @@
 import QtQuick 2.3
 import QtQuick.Window 2.0
+import QtQuick.Controls 1.2
+
+import "style"
 
 Item {
     id: productForm
@@ -9,7 +12,7 @@ Item {
     Item {
         id: header
 
-        height: 17 * Screen.pixelDensity
+        height: 15 * Screen.pixelDensity
         anchors {
             left: parent.left
             top: parent.top
@@ -24,7 +27,6 @@ Item {
                 top: parent.top
                 left: parent.left
                 bottom: parent.bottom
-                margins: 2 * Screen.pixelDensity
             }
 
             source: "logo.jpg"
@@ -45,17 +47,32 @@ Item {
                 id: name
                 width: parent.width
 
-                text: qsTr("Product name")
-                font.pixelSize: 12
+                text: "Сосиски"
+                font.pixelSize: 3 * Screen.pixelDensity
+                color: Style.dark.text
             }
 
             Text {
                 id: group
                 width: parent.width
 
-                text: qsTr("Group")
-                font.pixelSize: 12
+                text: "Колбасные изделия"
+                font.pixelSize: 3 * Screen.pixelDensity
+                color: Style.dark.mid
             }
+        }
+    }
+
+    SpinBox {
+        id: weightField
+
+        style: DMSpinBoxStyle {}
+
+        anchors {
+            left: parent.left
+            top: header.bottom
+            right: parent.right
+            topMargin: 2 * Screen.pixelDensity
         }
     }
 }

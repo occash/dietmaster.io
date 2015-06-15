@@ -5,12 +5,30 @@ import "style"
 
 Item {
     id: diaryForm
+    clip: true
 
     ListModel { id: defaultModel }
 
     Component.onCompleted: {
+        for (var i = 0; i < 10; ++i)
         defaultModel.append({
             "date": new Date().toLocaleDateString(),
+            "product": {
+                "name": "Суши Инари унаги",
+                "calories": 213,
+                "carbohydrate": 11.3,
+                "fat": 15,
+                "protein": 8.4,
+                "gi": Math.random() * 100.0,
+                "group": {
+                    "name": "Колбасные изделия"
+                }
+            },
+            "weight": Math.random() * 400.0
+        })
+        for (var i = 0; i < 10; ++i)
+        defaultModel.append({
+            "date": new Date(2015, 6, 14).toLocaleDateString(),
             "product": {
                 "name": "Сосиски",
                 "calories": 150,
@@ -28,9 +46,9 @@ Item {
         anchors.fill: parent
         anchors.margins: 2 * Screen.pixelDensity
 
-        clip: true
         focus: true
         visible: count
+        spacing: 2 * Screen.pixelDensity
 
         section.property: "date"
         section.criteria: ViewSection.FullString
@@ -61,7 +79,12 @@ Item {
                 anchors.margins: 2 * Screen.pixelDensity
 
                 Column {
-                    anchors.fill: parent
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        right: giColor.right
+                        bottom: parent.bottom
+                    }
 
                     Text {
                         text: product.name
@@ -73,7 +96,7 @@ Item {
                     }
 
                     Text {
-                        text: weight + "g"
+                        text: weight.toFixed() + "g"
                         color: Style.dark.mid
                         verticalAlignment: Text.AlignVCenter
                         renderType: Text.NativeRendering
@@ -81,9 +104,19 @@ Item {
                         font.family: "Tahoma"
                     }
                 }
+
+                Rectangle {
+                    id: giColor
+                    width: 2 * Screen.pixelDensity
+                    color: product.gi > 70 ? Style.colorBad : Style.colorGood
+
+                    anchors {
+                        top: parent.top
+                        right: parent.right
+                        bottom: parent.bottom
+                    }
+                }
             }
-
-
         }
     }
 }

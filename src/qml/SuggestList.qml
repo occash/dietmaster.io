@@ -12,6 +12,7 @@ Rectangle {
     signal selected(var data)
 
     color: Style.dark.alternateBase
+    clip: true
 
     Text {
         visible: !count
@@ -24,24 +25,12 @@ Rectangle {
         renderType: Text.NativeRendering
     }
 
-    /*ProductForm {
-        id: productForm
-
-        anchors {
-            left: parent.left
-            top: searchBox.bottom
-            right: parent.right
-            bottom: parent.bottom
-        }
-    }*/
-
     ListView {
         id: listView
 
         anchors.fill: parent
         anchors.margins: 2 * Screen.pixelDensity
 
-        clip: true
         focus: true
         visible: count
 
