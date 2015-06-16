@@ -33,7 +33,7 @@ Rectangle {
 
             asynchronous: true
             fillMode: Image.PreserveAspectFit
-            source: "logo.jpg"
+            source: "logo.png"
         }
 
         Text {

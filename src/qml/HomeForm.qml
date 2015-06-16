@@ -14,35 +14,48 @@ Item {
     property var client: null
     property var user: null
 
-    function record(product) {
-        if (currentProduct) {
-            var weight = weidthField.value
-            var factor = weight / 100.0
+    function record(data) {
+        var currentDate = new Date()
+        currentDate.setHours(0, 0, 0, 0)
 
-            board.calories += currentProduct.calories * factor
-            board.protein += currentProduct.protein * factor
-            board.fat += currentProduct.fat * factor
-            board.carbohydrate += currentProduct.carbohydrate * factor
-
-            var currentDate = new Date()
-            currentDate.setHours(0, 0, 0, 0)
-
-            var record = {
-                "objectType": "objects.record",
-                "date": currentDate,
-                "product": {
-                    "id": currentProduct.id,
-                    "objectType": "objects.product"
-                },
-                "weight": weidthField.value
-            }
-            client.create(record)
-
-            currentProduct = null
-            productField.selected = true
-            productField.text = ""
-            weidthField.value = 100
+        var record = {
+            "objectType": "objects.record",
+            "date": currentDate,
+            "product": {
+                "id": data.product.id,
+                "objectType": "objects.product"
+            },
+            "weight": data.weight
         }
+        client.create(record)
+    }
+
+    onClientChanged: {
+        if (!client)
+            return
+
+        var currentDate = new Date()
+        currentDate.setHours(0, 0, 0, 0)
+
+        var queryString = {
+            "objectType": "objects.record",
+            "limit": 100,
+            "query": {
+                "date": currentDate
+            },
+            "include": {
+                "product": {}
+            }
+        }
+        var reply = client.query(queryString)
+
+        reply.finished.connect(function() {
+            if (!reply.isError) {
+                diaryForm.model.clear()
+                for (var i = 0; i < reply.data.results.length; ++i)
+                    diaryForm.model.append(reply.data.results[i])
+            }
+        })
     }
 
     TextField {
@@ -61,8 +74,10 @@ Item {
         onAccepted: {
             var reply = client.search(searchBox.text)
             reply.finished.connect(function() {
-                if (!reply.isError)
-                    suggestList.model = reply.data.results
+                if (!reply.isError) {
+                    suggestList.pop()
+                    suggestList.currentItem.model = reply.data.results
+                }
             })
         }
 
@@ -92,7 +107,11 @@ Item {
                 }
             }
 
-            onClicked: searchBox.text = ""
+            onClicked: {
+                suggestList.pop({immediate: true})
+                suggestList.currentItem.model = []
+                searchBox.text = ""
+            }
         }
     }
 
@@ -107,7 +126,7 @@ Item {
         }
     }
 
-    SuggestList {
+    StackView {
         id: suggestList
         height: searchBox.text.length ?
                     (parent.height - searchBox.height) : 0
@@ -118,9 +137,27 @@ Item {
             right: parent.right
         }
 
-        onSelected: {
-            productForm.product = data
-            suggestList.visible = false
+        Component {
+            id: productForm
+            ProductForm {
+                onRecord: {
+                    suggestList.pop({immediate: true})
+                    suggestList.currentItem.model = []
+                    searchBox.text = ""
+                    homeForm.record(product)
+                }
+            }
+        }
+
+        initialItem: SuggestList {
+            onSelected: {
+                suggestList.push({
+                    item: productForm,
+                    properties: {
+                        product: data
+                    }
+                })
+            }
         }
 
         Behavior on height {
@@ -132,17 +169,5 @@ Item {
             }
         }
     }
-
-    /*ProductForm {
-        id: productForm
-
-        anchors {
-            left: parent.left
-            top: searchBox.bottom
-            right: parent.right
-            bottom: parent.bottom
-            margins: 2 * Screen.pixelDensity
-        }
-    }*/
 }
 

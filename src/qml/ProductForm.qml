@@ -4,75 +4,127 @@ import QtQuick.Controls 1.2
 
 import "style"
 
-Item {
+Rectangle {
     id: productForm
+    color: Style.dark.base
 
     property var product: null
+    signal record(var product)
 
-    Item {
-        id: header
+    ListModel { id: nutritionModel }
 
-        height: 15 * Screen.pixelDensity
-        anchors {
-            left: parent.left
-            top: parent.top
-            right: parent.right
-        }
+    function updateFacts(weight) {
+        var coef = weight / 100.0
 
-        Image {
-            id: photo
-
-            width: height
-            anchors {
-                top: parent.top
-                left: parent.left
-                bottom: parent.bottom
-            }
-
-            source: "logo.jpg"
-        }
-
-        Column {
-            id: column
-
-            anchors {
-                left: photo.right
-                right: parent.right
-                bottom: parent.bottom
-                top: parent.top
-                margins: 2 * Screen.pixelDensity
-            }
-
-            Text {
-                id: name
-                width: parent.width
-
-                text: "Сосиски"
-                font.pixelSize: 3 * Screen.pixelDensity
-                color: Style.dark.text
-            }
-
-            Text {
-                id: group
-                width: parent.width
-
-                text: "Колбасные изделия"
-                font.pixelSize: 3 * Screen.pixelDensity
-                color: Style.dark.mid
-            }
-        }
+        nutritionModel.clear()
+        nutritionModel.append({
+            "title": qsTr("Calories"),
+            "value": (product.calories * coef).toFixed()
+        })
+        nutritionModel.append({
+            "title": qsTr("Total Fat"),
+            "value": (product.fat * coef).toFixed()
+        })
+        nutritionModel.append({
+            "title": qsTr("Total Carbohydrate"),
+            "value": (product.carbohydrate * coef).toFixed()
+        })
+        nutritionModel.append({
+            "title": qsTr("Protein"),
+            "value": (product.protein * coef).toFixed()
+        })
     }
 
-    SpinBox {
-        id: weightField
+    Column {
+        id: column
+        anchors.fill: parent
+        anchors.margins: 2 * Screen.pixelDensity
+        spacing: 2 * Screen.pixelDensity
 
-        style: DMSpinBoxStyle {}
+        Item {
+            id: header
 
-        anchors {
-            left: parent.left
-            top: header.bottom
-            right: parent.right
-            topMargin: 2 * Screen.pixelDensity
+            width: parent.width
+            height: 15 * Screen.pixelDensity
+
+            Image {
+                id: photo
+
+                width: height
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    bottom: parent.bottom
+                }
+
+                source: "logo.png"
+            }
+
+            Column {
+                anchors {
+                    left: photo.right
+                    right: parent.right
+                    bottom: parent.bottom
+                    top: parent.top
+                    margins: 2 * Screen.pixelDensity
+                }
+
+                Text {
+                    id: name
+                    width: parent.width
+
+                    text: product.name
+                    font.pixelSize: 3 * Screen.pixelDensity
+                    font.family: "Tahoma"
+                    color: Style.dark.text
+                    renderType: Text.NativeRendering
+                }
+
+                Text {
+                    id: group
+                    width: parent.width
+
+                    text: product.group.name
+                    font.pixelSize: 3 * Screen.pixelDensity
+                    font.family: "Tahoma"
+                    color: Style.dark.mid
+                    renderType: Text.NativeRendering
+                }
+            }
+        }
+
+        SpinBox {
+            id: weightField
+            width: parent.width
+
+            style: DMSpinBoxStyle {}
+            value: 100
+            minimumValue: 1
+            maximumValue: 1500
+            suffix: qsTr(" g")
+
+            onValueChanged: updateFacts(value)
+        }
+
+        Button {
+            id: recordData
+            width: parent.width
+
+            style: DMButtonStyle {}
+            text: qsTr("Update")
+
+            onClicked: record({
+                weight: weightField.value,
+                product: productForm.product
+            })
+        }
+
+        VCardGroup {
+            id: nutrition
+            width: parent.width
+
+            title: qsTr("Nutrition facts")
+            model: nutritionModel
         }
     }
 }

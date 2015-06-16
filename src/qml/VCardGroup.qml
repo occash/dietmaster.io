@@ -13,7 +13,7 @@ Item {
     property real titleHeight: 6 * Screen.pixelDensity
     property real entryHeight: 5 * Screen.pixelDensity
 
-    height: titleHeight + model.count * entryHeight + 2 * Screen.pixelDensity
+    height: titleHeight + (model ? model.count : 0) * entryHeight + 2 * Screen.pixelDensity
 
     Rectangle {
         id: background
@@ -55,7 +55,7 @@ Item {
                 VCardEntry {
                     id: entry
 
-                    width: parent.width
+                    width: form.width
                     height: entryHeight
 
                     title: model.title

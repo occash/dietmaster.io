@@ -34,6 +34,12 @@ Rectangle {
         focus: true
         visible: count
 
+        highlightFollowsCurrentItem: true
+        highlightMoveDuration: 0
+        highlight: Rectangle {
+            color: Style.dark.highlight
+        }
+
         delegate: Item {
             id: container
 
@@ -66,7 +72,10 @@ Rectangle {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: selected(delegateData)
+                onClicked: {
+                    listView.currentIndex = index
+                    selected(delegateData)
+                }
             }
         }
     }
