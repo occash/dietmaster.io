@@ -264,8 +264,7 @@
         <file alias="close.png">images/icons/light/close.png</file>
     </qresource>
     <qresource prefix="/">
-        <file alias="logo.jpg">images/logo.jpg</file>
-        <file alias="logo@2x.jpg">images/logo@2x.jpg</file>
+        <file alias="logo.png">images/logo.png</file>
         <file alias="photo-default.png">images/photo-default.png</file>
         <file alias="home.png">images/home.png</file>
         <file alias="stats.png">images/stats.png</file>
