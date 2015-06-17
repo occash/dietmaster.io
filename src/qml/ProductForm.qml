@@ -3,6 +3,7 @@ import QtQuick.Window 2.0
 import QtQuick.Controls 1.2
 
 import "style"
+import "js/utils.js" as Utils
 
 Rectangle {
     id: productForm
@@ -113,10 +114,16 @@ Rectangle {
             style: DMButtonStyle {}
             text: qsTr("Update")
 
-            onClicked: record({
-                weight: weightField.value,
-                product: productForm.product
-            })
+            onClicked: {
+                var currentDate = new Date()
+                currentDate.setHours(0, 0, 0, 0)
+
+                record({
+                    date: Utils.toEds(currentDate),
+                    weight: weightField.value,
+                    product: productForm.product
+                })
+            }
         }
 
         VCardGroup {

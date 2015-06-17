@@ -25,8 +25,7 @@ DISTFILES += \
     qml/js/*.js \
     qml/register/*.qml \
     qml/style/*.qml \
-    qml/style/qmldir \
-    qml/Alert.qml
+    qml/style/qmldir
 
 android {
 QT += androidextras

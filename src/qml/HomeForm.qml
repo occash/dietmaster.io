@@ -14,6 +14,12 @@ Item {
     property var client: null
     property var user: null
 
+    function clear() {
+        suggestList.pop({immediate: true})
+        suggestList.currentItem.model = []
+        searchBox.text = ""
+    }
+
     function record(data) {
         var currentDate = new Date()
         currentDate.setHours(0, 0, 0, 0)
@@ -27,7 +33,12 @@ Item {
             },
             "weight": data.weight
         }
-        client.create(record)
+
+        var reply = client.create(record)
+        reply.finished.connect(function() {
+            if (!reply.isError)
+                user.diary.insert(0, data)
+        })
     }
 
     onClientChanged: {
@@ -37,6 +48,8 @@ Item {
         var currentDate = new Date()
         currentDate.setHours(0, 0, 0, 0)
 
+        console.log(currentDate)
+
         var queryString = {
             "objectType": "objects.record",
             "limit": 100,
@@ -45,15 +58,20 @@ Item {
             },
             "include": {
                 "product": {}
-            }
+            },
+            "sort": [
+                {
+                    "sortBy": "createdAt", "direction": "desc"
+                }
+            ]
         }
         var reply = client.query(queryString)
 
         reply.finished.connect(function() {
             if (!reply.isError) {
-                diaryForm.model.clear()
+                user.diary.clear()
                 for (var i = 0; i < reply.data.results.length; ++i)
-                    diaryForm.model.append(reply.data.results[i])
+                    user.diary.append(reply.data.results[i])
             }
         })
     }
@@ -107,16 +125,13 @@ Item {
                 }
             }
 
-            onClicked: {
-                suggestList.pop({immediate: true})
-                suggestList.currentItem.model = []
-                searchBox.text = ""
-            }
+            onClicked: homeForm.clear()
         }
     }
 
     DiaryForm {
         id: diaryForm
+        model: homeForm.user.diary
 
         anchors {
             left: parent.left
@@ -141,9 +156,7 @@ Item {
             id: productForm
             ProductForm {
                 onRecord: {
-                    suggestList.pop({immediate: true})
-                    suggestList.currentItem.model = []
-                    searchBox.text = ""
+                    homeForm.clear()
                     homeForm.record(product)
                 }
             }

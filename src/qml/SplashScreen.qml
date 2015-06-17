@@ -31,7 +31,6 @@ Rectangle {
             width: parent.width - text.height
             height: parent.width - text.height
 
-            asynchronous: true
             fillMode: Image.PreserveAspectFit
             source: "logo.png"
         }

@@ -1,6 +1,7 @@
 import QtQuick 2.3
 
 import "js/facts.js" as Facts
+import "js/utils.js" as Utils
 
 QtObject {
     id: user
@@ -30,18 +31,6 @@ QtObject {
     property url backgroundImage: ""
     property color backgroundColor: "#607d8b"
 
-    function today() {
-        return new Date()
-    }
-
-    function fromEds(date) {
-        return Date.fromLocaleString(Qt.locale(), date, "yyyy-MM-ddThh:mm:ss.zzzZ")
-    }
-
-    function toEds(date) {
-        return Qt.formatDate(date, "yyyy-MM-ddThh:mm:ss.zzzZ")
-    }
-
     function update(info) {
         email = info.email
         username = info.username
@@ -49,7 +38,7 @@ QtObject {
         lastname = info.lastName
 
         gender = info.gender
-        birthdate = fromEds(info.birthdate)
+        birthdate = Utils.fromEds(info.birthdate)
         height = info.height
         weight = info.weight
         lifestyle = info.lifestyle
@@ -85,5 +74,7 @@ QtObject {
         property real fat: user.weight * 3
         property real carbohydrate: user.weight * (1 - Facts.bfp(user) / 100.0)
     }
+
+    property ListModel diary: ListModel {}
 }
 
