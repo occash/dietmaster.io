@@ -99,6 +99,7 @@ Item {
 
     EnginioSearch {
         id: searchClient
+        serviceUrl: client.serviceUrl
     }
 }
 
