@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{01aa8abe-c4d1-4a74-912c-f5318f0213be}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>main.py</StartupFile>
+    <SearchPath>C:\Program Files (x86)\Google\google_appengine\;C:\Program Files (x86)\Google\google_appengine\lib\webapp2-2.5.2\;lib\</SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>{9a7a9026-48c1-4688-9d5d-e5699d47d074}</InterpreterId>
+    <InterpreterVersion>2.7</InterpreterVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="app.yaml" />
+    <Content Include="index.yaml" />
+    <Content Include="README.md" />
+    <Content Include="views\authenticated.html" />
+    <Content Include="views\email.html" />
+    <Content Include="views\forgot.html" />
+    <Content Include="views\home.html" />
+    <Content Include="views\login.html" />
+    <Content Include="views\main.html" />
+    <Content Include="views\message.html" />
+    <Content Include="views\resetpassword.html" />
+    <Content Include="views\signup.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="appengine_config.py" />
+    <Compile Include="base.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="browser.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cachepy.py" />
+    <Compile Include="handlers.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="main.py" />
+    <Compile Include="mobile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="models.py" />
+    <Compile Include="schemas.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="worker.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="views" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\2.7" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>
