@@ -35,3 +35,7 @@ class User(webapp2_extras.appengine.auth.models.User):
     @classmethod
     def delete_refresh_token(cls, user_id, token):
         cls.token_model.get_key(user_id, 'refresh', token).delete()
+
+models = {
+    'users': User
+}

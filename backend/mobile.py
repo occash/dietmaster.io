@@ -10,7 +10,12 @@ from base import BaseHandler, RestHandler
 
 import utils
 import logging
-from models import User
+
+from jsonschema import validate
+from jsonschema import ValidationError, SchemaError
+
+from models import User, models
+import schemas
 
 def auth(func):
 
@@ -37,7 +42,6 @@ def prepare_filters(request, model):
     query = {} if not q else json.decode(q)
 
     filters = ()
-    properties = model._properties
     for key, value in query.iteritems():
         property = getattr(model, key, None)
         if not property:
@@ -53,6 +57,10 @@ def prepare_filters(request, model):
 def prepare_sort(request, model):
     sort = request.get('sort', None)
     sort = {} if not sort else json.decode(sort)
+
+    logging.info(sort)
+
+    return sort
 
 def prepare_options(request):
     limit = request.get('limit', None)
@@ -81,6 +89,42 @@ def prepare_options(request):
     logging.info(options)
 
     return options, count
+
+def query_objects(request, type):
+    model = models.get(type, None)
+    if model is None:
+        return []
+
+    options, count = prepare_options(request)
+    filters = prepare_filters(request, model)
+    sort = prepare_sort(request, model)
+
+    result = []
+    response = ''
+    if not filters and count:
+        result = 0
+    else:
+        query = model.query().filter(*filters)
+
+        if count:
+            result = query.count(None, options=options)
+            response = json.encode({'count': result}, default=utils.default)
+        else:
+            query = query.fetch(None, options=options)
+            for user in query:
+                result.append(user.to_dict())
+            response = json.encode({'results': result}, default=utils.default)
+
+    return response
+
+def validate_schema(name, body):
+    # Check JSON schema
+    json_body = None if not body else json.decode(body)
+    jsonSchema = getattr(schemas, name, None)
+    if jsonSchema:
+        validate(json_body, jsonSchema)
+
+    return json_body
 
 class ObjectsHandler(BaseHandler):
 
@@ -129,29 +173,25 @@ class UsersHandler(BaseHandler):
 
     #@auth
     def get(self):
-        options, count = prepare_options(self.request)
-        filters = prepare_filters(self.request, self.user_model)
-
-        result = []
-        if not filters and count:
-            result = 0
-        else:
-            user_query = self.user_model.query().filter(*filters)
-
-            if count:
-                result = user_query.count(None, options=options)
-            else:
-                user_query = user_query.fetch(None, options=options)
-                for user in user_query:
-                    result.append(user.to_dict())
-
-        userjson = json.encode(result, default=utils.default)
-        self.response.write(userjson)
+        result = query_objects(self.request, 'users')
+        logging.info(result)
+        self.response.write(result)
 
     def post(self):
-        email = self.json['email']
-        username = self.json['username']
-        password = self.json['password']
+        json_body = {}
+
+        try:
+            json_body = validate_schema('users', self.request.body)
+        except SchemaError as s:
+            self.error(500, s.message)
+            return
+        except ValidationError as v:
+            self.error(400, v.message)
+            return
+
+        email = json_body['email']
+        username = json_body['username']
+        password = json_body['password']
 
         unique_properties = ['email_address']
         user_data = self.user_model.create_user(
