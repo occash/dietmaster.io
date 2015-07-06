@@ -27,8 +27,16 @@ class BaseHandler(webapp2.RequestHandler):
 
     # Write error ressponse
     def error(self, status, message):
-        self.response.status_int = status
-        self.response.write(message)
+        response = {
+            'errors': [
+                {
+                    "reason": "Error",
+                    "message": message
+                }
+            ]
+        }
+        self.response.set_status(status)
+        self.response.write(json.encode(response))
 
     # Handle exceptions
     def handle_exception(self, exception, debug):
