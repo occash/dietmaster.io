@@ -200,10 +200,13 @@ Rectangle {
             }
 
             function checkFull() {
-                var queryString = { "query": { "email": text } }
+                var queryString = {
+                    "query": { "email_address": text },
+                    "count": true
+                }
                 var reply = client.query(queryString, Operation.User)
                 reply.finished.connect(function() {
-                    valid = reply.data.results.length === 0
+                    valid = reply.data.count === 0
                     severity = valid ? Severity.Good : Severity.Bad
                     errorString = qsTr("E-mail is already in use")
                     /*if (valid)
@@ -232,10 +235,13 @@ Rectangle {
             }
 
             function checkFull() {
-                var queryString = { "query": { "username": text } }
+                var queryString = {
+                    "query": { "auth_ids": text },
+                    "count": true
+                }
                 var reply = client.query(queryString, Operation.User)
                 reply.finished.connect(function() {
-                    valid = reply.data.results.length === 0
+                    valid = reply.data.count === 0
                     severity = valid ? Severity.Good : Severity.Bad
                     errorString = qsTr("Username already exists")
                 })
