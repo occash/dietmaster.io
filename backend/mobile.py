@@ -14,7 +14,7 @@ import logging
 from jsonschema import validate
 from jsonschema import ValidationError, SchemaError
 
-from models import User, models
+import models
 import schemas
 
 def auth(func):
@@ -91,7 +91,7 @@ def prepare_options(request):
     return options, count
 
 def query_objects(request, type):
-    model = models.get(type, None)
+    model = getattr(models, type, None)
     if model is None:
         return []
 
@@ -128,11 +128,36 @@ def validate_schema(name, body):
 
 class ObjectsHandler(BaseHandler):
 
-    def get(selt):
-        pass
+    #@auth
+    def get(self, *args, **kwargs):
+        collection = kwargs['collection']
+        result = query_objects(self.request, collection)
+        logging.info(result)
+        self.response.write(result)
 
-    def post(self):
-        pass
+    def post(self, *args, **kwargs):
+        collection = kwargs['collection']
+        json_body = {}
+
+        try:
+            json_body = validate_schema(collection, self.request.body)
+        except SchemaError as s:
+            self.error(500, s.message)
+            return
+        except ValidationError as v:
+            self.error(400, v.message)
+            return
+
+        model = getattr(models, collection, None)
+        if not model:
+            self.error(404, 'No such collection')
+            return
+
+        instance = model(**json_body)
+        instance.put()
+        
+        instancejson = json.encode(instance.to_dict(), default = utils.default)
+        self.response.write(instancejson)
 
 class ObjectsIdHandler(BaseHandler):
 
@@ -173,7 +198,7 @@ class UsersHandler(BaseHandler):
 
     #@auth
     def get(self):
-        result = query_objects(self.request, 'users')
+        result = query_objects(self.request, 'User')
         logging.info(result)
         self.response.write(result)
 

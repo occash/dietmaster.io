@@ -36,6 +36,12 @@ class User(webapp2_extras.appengine.auth.models.User):
     def delete_refresh_token(cls, user_id, token):
         cls.token_model.get_key(user_id, 'refresh', token).delete()
 
-models = {
-    'users': User
-}
+class internal(ndb.Model):
+    createdAt = ndb.DateTimeProperty(auto_now_add=True)
+    creator = ndb.KeyProperty(kind='User')
+    updatedAt = ndb.DateTimeProperty(auto_now=True)
+    updater = ndb.KeyProperty(kind='User')
+
+class group(internal):
+    name = ndb.StringProperty()
+    description = ndb.StringProperty()
