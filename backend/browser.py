@@ -11,7 +11,7 @@ class VerifyHandler(BaseHandler):
         id = kwargs['id']
         token = kwargs['token']
 
-        user, ts = self.user_model.get_by_auth_token(int(id), token, 'signup')
+        user, ts = self.user_model.get_by_token(int(id), token, 'signup')
 
         if not user:
             logging.info('Could not find any user with id "%s" signup token "%s"',

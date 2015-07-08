@@ -17,7 +17,7 @@ class WorkerHandler(BaseHandler):
             return
 
         username = user.auth_ids[0]
-        email = user.email_address
+        email = user.email
 
         token = self.user_model.create_signup_token(user_id)
 
@@ -25,7 +25,7 @@ class WorkerHandler(BaseHandler):
         verification_url = self.uri_for(
             'verify', 
             id=user_id,
-            token=token, 
+            token=token,
             _full=True
         )
 

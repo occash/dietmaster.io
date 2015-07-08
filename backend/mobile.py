@@ -214,17 +214,16 @@ class UsersHandler(BaseHandler):
             self.error(400, v.message)
             return
 
-        email = json_body['email']
-        username = json_body['username']
-        password = json_body['password']
+        username = json_body.pop('username')
+        password = json_body.pop('password')
 
-        unique_properties = ['email_address']
+        unique_properties = ['email']
         user_data = self.user_model.create_user(
           username,
           unique_properties,
-          email_address=email, 
           password_raw=password, 
-          verified=False
+          verified=False,
+          **json_body
         )
 
         if not user_data[0]: #user_data is a tuple
@@ -285,7 +284,7 @@ class AuthTokenHandler(BaseHandler):
             password = self.request.get("password")
 
             try:
-                user = User.get_by_auth_password(username, password)
+                user = self.user_model.get_by_auth_password(username, password)
             except InvalidPasswordError:
                 self.error(400, 'invalid password')
                 return
@@ -298,7 +297,7 @@ class AuthTokenHandler(BaseHandler):
         elif grant_type == 'refresh_token':
             refresh_token = self.request.get("refresh_token")
 
-            user = User.token_model.get('', 'refresh', refresh_token)
+            user = self.user_model.token_model.get('', 'refresh', refresh_token)
 
             if not user:
                 self.error(400, 'invalid credentials')
@@ -309,8 +308,8 @@ class AuthTokenHandler(BaseHandler):
             self.error(406, 'Unsupported grant type')
 
     def prepare_token(self, user):
-        token = User.create_auth_token(user.get_id())
-        refresh = User.create_refresh_token(user.get_id())
+        token = self.user_model.create_auth_token(user.get_id())
+        refresh = self.user_model.create_refresh_token(user.get_id())
         
         response = {
             "access_token": token,

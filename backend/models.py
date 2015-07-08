@@ -37,11 +37,11 @@ class User(webapp2_extras.appengine.auth.models.User):
         cls.token_model.get_key(user_id, 'refresh', token).delete()
 
 class internal(ndb.Model):
-    createdAt = ndb.DateTimeProperty(auto_now_add=True)
-    creator = ndb.KeyProperty(kind='User')
-    updatedAt = ndb.DateTimeProperty(auto_now=True)
-    updater = ndb.KeyProperty(kind='User')
+    createdAt = ndb.DateTimeProperty(auto_now_add=True, indexed=False)
+    creator = ndb.KeyProperty(kind='User', indexed=False)
+    updatedAt = ndb.DateTimeProperty(auto_now=True, indexed=False)
+    updater = ndb.KeyProperty(kind='User', indexed=False)
 
 class group(internal):
-    name = ndb.StringProperty()
-    description = ndb.StringProperty()
+    name = ndb.StringProperty(indexed=False)
+    description = ndb.StringProperty(indexed=False)

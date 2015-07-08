@@ -67,6 +67,6 @@ group = {
             'type': 'string'
         }
     },
-    'required': ['email', 'username', 'password'],
+    'required': ['name', 'description'],
     "additionalProperties": False
 }
