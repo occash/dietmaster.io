@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from google.appengine.api import taskqueue
 from google.appengine.ext.ndb import QueryOptions, GenericProperty
@@ -16,6 +17,9 @@ from jsonschema import ValidationError, SchemaError
 
 import models
 import schemas
+
+class EmptyModelError(Exception):
+    pass
 
 def auth(func):
 
@@ -93,7 +97,7 @@ def prepare_options(request):
 def query_objects(request, type):
     model = getattr(models, type, None)
     if model is None:
-        return []
+        raise EmptyModelError()
 
     options, count = prepare_options(request)
     filters = prepare_filters(request, model)
@@ -131,9 +135,12 @@ class ObjectsHandler(BaseHandler):
     #@auth
     def get(self, *args, **kwargs):
         collection = kwargs['collection']
-        result = query_objects(self.request, collection)
-        logging.info(result)
-        self.response.write(result)
+        try:
+            result = query_objects(self.request, collection)
+            logging.info(result)
+            self.response.write(result)
+        except EmptyModelError:
+            self.error(404, 'Objects %s not found' % collection)
 
     def post(self, *args, **kwargs):
         collection = kwargs['collection']
@@ -198,9 +205,12 @@ class UsersHandler(BaseHandler):
 
     #@auth
     def get(self):
-        result = query_objects(self.request, 'User')
-        logging.info(result)
-        self.response.write(result)
+        try:
+            result = query_objects(self.request, 'User')
+            logging.info(result)
+            self.response.write(result)
+        except EmptyModelError:
+            self.error(404, 'Objects User not found')
 
     def post(self):
         json_body = {}

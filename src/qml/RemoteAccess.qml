@@ -83,13 +83,21 @@ Item {
 
         onSessionAuthenticationError: {
             client.identity = null
-            var description = Utils.capitalizeFirst(reply.data.error_description)
-            authError(description)
+            if (typeof(reply) !== "undefined"
+                    && typeof(reply.errorString) !== "undefined") {
+                console.log('Auth', reply.errorString)
+                //var description = Utils.capitalizeFirst(reply.errorString)
+                error(reply.errorString)
+            }
         }
 
         onError: {
-            var description = Utils.capitalizeFirst(reply.data.error_description)
-            error(description)
+            if (typeof(reply) !== "undefined"
+                    && typeof(reply.errorString) !== "undefined") {
+                console.log('Error', reply.errorString)
+                //var description = Utils.capitalizeFirst(reply.errorString)
+                error(reply.errorString)
+            }
         }
 
         //Uncomment to enable debug output

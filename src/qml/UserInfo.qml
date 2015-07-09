@@ -33,7 +33,7 @@ QtObject {
 
     function update(info) {
         email = info.email
-        username = info.username
+        username = info.auth_ids[0]
         firstname = info.firstName
         lastname = info.lastName
 

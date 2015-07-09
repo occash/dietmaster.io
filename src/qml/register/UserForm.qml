@@ -139,50 +139,6 @@ Rectangle {
 
         anchors.fill: parent
 
-        /*Row {
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 6 * Screen.pixelDensity
-
-            RoundButton {
-                width: 12 * Screen.pixelDensity
-                height: 12 * Screen.pixelDensity
-
-                borderWidth: 1
-
-                Image {
-                    anchors.fill: parent
-                    source: "qrc:/flags/ru.svg"
-                    smooth: false
-                }
-
-                onClicked: message.show()
-            }
-
-            HorizontalSpacer {}
-
-            RoundButton {
-                width: 12 * Screen.pixelDensity
-                height: 12 * Screen.pixelDensity
-
-                borderWidth: 1
-
-                Rectangle {
-                    anchors.fill: parent
-                    color: Style.light.button
-
-                    Text {
-                        anchors.fill: parent
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        renderType: Text.NativeRendering
-                        color: Style.dark.text
-                        text: "RU" //Qt.locale().nativeLanguageName
-                        font.pixelSize: 6 * Screen.pixelDensity
-                    }
-                }
-            }
-        }*/
-
         InputField {
             id: emailField
             Layout.fillWidth: true
@@ -206,9 +162,11 @@ Rectangle {
                 }
                 var reply = client.query(queryString, Operation.User)
                 reply.finished.connect(function() {
-                    valid = reply.data.count === 0
+                    valid = !reply.isError & reply.data.count === 0
                     severity = valid ? Severity.Good : Severity.Bad
-                    errorString = qsTr("E-mail is already in use")
+                    errorString = reply.isError ?
+                                reply.errorString :
+                                qsTr("E-mail is already in use")
                     /*if (valid)
                         provider.request(Providers.Twitter, text)*/
                 })
@@ -241,9 +199,11 @@ Rectangle {
                 }
                 var reply = client.query(queryString, Operation.User)
                 reply.finished.connect(function() {
-                    valid = reply.data.count === 0
+                    valid = !reply.isError & reply.data.count === 0
                     severity = valid ? Severity.Good : Severity.Bad
-                    errorString = qsTr("Username already exists")
+                    errorString = reply.isError ?
+                                reply.errorString :
+                                qsTr("Username already exists")
                 })
                 return valid
             }

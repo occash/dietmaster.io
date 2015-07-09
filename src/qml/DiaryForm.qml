@@ -1,5 +1,6 @@
 import QtQuick 2.3
 import QtQuick.Window 2.0
+import QtQuick.Controls 1.2
 
 import "style"
 import "js/utils.js" as Utils
@@ -91,6 +92,17 @@ Item {
                 }
             }
         }
+    }
+
+    Alert {
+        visible: diaryForm.model.count < 1
+        anchors {
+            left: parent.left
+            top: parent.top
+            right: parent.right
+        }
+        anchors.margins: 2 * Screen.pixelDensity
+        text: qsTr("You have no records today. Serch something and add.")
     }
 }
 

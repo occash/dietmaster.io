@@ -27,13 +27,14 @@ Rectangle {
             "objectType": "users",
             "limit": 1,
             "query": {
-                "username": client.username
+                "auth_ids": client.username
             }
         }
         var reply = client.query(queryString, Operation.User)
         reply.finished.connect(function() {
             if (!reply.isError) {
-                user.update(reply.data.results[0])
+                if (reply.data.results.length > 0)
+                    user.update(reply.data.results[0])
             }
         })
     }

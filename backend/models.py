@@ -45,3 +45,11 @@ class internal(ndb.Model):
 class group(internal):
     name = ndb.StringProperty(indexed=False)
     description = ndb.StringProperty(indexed=False)
+
+class product(ndb.Model):
+    name = ndb.StringProperty(indexed=False)
+    calories = ndb.FloatProperty(indexed=False)
+    carbohydrate = ndb.FloatProperty(indexed=False)
+    fat = ndb.FloatProperty(indexed=False)
+    gi = ndb.FloatProperty(indexed=False)
+    protein = ndb.FloatProperty(indexed=False)
