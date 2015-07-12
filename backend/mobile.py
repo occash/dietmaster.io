@@ -29,9 +29,9 @@ def auth(func):
         user = None
 
         # Get token
-        token_obj = User.token_model.get('', 'auth', bearer)
+        token_obj = self.user_model.token_model.get('', 'auth', bearer)
         if token_obj:
-            user = User.get_by_id(int(token_obj.user))
+            user = self.user_model.get_by_id(int(token_obj.user))
 
         if not user:
             self.error(401, 'authorization required')
@@ -203,7 +203,7 @@ class SearchHandler(BaseHandler):
 
 class UsersHandler(BaseHandler):
 
-    #@auth
+    @auth
     def get(self):
         try:
             result = query_objects(self.request, 'User')
