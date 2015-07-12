@@ -4,6 +4,7 @@
 from google.appengine.api import taskqueue
 from google.appengine.ext.ndb import QueryOptions, GenericProperty
 from webapp2_extras.auth import InvalidPasswordError, InvalidAuthIdError
+from google.appengine.api import search
 
 from webapp2_extras import json
 
@@ -199,7 +200,37 @@ class ObjectsIdAccessHandler(BaseHandler):
 class SearchHandler(BaseHandler):
 
     def get(self):
-        pass
+        include = self.request.get('include', None)
+        include = {} if not include else json.decode(include)
+        types = self.request.get('objectTypes[]', None)
+        query = self.request.get('search', None)
+        query = {} if not query else json.decode(query)
+
+        logging.info(query)
+
+        sort = search.SortOptions(expressions=[
+        search.SortExpression(expression='name',
+	        direction=search.SortExpression.ASCENDING, default_value='')
+        ], limit=1000)
+
+        options = search.QueryOptions(
+	        limit=10,
+	        sort_options=sort,
+	        returned_fields=['name'])
+ 
+        query = search.Query(query_string=query['phrase'], options=options)
+ 
+        results = search.Index('product').search(query)
+ 
+        out = {'results': []}
+        if results:
+            for item in results:
+                out['results'].append({f.name: f.value for f in item.fields})
+
+        logging.info(out['results'])
+ 
+        searchjson = json.encode(out, default = utils.default)
+        self.response.write(searchjson)
 
 class UsersHandler(BaseHandler):
 

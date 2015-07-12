@@ -1,8 +1,8 @@
 import time
+
 import webapp2_extras.appengine.auth.models
-
+from google.appengine.api import search
 from google.appengine.ext import ndb
-
 from webapp2_extras import security
 
 class User(webapp2_extras.appengine.auth.models.User):
@@ -36,17 +36,59 @@ class User(webapp2_extras.appengine.auth.models.User):
     def delete_refresh_token(cls, user_id, token):
         cls.token_model.get_key(user_id, 'refresh', token).delete()
 
-class internal(ndb.Model):
+    def to_dict(self):
+        result = super(User, self).to_dict()
+        result['id'] = self.key.id()
+        result.pop('password')
+        return result
+
+class BaseModel(ndb.Model):
+
+    def to_dict(self):
+        result = super(BaseModel, self).to_dict()
+        result['id'] = self.key.id()
+        return result
+
+    def build_suggestions(self, str):
+        suggestions = []
+        for word in str.split():
+            prefix = ""
+            for letter in word:
+                prefix += letter
+                suggestions.append(prefix)
+        return ' '.join(suggestions)
+
+    def _post_put_hook(self, future):
+        fields = []
+        for iname in self.__class__.index:
+            ivalue = getattr(self, iname, None)
+            ivalue = self.build_suggestions(ivalue)
+            sindex = search.TextField(name=iname, value=ivalue)
+            fields.append(sindex)
+
+        doc = search.Document(doc_id=str(self.key.id()), fields=fields)
+        search.Index(self.__class__.__name__).put(doc)
+ 
+    @classmethod
+    def _post_delete_hook(cls, key, future):
+        search.Index(cls.__name__).delete(str(key.id()))
+
+class InternalModel(BaseModel):
+
     createdAt = ndb.DateTimeProperty(auto_now_add=True, indexed=False)
     creator = ndb.KeyProperty(kind='User', indexed=False)
     updatedAt = ndb.DateTimeProperty(auto_now=True, indexed=False)
     updater = ndb.KeyProperty(kind='User', indexed=False)
 
-class group(internal):
+class group(InternalModel):
+
     name = ndb.StringProperty(indexed=False)
     description = ndb.StringProperty(indexed=False)
 
-class product(ndb.Model):
+class product(BaseModel):
+
+    index = ['name']
+
     name = ndb.StringProperty(indexed=False)
     calories = ndb.FloatProperty(indexed=False)
     carbohydrate = ndb.FloatProperty(indexed=False)
