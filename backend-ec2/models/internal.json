@@ -1,0 +1,10 @@
+{
+    "users": {
+        "index": [ ],
+        "ttl": [ ]
+    },
+    "tokens": { 
+        "index": [ "access_token" ],
+        "ttl": [ "expires_in" ]
+    }
+}
