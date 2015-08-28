@@ -8,6 +8,13 @@ database:
   address: '192.168.0.248'
   port: 27017
 
+email:
+  address: 'smtp.gmail.com'
+  port: 587
+  login: on
+  user: ''
+  password: ''
+
 logging:
   version: 1
   disable_existing_loggers: true

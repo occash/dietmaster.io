@@ -9,6 +9,8 @@ import logging.config
 from motor import MotorClient
 from pymongo.son_manipulator import SONManipulator, AutoReference
 
+from tornado_smtp.client import TornadoSMTP
+
 from tornado.web import Application
 from tornado.log import enable_pretty_logging
 from tornado.ioloop import IOLoop
@@ -16,8 +18,7 @@ from tornado.ioloop import IOLoop
 from routes import routes
 from models import Models
 
-if __name__ == '__main__':
-
+def main():
     # Read config
     with open("config.yaml", 'r') as ymlfile:
         config = yaml.load(ymlfile)
@@ -25,6 +26,7 @@ if __name__ == '__main__':
     logconfig = config['logging']
     dbconfig = config['database']
     webconfig = config['web']
+    emailconfig = config['email']
 
     # Configure logging
     logging.config.dictConfig(config['logging'])
@@ -39,19 +41,27 @@ if __name__ == '__main__':
         Models.init(database)
         Models.create_index()
     except:
-        import traceback
-        traceback.print_exc()
         logging.info('Cannot connect to database')
         exit(1)
 
     logging.info('Connected to database at %s:%s', dbconfig['address'], dbconfig['port'])
+
+    # Login to mail server   
+    mail = TornadoSMTP(emailconfig['address'], emailconfig['port'])
+    if emailconfig['login']:
+        mail.ehlo()
+        mail.starttls()
+        mail.login(emailconfig['user'], emailconfig['password'])
+    
+    logging.info('Connected to smtp server at %s:%s', emailconfig['address'], emailconfig['port'])
 
     # Create Tornado application
     application = Application(
         routes,
         autoreload=webconfig['autoreload'],
         debug=webconfig['debug'],
-        database=database
+        database=database,
+        mail=mail
     )
 
     # Enable Torando logging
@@ -67,3 +77,6 @@ if __name__ == '__main__':
 
     # Start IO loop
     IOLoop.current().start()
+
+if __name__ == '__main__':
+    main()

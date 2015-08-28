@@ -8,6 +8,13 @@ database:
   address: '127.0.0.1'
   port: 27017
 
+email:
+  address: '127.0.0.1'
+  port: 25
+  login: off
+  user: ''
+  password: ''
+
 logging:
   version: 1
   disable_existing_loggers: true
