@@ -9,14 +9,13 @@ import logging.config
 from motor import MotorClient
 from pymongo.son_manipulator import SONManipulator, AutoReference
 
-from tornado_smtp.client import TornadoSMTP
-
 from tornado.web import Application
 from tornado.log import enable_pretty_logging
 from tornado.ioloop import IOLoop
 
 from routes import routes
 from models import Models
+from mail import MailWorker
 
 def main():
     # Read config
@@ -47,13 +46,13 @@ def main():
     logging.info('Connected to database at %s:%s', dbconfig['address'], dbconfig['port'])
 
     # Login to mail server   
-    mail = TornadoSMTP(emailconfig['address'], emailconfig['port'])
-    if emailconfig['login']:
-        mail.ehlo()
-        mail.starttls()
-        mail.login(emailconfig['user'], emailconfig['password'])
+    try:
+        mail = MailWorker(emailconfig)
+    except:
+        logging.info('Cannot start mail worker')
+        exit(2)
     
-    logging.info('Connected to smtp server at %s:%s', emailconfig['address'], emailconfig['port'])
+    logging.info('Mail worker started')
 
     # Create Tornado application
     application = Application(
@@ -71,7 +70,7 @@ def main():
         application.listen(webconfig['port'], webconfig['address'])
     except:
         logging.info('Cannot start web server')
-        exit(2)
+        exit(3)
 
     logging.info('Listen on %s:%s', webconfig['address'], webconfig['port'])
 

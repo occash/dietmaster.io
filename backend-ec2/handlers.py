@@ -133,15 +133,29 @@ class UsersHandler(BaseHandler):
             raw_password = raw_password.encode('utf-8')
             password = hashlib.sha256(salt + raw_password).digest()
             username = user_body['username']
+            verify_token = hashlib.sha1(os.urandom(128)).hexdigest()
 
             internal_body = {
                 '_id': username,
                 'salt': salt,
                 'password': password,
+                'verified': False,
+                'token': verify_token,
                 'usergroups': []
             }
 
-            internal_id = yield internal_users.save(internal_body)
+            yield internal_users.save(internal_body)
+
+            mail = self.settings['mail']
+            mail.send(
+                'DietMaster',
+                'support@dietmaster.io',
+                user_body['email'],
+                'Account verification',
+                'verify',
+                user=username,
+                url='https://dietmaster.io/verify/%s-%s' % (username, verify_token)
+            )
 
             self.write(dumps(user_body))
         except SchemaError:
@@ -272,3 +286,14 @@ class SearchHandler(BaseHandler):
         objects = yield cursor.to_list(None)
 
         self.finish(dumps({'results': objects}))
+
+class VerifyHandler(BaseHandler):
+
+    @coroutine
+    def get(self, id, token):
+        database = self.settings['database']
+        users = database['internal.users']
+        user = yield users.find_one(id)
+        if user['token'] == token:
+            yield users.update(
+                {'_id': id}, {'$set': {'verified': True}})

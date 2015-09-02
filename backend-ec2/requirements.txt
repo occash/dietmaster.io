@@ -1,5 +1,5 @@
 tornado==4.2
 motor==0.4.1
 pyyaml==3.11
-jsonschema=2.5.1
-tornado-smtpclient=0.1.5
+jsonschema==2.5.1
+jinja2==2.8

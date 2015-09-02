@@ -1,0 +1,10 @@
+Hi, {{ user }}
+
+Your account has been approved.
+To continue using the application, please check the link below and sign in again.
+Verify your account. Click here {{ url }}
+
+Thank you for choosing DietMaster.
+
+Best regards,
+DietMaster team

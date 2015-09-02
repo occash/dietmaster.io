@@ -34,6 +34,6 @@ routes = [
     #(r'/v1/files/<id:.+>', FilesIdHandler),
     #('/v1/files/<id:.+>/download_url', FilesIdUrlHandler),
     # Other routes
-    #(r'/verify/<id:\d+>-<token:.+>', VerifyHandler),
+    (r'/verify/(\w+)-(\w+)', VerifyHandler),
     #(r'/worker', WorkerHandler)
 ]
