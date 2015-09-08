@@ -17,6 +17,8 @@ from routes import routes
 from models import Models
 from mail import MailWorker
 
+COOKIE_SECRET = '24a57703-270d-439a-a22d-d6580972a1d7'
+
 def main():
     # Read config
     with open("config.yaml", 'r') as ymlfile:
@@ -59,6 +61,7 @@ def main():
         routes,
         autoreload=webconfig['autoreload'],
         debug=webconfig['debug'],
+        cookie_secret=COOKIE_SECRET,
         database=database,
         mail=mail
     )

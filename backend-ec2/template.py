@@ -1,4 +1,5 @@
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
+from tornado.web import HTTPError
 
 class Template():
 
@@ -11,4 +12,4 @@ class Template():
             content = template.render(kwargs)
             return content
         except TemplateNotFound:
-            raise HTTPError(404, 'Template not found')
+            raise HTTPError(404, 'Page not found')

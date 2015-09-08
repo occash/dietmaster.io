@@ -1,17 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*- 
 
+import os
+import hashlib
+import logging
+
+from datetime import datetime
+
 from tornado.web import RequestHandler, HTTPError
 from tornado.gen import coroutine
 
+from jsonschema import SchemaError, ValidationError
 from bson.json_util import loads, dumps
+
+from pymongo.errors import OperationFailure
+
+from models import Models
 
 class BaseHandler(RequestHandler):
 
     def parse_body(self):
-        body = self.request.body
-        body = body.decode('utf-8')
-        return None if not body else loads(body)
+        try:
+            body = self.request.body
+            body = body.decode('utf-8')
+            return None if not body else loads(body)
+        except:
+            raise HTTPError(400, 'Invalid request body')
 
     def write_error(self, status_code, **kwargs):
         if status_code == 500:
@@ -19,6 +33,12 @@ class BaseHandler(RequestHandler):
 
         if 'message' in kwargs:
             self.write(kwargs['message'])
+
+        if 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
+            self.write(kwargs['exc_info'][1].log_message)
+
+    def get_current_user(self):
+        return self.get_secure_cookie("user")
 
 class UsersHandler(BaseHandler):
 
@@ -43,56 +63,72 @@ class UsersHandler(BaseHandler):
 
     @coroutine
     def post(self):
+        # Parse body
         user_body = self.parse_body()
-        print(user_body)
-        '''try:
-            user_body = self.parse_body()
+
+        if not user_body['tnc']:
+            raise HTTPError(400, 'Accept terms first')
+        
+        # Remove unused fields
+        del user_body['tnc']
+        del user_body['rpassword']
+
+        # Validate model
+        try:
             Models.users.validate(user_body)
-
-            database = self.settings['database']
-            users = database.users
-            internal_users = database.internal.users
-
-            raw_password = user_body.pop('password')
-            add_date_internal(user_body)
-
-            user_id = yield users.save(user_body)
-
-            salt = os.urandom(24)
-            raw_password = raw_password.encode('utf-8')
-            password = hashlib.sha256(salt + raw_password).digest()
-            username = user_body['username']
-            verify_token = hashlib.sha1(os.urandom(128)).hexdigest()
-
-            internal_body = {
-                '_id': username,
-                'salt': salt,
-                'password': password,
-                'verified': False,
-                'token': verify_token,
-                'usergroups': []
-            }
-
-            yield internal_users.save(internal_body)
-
-            mail = self.settings['mail']
-            mail.send(
-                'DietMaster',
-                'support@dietmaster.io',
-                user_body['email'],
-                'Account verification',
-                'verify',
-                user=username,
-                url='https://dietmaster.io/verify/%s-%s' % (username, verify_token)
-            )
-
-            self.write(dumps(user_body))
         except SchemaError:
-            self.error(500, 'Invalid JSON schema')
-        except ValidationError:
-            self.error(400, 'JSON body not valid')
+            raise HTTPError(500, 'Invalid JSON schema')
+        except ValidationError as e:
+            raise HTTPError(400, 'JSON body not valid')
+
+        # Get collections
+        database = self.settings['database']
+        users = database.users
+        internal_users = database.internal.users
+
+        # Modify user a bit
+        raw_password = user_body.pop('password')
+        user_body['created'] = datetime.utcnow()
+        user_body['birthdate'] = datetime.strptime(user_body['birthdate'], '%Y-%m-%d')
+
+        # Generate password hash
+        salt = os.urandom(24)
+        raw_password = raw_password.encode('utf-8')
+        password = hashlib.sha256(salt + raw_password).digest()
+
+        # Generate verify token
+        verify_token = hashlib.sha1(os.urandom(128)).hexdigest()
+
+        username = user_body['username']
+        internal_body = {
+            '_id': username,
+            'salt': salt,
+            'password': password,
+            'verified': False,
+            'token': verify_token,
+            'usergroups': []
+        }
+
+        # Save internal part
+        try:
+            yield users.save(user_body)
+            yield internal_users.save(internal_body)
         except OperationFailure:
-            self.error(400, 'Object could not be saved')'''
+            raise HTTPError(500, 'Cannot save user')
+
+        # Send mail with verification
+        mail = self.settings['mail']
+        mail.send(
+            'DietMaster',
+            'support@dietmaster.io',
+            user_body['email'],
+            'Account verification',
+            'verify',
+            user=username,
+            url='https://dietmaster.io/verify/%s-%s' % (username, verify_token)
+        )
+
+        self.write(dumps(user_body))
 
 class LoginHandler(BaseHandler):
     
@@ -106,7 +142,6 @@ class LoginHandler(BaseHandler):
 
         database = self.settings['database']
         users = database['internal.users']
-        tokens = database['internal.tokens']
 
         user = yield users.find_one({'_id': username})
         if not user:
@@ -119,22 +154,7 @@ class LoginHandler(BaseHandler):
         if not hexpass == user['password']:
             raise HTTPError(403, 'Wrong password')
 
-        token = yield tokens.find_one({'_id': username})
-        if not token:
-            bearer = hashlib.sha1(os.urandom(128)).hexdigest()
-            refresh = hashlib.sha1(os.urandom(128)).hexdigest()
-            expires = datetime.utcnow() + timedelta(days=7)
-
-            token = {
-                '_id': username,
-                'access_token': bearer,
-                'refresh_token': refresh,
-                'expires_in': expires
-            }
-
-            yield tokens.save(token)
-
-        self.set_secure_cookie('token', token['access_token'], expires_days=7)
+        self.set_secure_cookie('user', user['_id'], expires_days=7)
 
 class LogoutHandler(BaseHandler):
 

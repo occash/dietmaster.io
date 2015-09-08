@@ -67,7 +67,7 @@ var Login = function() {
         $('.login-form input').keypress(function(e) {
             if (e.which == 13) {
                 if ($('.login-form').validate().form()) {
-                    //$('.login-form').submit(); //form validation success, call ajax form submit
+                    $('.login-form').submit(); //form validation success, call ajax form submit
                 }
                 return false;
             }
@@ -153,28 +153,6 @@ var Login = function() {
 
     var handleRegister = function() {
 
-        function format(state) {
-            if (!state.id) return state.text; // optgroup
-            return "<img class='flag' src='../../assets/global/img/flags/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
-        }
-
-        if (jQuery().select2) {
-	        $("#select2_sample4").select2({
-	            placeholder: '<i class="fa fa-map-marker"></i>&nbsp;Select a Country',
-	            allowClear: true,
-	            formatResult: format,
-	            formatSelection: format,
-	            escapeMarkup: function(m) {
-	                return m;
-	            }
-	        });
-
-
-	        $('#select2_sample4').change(function() {
-	            $('.register-form').validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
-	        });
-    	}
-
         $('.register-form').validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
@@ -185,20 +163,25 @@ var Login = function() {
                 fullname: {
                     required: true
                 },
+                gender: {
+                    required: true,
+                },
+                height: {
+                    required: true,
+                },
+                weight: {
+                    required: true,
+                },
+                lifestyle: {
+                    required: true,
+                },
+                diabetic: {
+                    required: false,
+                },
                 email: {
                     required: true,
                     email: true
                 },
-                address: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                country: {
-                    required: true
-                },
-
                 username: {
                     required: true
                 },
@@ -206,9 +189,9 @@ var Login = function() {
                     required: true
                 },
                 rpassword: {
+                    required: false,
                     equalTo: "#register_password"
                 },
-
                 tnc: {
                     required: true
                 }
@@ -216,7 +199,7 @@ var Login = function() {
 
             messages: { // custom messages for radio buttons and checkboxes
                 tnc: {
-                    required: "Please accept TNC first."
+                    required: "Please accept terms first."
                 }
             },
 
@@ -245,8 +228,7 @@ var Login = function() {
             },
 
             submitHandler: function(form) {
-                var formData = $(form).serializeObject();
-                alert(formData.fullname)
+                var formData = $(form).serializeJSON({parseAll: "true"});
 
                 $.ajax({
                     type: 'POST',
@@ -288,22 +270,6 @@ var Login = function() {
     return {
         //main function to initiate the module
         init: function() {
-            
-            $.fn.serializeObject = function () {
-                var o = {};
-                var a = this.serializeArray();
-                $.each(a, function () {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
-                            o[this.name] = [o[this.name]];
-                        }
-                        o[this.name].push(this.value || '');
-                    } else {
-                        o[this.name] = this.value || '';
-                    }
-                });
-                return o;
-            };
 
             handleLogin();
             handleForgetPassword();

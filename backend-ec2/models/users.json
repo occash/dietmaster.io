@@ -12,18 +12,24 @@
                 },
                 "username": {
                     "type": "string",
-                    "pattern": "^[a-zA-Z0-9_.-]+$"
+                    "pattern": "^[a-zA-Z0-9_.-]+$",
+                    "minLength": 3,
+                    "maxLength": 21
                 },
                 "password": {
                     "type": "string",
                     "minLength": 3,
                     "maxLength": 21
                 },
-                "neck": {
-                    "type": "number"
+                "fullname": {
+                    "type": "string"
                 },
-                "lifestyle": {
-                    "type": "integer"
+                "gender": {
+                    "enum": [ "m", "f" ]
+                },
+                "birthdate": {
+                    "type": "string",
+                    "format": "date"
                 },
                 "height": {
                     "type": "number"
@@ -31,30 +37,24 @@
                 "weight": {
                     "type": "number"
                 },
-                "gender": {
-                    "type": "boolean"
-                },
-                "hip": {
-                    "type": "number"
-                },
-                "birthdate": {
-                    "type": "string",
-                    "format": "datetime"
-                },
-                "lastName": {
-                    "type": "string"
+                "lifestyle": {
+                    "type": "integer"
                 },
                 "diabetic": {
                     "type": "boolean"
                 },
-                "abdomen": {
+                "neck": {
                     "type": "number"
                 },
-                "firstName": {
-                    "type": "string"
+                "hip": {
+                    "type": "number"
+                },
+                "abdomen": {
+                    "type": "number"
                 }
             },
-            "required": [ "email", "username", "password" ],
+            "required": [ "email", "username", "password", "fullname", "gender", 
+                          "birthdate", "height", "weight", "lifestyle" ],
             "additionalProperties": false
         }
     },
