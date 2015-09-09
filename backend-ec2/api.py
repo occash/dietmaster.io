@@ -16,29 +16,28 @@ from bson.json_util import loads, dumps
 from pymongo.errors import OperationFailure
 
 from models import Models
+from base import BaseHandler
 
-class BaseHandler(RequestHandler):
+class UserHandler(BaseHandler):
 
-    def parse_body(self):
-        try:
-            body = self.request.body
-            body = body.decode('utf-8')
-            return None if not body else loads(body)
-        except:
-            raise HTTPError(400, 'Invalid request body')
+    @coroutine
+    def get(self):
+        if self.current_user:
+            database = self.settings['database']
+            users = database.users
+            user = yield users.find_one({'username': self.current_user.decode('utf-8')})
+            if not user:
+                raise HTTPError(404, 'User not found')
 
-    def write_error(self, status_code, **kwargs):
-        if status_code == 500:
-            self.write('Internal server error')
+            self.write(dumps(user))
+        else:
+            raise HTTPError(401, 'Anauthorized')
 
-        if 'message' in kwargs:
-            self.write(kwargs['message'])
+class UserFactsHandler(BaseHandler):
+    pass
 
-        if 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
-            self.write(kwargs['exc_info'][1].log_message)
-
-    def get_current_user(self):
-        return self.get_secure_cookie("user")
+class UserPhotoHandler(BaseHandler):
+    pass
 
 class UsersHandler(BaseHandler):
 
@@ -130,7 +129,7 @@ class UsersHandler(BaseHandler):
 
         self.write(dumps(user_body))
 
-class LoginHandler(BaseHandler):
+class AuthHandler(BaseHandler):
     
     @coroutine
     def post(self):
@@ -156,10 +155,7 @@ class LoginHandler(BaseHandler):
 
         self.set_secure_cookie('user', user['_id'], expires_days=7)
 
-class LogoutHandler(BaseHandler):
-
-    @coroutine
-    def post(self):
+    def delete(self):
         self.clear_all_cookies()
 
 class ResetHandler(BaseHandler):

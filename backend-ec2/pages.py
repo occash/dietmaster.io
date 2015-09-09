@@ -4,22 +4,31 @@
 from tornado.web import RequestHandler, HTTPError
 from tornado.gen import coroutine
 
-from template import Template
-
-class PageHandler(RequestHandler):
-    template = Template('web')
-
-    def render(self, name, **params):
-        return PageHandler.template.render(name, **params)
+from base import PageHandler
 
 class LoginPage(PageHandler):
 
     def get(self):
-        html = self.render('login.html')
-        self.write(html)
+        if self.current_user:
+            self.redirect('/')
+        else:
+            html = self.render('login.html')
+            self.write(html)
 
 class HomePage(PageHandler):
 
+    @coroutine
     def get(self):
-        html = self.render('index.html')
+        if self.current_user:
+            '''database = self.settings['database']
+            users = database.users
+            user = yield users.find_one({'username': self.current_user.decode('utf-8')})
+            if not user:
+                self.clear_all_cookies()
+                self.redirect('/login')'''
+
+            html = self.render('index.html')
+        else:
+            html = 'Hello'
+
         self.write(html)

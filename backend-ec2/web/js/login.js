@@ -51,10 +51,10 @@ var Login = function() {
 
                 $.ajax({
                     type: 'POST',
-                    url: '/api/login',
+                    url: '/api/auth',
                     data: formData,
                     success: function(data, textStatus, jqXHR) {
-                        window.location = "/app";
+                        window.location = "/";
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         $('.alert-danger > span', $('.login-form')).text(jqXHR.responseText);

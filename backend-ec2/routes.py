@@ -8,13 +8,15 @@ from pages import *
 
 routes = [
     # Api handlers
+    (r'/api/user', UserHandler),
+    (r'/api/user/facts', UserFactsHandler),
+    (r'/api/user/photo', UserPhotoHandler),
     (r'/api/users', UsersHandler),
-    (r'/api/login', LoginHandler),
-    (r'/api/logout', LogoutHandler),
+    (r'/api/auth', AuthHandler),
     (r'/api/reset', ResetHandler),
 
     # Site handlers
-    (r'/app/login', LoginPage),
-    (r'/app/home', HomePage),
+    (r'/login', LoginPage),
+    (r'/', HomePage),
     (r'/(.*)', StaticFileHandler, {'path': r'web/'})
 ]
