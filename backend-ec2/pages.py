@@ -8,8 +8,10 @@ from base import PageHandler
 
 class LoginPage(PageHandler):
 
+    @coroutine
     def get(self):
-        if self.current_user:
+        user = yield self.current_user()
+        if user:
             self.redirect('/')
         else:
             html = self.render('login.html')
@@ -19,16 +21,20 @@ class HomePage(PageHandler):
 
     @coroutine
     def get(self):
-        if self.current_user:
-            '''database = self.settings['database']
-            users = database.users
-            user = yield users.find_one({'username': self.current_user.decode('utf-8')})
-            if not user:
-                self.clear_all_cookies()
-                self.redirect('/login')'''
-
+        user = yield self.current_user()
+        if user:
             html = self.render('index.html')
         else:
             html = 'Hello'
 
         self.write(html)
+
+class VerifyPage(PageHandler):
+    
+    def get(self):
+        pass
+
+class ResetPage(PageHandler):
+
+    def get(self):
+        pass

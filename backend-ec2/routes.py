@@ -13,10 +13,11 @@ routes = [
     (r'/api/user/photo', UserPhotoHandler),
     (r'/api/users', UsersHandler),
     (r'/api/auth', AuthHandler),
-    (r'/api/reset', ResetHandler),
 
     # Site handlers
     (r'/login', LoginPage),
+    (r'/reset', ResetPage),
+    (r'/verify', VerifyPage),
     (r'/', HomePage),
     (r'/(.*)', StaticFileHandler, {'path': r'web/'})
 ]

@@ -54,6 +54,8 @@ var Login = function() {
                     url: '/api/auth',
                     data: formData,
                     success: function(data, textStatus, jqXHR) {
+                        token = JSON.parse(data);
+                        $.cookie('bearer', token.bearer);
                         window.location = "/";
                     },
                     error: function(jqXHR, textStatus, errorThrown) {

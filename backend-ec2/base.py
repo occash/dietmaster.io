@@ -2,8 +2,28 @@
 # -*- coding: utf8 -*- 
 
 from tornado.web import RequestHandler, HTTPError
+from tornado.gen import coroutine
 
 from template import Template
+
+def auth(func):
+
+    @coroutine
+    def check_auth(self, *args, **kwargs):
+        bearer = self.request.headers['bearer']
+
+        database = self.settings['database']
+        tokens = database['internal.tokens']
+
+        # Get token
+        token = yield tokens.find_one({'bearer': bearer})
+        if not token:
+            raise HTTPError(401, 'Access token expired')
+
+        self.user = token['_id']
+        result = yield func(self, *args, **kwargs)
+
+    return check_auth
 
 class BaseHandler(RequestHandler):
 
@@ -25,11 +45,22 @@ class BaseHandler(RequestHandler):
         if 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
             self.write(kwargs['exc_info'][1].log_message)
 
-    def get_current_user(self):
-        return self.get_secure_cookie("user")
-
 class PageHandler(BaseHandler):
     template = Template('web')
 
     def render(self, name, **params):
         return PageHandler.template.render(name, **params)
+
+    @coroutine
+    def current_user(self):
+        bearer = self.get_cookie("bearer")
+        if not bearer:
+            return None
+
+        database = self.settings['database']
+        tokens = database['internal.tokens']
+
+        # Get token
+        token = yield tokens.find_one({'bearer': bearer})
+
+        return token['_id'] if token else None

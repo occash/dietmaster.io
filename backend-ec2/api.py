@@ -5,7 +5,7 @@ import os
 import hashlib
 import logging
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from tornado.web import RequestHandler, HTTPError
 from tornado.gen import coroutine
@@ -16,22 +16,20 @@ from bson.json_util import loads, dumps
 from pymongo.errors import OperationFailure
 
 from models import Models
-from base import BaseHandler
+from base import BaseHandler, auth
 
 class UserHandler(BaseHandler):
 
+    @auth
     @coroutine
     def get(self):
-        if self.current_user:
-            database = self.settings['database']
-            users = database.users
-            user = yield users.find_one({'username': self.current_user.decode('utf-8')})
-            if not user:
-                raise HTTPError(404, 'User not found')
+        database = self.settings['database']
+        users = database.users
+        user = yield users.find_one({'username': self.user})
+        if not user:
+            raise HTTPError(404, 'User not found')
 
-            self.write(dumps(user))
-        else:
-            raise HTTPError(401, 'Anauthorized')
+        self.write(dumps(user))
 
 class UserFactsHandler(BaseHandler):
     pass
@@ -43,22 +41,7 @@ class UsersHandler(BaseHandler):
 
     @coroutine
     def get(self):
-        database = self.settings['database']
-        users = database.users
-        options = QueryOptions(self)
-
-        cursor = users.find(options.query)
-        cursor = cursor.limit(options.limit)
-        cursor = cursor.skip(options.offset)
-
-        if options.count:
-            result = yield cursor.count(with_limit_and_skip=True)
-            json_users = { 'count': result }
-        else:
-            result = yield cursor.to_list(None)
-            json_users = { 'results': result }
-
-        self.finish(dumps(json_users))
+        pass
 
     @coroutine
     def post(self):
@@ -108,7 +91,7 @@ class UsersHandler(BaseHandler):
             'usergroups': []
         }
 
-        # Save internal part
+        # Save user
         try:
             yield users.save(user_body)
             yield internal_users.save(internal_body)
@@ -141,6 +124,7 @@ class AuthHandler(BaseHandler):
 
         database = self.settings['database']
         users = database['internal.users']
+        tokens = database['internal.tokens']
 
         user = yield users.find_one({'_id': username})
         if not user:
@@ -153,13 +137,29 @@ class AuthHandler(BaseHandler):
         if not hexpass == user['password']:
             raise HTTPError(403, 'Wrong password')
 
-        self.set_secure_cookie('user', user['_id'], expires_days=7)
+        token = yield tokens.find_one({'_id': username})
+        if not token:
+            bearer = hashlib.sha1(os.urandom(128)).hexdigest()
+            refresh = hashlib.sha1(os.urandom(128)).hexdigest()
+            expires = datetime.utcnow() + timedelta(days=7)
 
-    def delete(self):
-        self.clear_all_cookies()
+            token = {
+                '_id': username,
+                'bearer': bearer,
+                'refresh': refresh,
+                'expires': expires
+            }
 
-class ResetHandler(BaseHandler):
+            yield tokens.save(token)
+
+        self.finish(dumps(token))
 
     @coroutine
-    def post(self):
-        pass
+    def delete(self):
+        bearer = self.get_argument('bearer', None)
+        if not bearer:
+            raise HTTPError(403, 'No token supplied')
+
+        database = self.settings['database']
+        tokens = database['internal.tokens']
+        yield tokens.remove({'bearer': bearer})

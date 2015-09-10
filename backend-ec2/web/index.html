@@ -173,7 +173,7 @@
 							<li class="divider">
 							</li>
 							<li>
-								<a href="/logout">
+								<a href="#" onclick="javascript:logout()">
 								<i class="icon-lock"></i> Log Out </a>
 							</li>
 						</ul>
@@ -1801,6 +1801,20 @@
 <script src="/js/tasks.js" type="text/javascript"></script>
 <script src="/js/facts.js" type="text/javascript"></script>
 <script>
+function logout() {
+    $.ajax({
+        type: 'DELETE',
+        url: '/api/auth',
+        data: {'bearer': $.cookie('bearer')},
+        success: function(data, textStatus, jqXHR) {
+            $.removeCookie('bearer');
+            window.location = "/";
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // Alert disconnected
+        }
+    });
+}
 jQuery(document).ready(function() {    
     Metronic.init(); // init metronic core componets
     Layout.init(); // init layout
@@ -1812,14 +1826,13 @@ jQuery(document).ready(function() {
     $.ajax({
         type: 'GET',
         url: '/api/user',
+        headers: {bearer: $.cookie('bearer')},
         success: function(data, textStatus, jqXHR) {
             var user = JSON.parse(data);
             var calories = Facts.bmr(user) * Facts.lifestyleCoef(user);
             var protein = user.weight * (1 - Facts.bfp(user) / 100.0) * 5;
             var fat = user.weight * 3;
             var carbs = user.weight * (1 - Facts.bfp(user) / 100.0);
-            
-            console.log(user);
             
             $('#username').text(user.fullname)
             $('#daily_calories').text(Math.round(calories));
@@ -1828,7 +1841,7 @@ jQuery(document).ready(function() {
             $('#daily_carbs').text(Math.round(carbs));
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error');
+            // Alert disconnected
         }
     });
 });
