@@ -3,6 +3,7 @@
 
 from tornado.web import StaticFileHandler
 
+from base import *
 from api import *
 from pages import *
 
@@ -11,6 +12,7 @@ routes = [
     (r'/api/user', UserHandler),
     (r'/api/user/facts', UserFactsHandler),
     (r'/api/user/photo', UserPhotoHandler),
+    (r'/api/user/settings', UserSettingsHandler),
     (r'/api/users', UsersHandler),
     (r'/api/auth', AuthHandler),
 
@@ -19,5 +21,7 @@ routes = [
     (r'/reset', ResetPage),
     (r'/verify', VerifyPage),
     (r'/', HomePage),
-    (r'/(.*)', StaticFileHandler, {'path': r'web/'})
+
+    # Other
+    (r'.*', PageNotFound)
 ]

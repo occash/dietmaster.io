@@ -16,9 +16,9 @@ from bson.json_util import loads, dumps
 from pymongo.errors import OperationFailure
 
 from models import Models
-from base import BaseHandler, auth
+from base import ApiHandler, auth
 
-class UserHandler(BaseHandler):
+class UserHandler(ApiHandler):
 
     @auth
     @coroutine
@@ -31,13 +31,16 @@ class UserHandler(BaseHandler):
 
         self.write(dumps(user))
 
-class UserFactsHandler(BaseHandler):
+class UserFactsHandler(ApiHandler):
     pass
 
-class UserPhotoHandler(BaseHandler):
+class UserPhotoHandler(ApiHandler):
     pass
 
-class UsersHandler(BaseHandler):
+class UserSettingsHandler(ApiHandler):
+    pass
+
+class UsersHandler(ApiHandler):
 
     @coroutine
     def get(self):
@@ -112,7 +115,7 @@ class UsersHandler(BaseHandler):
 
         self.write(dumps(user_body))
 
-class AuthHandler(BaseHandler):
+class AuthHandler(ApiHandler):
     
     @coroutine
     def post(self):

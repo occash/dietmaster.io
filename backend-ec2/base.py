@@ -25,7 +25,7 @@ def auth(func):
 
     return check_auth
 
-class BaseHandler(RequestHandler):
+class ApiHandler(RequestHandler):
 
     def parse_body(self):
         try:
@@ -45,7 +45,7 @@ class BaseHandler(RequestHandler):
         if 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
             self.write(kwargs['exc_info'][1].log_message)
 
-class PageHandler(BaseHandler):
+class PageHandler(RequestHandler):
     template = Template('web')
 
     def render(self, name, **params):
@@ -53,6 +53,7 @@ class PageHandler(BaseHandler):
 
     @coroutine
     def current_user(self):
+
         bearer = self.get_cookie("bearer")
         if not bearer:
             return None
@@ -64,3 +65,9 @@ class PageHandler(BaseHandler):
         token = yield tokens.find_one({'bearer': bearer})
 
         return token['_id'] if token else None
+
+class PageNotFound(PageHandler):
+    
+    def get(self):
+        html = self.render('404.html')
+        self.write(html)
