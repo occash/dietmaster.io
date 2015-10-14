@@ -1,10 +1,28 @@
 #!/usr/bin/env python
-# -*- coding: utf8 -*- 
+# -*- coding: utf8 -*-
+
+from json import loads as jloads, dumps as jdumps
+from jsonschema import validate, ValidationError
 
 from tornado.web import RequestHandler, HTTPError
 from tornado.gen import coroutine
 
+from bson.objectid import ObjectId
+from datetime import date
+
 from template import Template
+
+def json_convert(obj):
+    for k, v in obj.items():
+        if isinstance(obj[k], ObjectId):
+            obj[k] = str(obj[k])
+        if isinstance(obj[k], date):
+            obj[k] = obj[k].strftime('%Y-%m-%d')
+
+    return obj
+
+def dumps(obj, *args, **kwargs):
+    return jdumps(json_convert(obj), *args, **kwargs)
 
 def auth(func):
 
@@ -27,21 +45,40 @@ def auth(func):
 
 class ApiHandler(RequestHandler):
 
-    def parse_body(self):
+    def prepare(self):
+        if not getattr(self, self.request.method.lower(), None):
+            raise HTTPError(405, 'Method not allowed')
+
+        # Find schema
+        schema = self.settings['schema']
+        class_schema = schema.get(self.__class__.__name__, None)
+        method_schema = class_schema.get(self.request.method, None)
+
+        # Parse JSON body
         try:
             body = self.request.body
-            body = body.decode('utf-8')
-            return None if not body else loads(body)
+            body = jloads(body.decode('utf-8')) if body else None
         except:
-            raise HTTPError(400, 'Invalid request body')
+            raise HTTPError(400, 'Invalid body')
+        
+        # Validate schema
+        try:
+            validate(body, method_schema)
+            self.json_body = body
+        except ValidationError as e:
+            raise HTTPError(400, 'Invalid value: %s' % e.message)
 
     def write_error(self, status_code, **kwargs):
+        # Handle internal error
         if status_code == 500:
+            # TODO: send email to admins
             self.write('Internal server error')
 
+        # Write raw message if available
         if 'message' in kwargs:
             self.write(kwargs['message'])
 
+        # Write HTTError message (most common)
         if 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
             self.write(kwargs['exc_info'][1].log_message)
 

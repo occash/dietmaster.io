@@ -1,8 +1,10 @@
 {
-    "users": {
-        "index": [ ],
-        "ttl": [ ],
-        "schema": {
+    "UserHandler": {
+        "GET": {}
+    },
+    "UsersHandler": {
+        "GET": {},
+        "POST": {
             "$schema": "http://json-schema.org/draft-04/schema#",
             "type": "object",
             "properties": {
@@ -53,24 +55,12 @@
                     "type": "number"
                 }
             },
-            "required": [ "email", "username", "password", "fullname", "gender", 
+            "required": [ "email", "username", "password", "fullname", "gender",
                           "birthdate", "height", "weight", "lifestyle" ],
             "additionalProperties": false
         }
     },
-    "usergroups": {
-        "index": [ ],
-        "ttl": [ ],
-        "schema": {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            },
-            "required": [ "name" ],
-            "additionalProperties": false
-        }
+    "AuthHandler": {
+        "POST": {}
     }
 }

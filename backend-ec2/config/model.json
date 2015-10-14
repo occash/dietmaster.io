@@ -1,0 +1,21 @@
+{
+    "internal.tokens": {
+        "access_token": {
+            "background": true
+        },
+        "expires_in": {
+            "expireAfterSeconds": 0,
+            "background": true
+        }
+    },
+    "users": {
+        "username": {
+            "unique": true,
+            "background": true
+        },
+        "email": {
+            "unique": true,
+            "background": true
+        }
+    }
+}

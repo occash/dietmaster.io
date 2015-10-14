@@ -3,4 +3,4 @@
 *.sln
 *.suo
 /__pycache__
-server.log
+logs/

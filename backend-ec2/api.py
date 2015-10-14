@@ -10,13 +10,9 @@ from datetime import datetime, timedelta
 from tornado.web import RequestHandler, HTTPError
 from tornado.gen import coroutine
 
-from jsonschema import SchemaError, ValidationError
-from bson.json_util import loads, dumps
+from pymongo.errors import DuplicateKeyError
 
-from pymongo.errors import OperationFailure
-
-from models import Models
-from base import ApiHandler, auth
+from base import ApiHandler, auth, dumps
 
 class UserHandler(ApiHandler):
 
@@ -44,39 +40,38 @@ class UsersHandler(ApiHandler):
 
     @coroutine
     def get(self):
-        pass
+        key = self.get_argument('key', None)
+        value = self.get_argument('value', None)
+
+        if not key or not value:
+            raise HTTPError(400, 'Key and value required')
+
+        if not key in ['username', 'email']:
+            raise HTTPError(400, 'Invalid key')
+        
+        database = self.settings['database']
+        users = database.users
+        
+        result = yield users.find_one({key: value})
+
+        self.write({key: result is not None})
 
     @coroutine
     def post(self):
         # Parse body
-        user_body = self.parse_body()
-
-        if not user_body['tnc']:
-            raise HTTPError(400, 'Accept terms first')
-        
-        # Remove unused fields
-        del user_body['tnc']
-        del user_body['rpassword']
-
-        # Validate model
-        try:
-            Models.users.validate(user_body)
-        except SchemaError:
-            raise HTTPError(500, 'Invalid JSON schema')
-        except ValidationError as e:
-            raise HTTPError(400, 'JSON body not valid')
-
-        # Get collections
-        database = self.settings['database']
-        users = database.users
-        internal_users = database.internal.users
+        user_body = self.json_body
 
         # Modify user a bit
         raw_password = user_body.pop('password')
         user_body['created'] = datetime.utcnow()
         user_body['birthdate'] = datetime.strptime(user_body['birthdate'], '%Y-%m-%d')
 
+        database = self.settings['database']
+        users = database.users
+        internal_users = database['internal.users']
+
         # Generate password hash
+        # TODO: generate hash async
         salt = os.urandom(24)
         raw_password = raw_password.encode('utf-8')
         password = hashlib.sha256(salt + raw_password).digest()
@@ -90,16 +85,16 @@ class UsersHandler(ApiHandler):
             'salt': salt,
             'password': password,
             'verified': False,
-            'token': verify_token,
-            'usergroups': []
+            'token': verify_token
         }
 
         # Save user
         try:
+            # TODO: make transactional query
             yield users.save(user_body)
             yield internal_users.save(internal_body)
-        except OperationFailure:
-            raise HTTPError(500, 'Cannot save user')
+        except DuplicateKeyError as e:
+            raise HTTPError(400, 'User with same name or email already exists')
 
         # Send mail with verification
         mail = self.settings['mail']
@@ -123,7 +118,7 @@ class AuthHandler(ApiHandler):
         password = self.get_argument('password', None)
 
         if not username or not password:
-            raise HTTPError(403, 'No credentials supplied')
+            raise HTTPError(400, 'No credentials supplied')
 
         database = self.settings['database']
         users = database['internal.users']
@@ -131,14 +126,14 @@ class AuthHandler(ApiHandler):
 
         user = yield users.find_one({'_id': username})
         if not user:
-            raise HTTPError(403, 'User not found')
+            raise HTTPError(404, 'User not found')
 
         salt = user['salt']
         rawpassword = password.encode('utf-8')
         hexpass = hashlib.sha256(salt + rawpassword).digest()
 
         if not hexpass == user['password']:
-            raise HTTPError(403, 'Wrong password')
+            raise HTTPError(400, 'Incorrect password')
 
         token = yield tokens.find_one({'_id': username})
         if not token:
