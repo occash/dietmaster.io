@@ -11,7 +11,7 @@ routes = [
     # Api handlers
     (r'/api/user', UserHandler),
     (r'/api/user/facts', UserFactsHandler),
-    (r'/api/user/photo', UserPhotoHandler),
+    (r'/api/user/photo', UserPhotoHandler, {'path': '/'}),
     (r'/api/user/settings', UserSettingsHandler),
     (r'/api/users', UsersHandler),
     (r'/api/auth', AuthHandler),

@@ -26,8 +26,25 @@ class UserHandler(ApiHandler):
 class UserFactsHandler(ApiHandler):
     pass
 
-class UserPhotoHandler(ApiHandler):
-    pass
+class UserPhotoHandler(StreamApiHandler):
+
+    def set_extra_headers(self, path):
+        self.set_header("Cache-control", "no-cache")
+
+    def head(self):
+        return super(StreamApiHandler, self).get('/', False)
+
+    @auth
+    @coroutine
+    def get(self):
+        return super(StreamApiHandler, self).get('/', True)
+
+    @classmethod
+    def get_absolute_path(cls, root, path):
+        return 'C:/Users/shal/Pictures/projects/mechanic.png'
+
+    def validate_absolute_path(self, root, absolute_path):
+        return 'C:/Users/shal/Pictures/projects/mechanic.png'
 
 class UserSettingsHandler(ApiHandler):
     

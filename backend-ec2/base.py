@@ -4,7 +4,7 @@
 from json import loads as jloads, dumps as jdumps
 from jsonschema import validate, ValidationError
 
-from tornado.web import RequestHandler, HTTPError
+from tornado.web import RequestHandler, StaticFileHandler, HTTPError
 from tornado.gen import coroutine
 
 from bson.objectid import ObjectId
@@ -104,6 +104,9 @@ class ApiHandler(RequestHandler):
         # Write HTTError message (most common)
         if 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
             self.write(kwargs['exc_info'][1].log_message)
+
+class StreamApiHandler(StaticFileHandler):
+    pass
 
 class PageHandler(RequestHandler):
     template = Template('web')
