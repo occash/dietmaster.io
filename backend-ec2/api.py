@@ -6,13 +6,9 @@ import hashlib
 import logging
 
 from datetime import datetime, timedelta
-
-from tornado.web import RequestHandler, HTTPError
 from tornado.gen import coroutine
-
 from pymongo.errors import DuplicateKeyError
-
-from base import ApiHandler, auth, dumps
+from base import ApiHandler, StreamApiHandler, auth, dumps
 
 class UserHandler(ApiHandler):
 
@@ -34,7 +30,19 @@ class UserPhotoHandler(ApiHandler):
     pass
 
 class UserSettingsHandler(ApiHandler):
-    pass
+    
+    @coroutine
+    def get(self):
+        settings = {
+            'language': 'en',
+            'measure': 'me',
+            'theme': 'light'
+        }
+        self.write(settings)
+
+    @coroutine
+    def post(self):
+        pass
 
 class UsersHandler(ApiHandler):
 

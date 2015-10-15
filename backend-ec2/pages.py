@@ -4,29 +4,31 @@
 from tornado.web import RequestHandler, HTTPError
 from tornado.gen import coroutine
 
-from base import PageHandler
+from base import PageHandler, webauth
 
 class LoginPage(PageHandler):
 
     @coroutine
     def get(self):
-        user = yield self.current_user()
-        if user:
-            self.redirect('/')
-        else:
-            html = self.render('login.html')
-            self.write(html)
+        bearer = self.get_cookie('bearer', None)
+        if bearer:
+            database = self.settings['database']
+            tokens = database['internal.tokens']
+
+            # Get token
+            token = yield tokens.find_one({'bearer': bearer})
+            if token:
+                self.redirect('/')
+
+        html = self.render('login.html')
+        self.write(html)
 
 class HomePage(PageHandler):
 
+    @webauth
     @coroutine
     def get(self):
-        user = yield self.current_user()
-        if user:
-            html = self.render('index.html')
-        else:
-            html = 'Hello'
-
+        html = self.render('index.html')
         self.write(html)
 
 class VerifyPage(PageHandler):

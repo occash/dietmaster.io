@@ -28,7 +28,9 @@ def auth(func):
 
     @coroutine
     def check_auth(self, *args, **kwargs):
-        bearer = self.request.headers['bearer']
+        bearer = self.request.headers.get('bearer', None)
+        if not bearer:
+            raise HTTPError(400, 'Access token required')
 
         database = self.settings['database']
         tokens = database['internal.tokens']
@@ -37,6 +39,27 @@ def auth(func):
         token = yield tokens.find_one({'bearer': bearer})
         if not token:
             raise HTTPError(401, 'Access token expired')
+
+        self.user = token['_id']
+        result = yield func(self, *args, **kwargs)
+
+    return check_auth
+
+def webauth(func):
+
+    @coroutine
+    def check_auth(self, *args, **kwargs):
+        bearer = self.get_cookie('bearer', None)
+        if not bearer:
+            self.redirect('/login')
+
+        database = self.settings['database']
+        tokens = database['internal.tokens']
+
+        # Get token
+        token = yield tokens.find_one({'bearer': bearer})
+        if not token:
+            self.redirect('/login')
 
         self.user = token['_id']
         result = yield func(self, *args, **kwargs)
@@ -87,21 +110,6 @@ class PageHandler(RequestHandler):
 
     def render(self, name, **params):
         return PageHandler.template.render(name, **params)
-
-    @coroutine
-    def current_user(self):
-
-        bearer = self.get_cookie("bearer")
-        if not bearer:
-            return None
-
-        database = self.settings['database']
-        tokens = database['internal.tokens']
-
-        # Get token
-        token = yield tokens.find_one({'bearer': bearer})
-
-        return token['_id'] if token else None
 
 class PageNotFound(PageHandler):
     
