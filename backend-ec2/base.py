@@ -60,6 +60,7 @@ def webauth(func):
         token = yield tokens.find_one({'bearer': bearer})
         if not token:
             self.redirect('/login')
+            return
 
         self.user = token['_id']
         result = yield func(self, *args, **kwargs)
