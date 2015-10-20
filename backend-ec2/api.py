@@ -52,18 +52,22 @@ class UserPhotoHandler(StreamApiHandler):
 
 class UserSettingsHandler(ApiHandler):
     
+    @auth
     @coroutine
     def get(self):
-        settings = {
-            'language': 'en',
-            'measure': 'me',
-            'theme': 'light'
-        }
-        self.write(settings)
+        database = self.settings['database']
+        settings = database.settings
 
+        result = yield settings.find_one({'_id': self.user})
+        self.write(dumps(result))
+
+    @auth
     @coroutine
     def post(self):
-        pass
+        database = self.settings['database']
+        settings = database.settings
+        yield settings.update({'_id': self.user}, {'$set': self.json_body}, 
+                              upsert=False, multi=False)
 
 class UsersHandler(ApiHandler):
 
@@ -97,6 +101,7 @@ class UsersHandler(ApiHandler):
 
         database = self.settings['database']
         users = database.users
+        settings = database.settings
         internal_users = database['internal.users']
 
         # Generate password hash
@@ -122,6 +127,7 @@ class UsersHandler(ApiHandler):
             # TODO: make transactional query
             yield users.save(user_body)
             yield internal_users.save(internal_body)
+            yield settings.save({'language': 'en', 'measure': 'me', 'theme': 'light'})
         except DuplicateKeyError as e:
             raise HTTPError(400, 'User with same name or email already exists')
 

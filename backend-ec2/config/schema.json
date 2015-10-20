@@ -2,6 +2,25 @@
     "UserHandler": {
         "GET": {}
     },
+    "UserSettingsHandler": {
+        "GET": {},
+        "POST": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+                "language": {
+                    "enum": ["en"]
+                },
+                "measure": {
+                    "enum": ["me", "im", "us"]
+                },
+                "theme": {
+                    "enum": ["light", "dark"]
+                }
+            },
+            "additionalProperties": false
+        }
+    },
     "UsersHandler": {
         "GET": {},
         "POST": {
