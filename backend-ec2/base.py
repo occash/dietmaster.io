@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from json import loads as jloads, dumps as jdumps
+from json import loads as jloads, dumps as jdumps, JSONEncoder
 from jsonschema import validate, ValidationError
 
 from tornado.web import RequestHandler, StaticFileHandler, HTTPError
@@ -12,17 +12,18 @@ from datetime import date
 
 from template import Template
 
-def json_convert(obj):
-    for k, v in obj.items():
-        if isinstance(obj[k], ObjectId):
-            obj[k] = str(obj[k])
-        if isinstance(obj[k], date):
-            obj[k] = obj[k].strftime('%Y-%m-%d')
+class MongoEncoder(JSONEncoder):
 
-    return obj
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        if isinstance(obj, date):
+            return obj.strftime('%Y-%m-%d')
+
+        return JSONEncoder.default(self, obj)
 
 def dumps(obj, *args, **kwargs):
-    return jdumps(json_convert(obj), *args, **kwargs)
+    return jdumps(obj, cls=MongoEncoder, *args, **kwargs)
 
 def auth(func):
 

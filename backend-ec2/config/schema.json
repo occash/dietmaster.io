@@ -65,5 +65,11 @@
     },
     "UserPhotoHandler": {
         "GET": {}
+    },
+    "FoodHandler": {
+        "GET": {}
+    },
+    "FoodIdHandler": {
+        "GET": {}
     }
 }

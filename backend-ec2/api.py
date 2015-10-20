@@ -2,12 +2,16 @@
 # -*- coding: utf8 -*- 
 
 import os
+import re
 import hashlib
 import logging
 
 from datetime import datetime, timedelta
+from tornado.web import HTTPError
 from tornado.gen import coroutine
 from pymongo.errors import DuplicateKeyError
+from bson.objectid import ObjectId
+
 from base import ApiHandler, StreamApiHandler, auth, dumps
 
 class UserHandler(ApiHandler):
@@ -186,3 +190,35 @@ class AuthHandler(ApiHandler):
         database = self.settings['database']
         tokens = database['internal.tokens']
         yield tokens.remove({'bearer': bearer})
+
+class FoodHandler(ApiHandler):
+
+    @auth
+    @coroutine
+    def get(self):
+        phrase = self.get_argument('phrase', None)
+        if not phrase:
+            raise HTTPError(400, 'Search phrase required')
+
+        database = self.settings['database']
+        food = database.food
+
+        rexp = re.compile('^%s.*' % phrase, re.IGNORECASE)
+        cursor = food.find({'name': rexp}, {'_id': 1, 'name': 1})
+        result = yield cursor.to_list(length=10)
+
+        self.write(dumps({'results': result}))
+
+class FoodIdHandler(ApiHandler):
+
+    @auth
+    @coroutine
+    def get(self, id):
+        database = self.settings['database']
+        food = database.food
+
+        result = yield food.find_one({'_id': ObjectId(id)})
+        if not result:
+            raise HTTPError(404, 'Product not found')
+
+        self.write(dumps(result))

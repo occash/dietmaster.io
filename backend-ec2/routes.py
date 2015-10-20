@@ -15,6 +15,8 @@ routes = [
     (r'/api/user/settings', UserSettingsHandler),
     (r'/api/users', UsersHandler),
     (r'/api/auth', AuthHandler),
+    (r'/api/food', FoodHandler),
+    (r'/api/food/(\w+)', FoodIdHandler),
 
     # Site handlers
     (r'/login', LoginPage),
