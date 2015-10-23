@@ -33,15 +33,22 @@ class UserFactsHandler(ApiHandler):
 class UserPhotoHandler(StreamApiHandler):
 
     def set_extra_headers(self, path):
-        self.set_header("Cache-control", "no-cache")
+        if __debug__:
+            self.set_header('Cache-control', 'no-store, no-cache, must-revalidate, max-age=0')
 
     def head(self):
-        return super(StreamApiHandler, self).get('/', False)
+        return StreamApiHandler.get(self, '/', False)
 
-    @auth
     @coroutine
-    def get(self):
-        return super(StreamApiHandler, self).get('/', True)
+    def get(self, bearer):
+        database = self.settings['database']
+        tokens = database['internal.tokens']
+
+        token = yield tokens.find_one({'bearer': bearer})
+        if not token:
+            raise HTTPError(404, 'Photo not found')
+
+        yield StreamApiHandler.get(self, '/', True)
 
     @classmethod
     def get_absolute_path(cls, root, path):
