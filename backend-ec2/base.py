@@ -38,7 +38,7 @@ def auth(func):
             raise HTTPError(400, 'Access token required')
 
         database = self.settings['database']
-        tokens = database['internal.tokens']
+        tokens = database.tokens
 
         # Get token
         token = yield tokens.find_one({'bearer': bearer})
@@ -59,7 +59,7 @@ def webauth(func):
             self.redirect('/login')
 
         database = self.settings['database']
-        tokens = database['internal.tokens']
+        tokens = database.tokens
 
         # Get token
         token = yield tokens.find_one({'bearer': bearer})
@@ -148,7 +148,7 @@ class ApiHandler(RequestHandler):
         if not self.response_type:
             raise HTTPError(406, 'Not acceptable')
 
-        content_type = self.request.headers.get('Content-Type', None)
+        content_type = self.request.headers.get('Content-Type', 'application/json')
         body = self.request.body
         body = body.decode('utf-8')
 

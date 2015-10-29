@@ -36,11 +36,11 @@ class UserHandler(ApiHandler):
     def get(self):
         database = self.settings['database']
         users = database.users
-        user = yield users.find_one({'username': self.user})
+        user = yield users.find_one({'username': self.user}, {'_id': 0, 'private': 0})
         if not user:
             raise HTTPError(404, 'User not found')
 
-        self.write(dumps(user))
+        self.write_content(user)
 
 class UserFactsHandler(ApiHandler):
     pass
@@ -57,7 +57,7 @@ class UserPhotoHandler(StreamApiHandler):
     @coroutine
     def get(self, bearer):
         database = self.settings['database']
-        tokens = database['internal.tokens']
+        tokens = database.tokens
 
         token = yield tokens.find_one({'bearer': bearer})
         if not token:
@@ -78,17 +78,17 @@ class UserSettingsHandler(ApiHandler):
     @coroutine
     def get(self):
         database = self.settings['database']
-        settings = database.settings
+        users = database.users
 
-        result = yield settings.find_one({'_id': self.user})
-        self.write(dumps(result))
+        result = yield users.find_one({'username': self.user}, {'_id': 0, 'settings': 1})
+        self.write_content(result)
 
     @auth
     @coroutine
     def post(self):
         database = self.settings['database']
-        settings = database.settings
-        yield settings.update({'_id': self.user}, {'$set': self.json_body}, 
+        users = database.users
+        yield users.update({'username': self.user}, {'$set': {'settings': self.json_body}}, 
                               upsert=False, multi=False)
 
 class UsersHandler(ApiHandler):
@@ -109,12 +109,14 @@ class UsersHandler(ApiHandler):
         
         result = yield users.find_one({key: value})
 
-        self.write({key: result is not None})
+        self.write_content({key: result is not None})
 
     @coroutine
     def post(self):
-        # Parse body
         user_body = self.json_body
+        database = self.settings['database']
+        users = database.users
+        facts = database.facts
 
         # Modify user a bit
         raw_password = user_body.pop('password')
@@ -157,10 +159,6 @@ class UsersHandler(ApiHandler):
         }
 
         # Save user
-        database = self.settings['database']
-        users = database.users
-        facts = database.facts
-
         try:
             # TODO: make transactional query
             yield users.save(user_body)
@@ -196,20 +194,22 @@ class AuthHandler(ApiHandler):
             raise HTTPError(400, 'No credentials supplied')
 
         database = self.settings['database']
-        users = database['internal.users']
-        tokens = database['internal.tokens']
+        users = database.users
+        tokens = database.tokens
 
-        user = yield users.find_one({'_id': username})
+        user = yield users.find_one({'username': username}, {'_id': 0})
         if not user:
             raise HTTPError(404, 'User not found')
 
-        salt = user['salt']
+        private = user.pop('private')
+        salt = private['salt']
         rawpassword = password.encode('utf-8')
         hexpass = hashlib.sha256(salt + rawpassword).digest()
 
-        if not hexpass == user['password']:
+        if not hexpass == private['password']:
             raise HTTPError(400, 'Incorrect password')
 
+        # TODO: update expires field
         token = yield tokens.find_one({'_id': username})
         if not token:
             bearer = hashlib.sha1(os.urandom(128)).hexdigest()
@@ -225,7 +225,9 @@ class AuthHandler(ApiHandler):
 
             yield tokens.save(token)
 
-        self.finish(dumps(token))
+        token.pop('_id')
+        token['user'] = user
+        self.write_content(token)
 
     @coroutine
     def delete(self):
@@ -234,7 +236,7 @@ class AuthHandler(ApiHandler):
             raise HTTPError(403, 'No token supplied')
 
         database = self.settings['database']
-        tokens = database['internal.tokens']
+        tokens = database.tokens
         yield tokens.remove({'bearer': bearer})
 
 class FoodHandler(ApiHandler):

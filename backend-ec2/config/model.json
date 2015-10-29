@@ -1,9 +1,9 @@
 {
-    "internal.tokens": {
-        "access_token": {
+    "tokens": {
+        "bearer": {
             "background": true
         },
-        "expires_in": {
+        "expires": {
             "expireAfterSeconds": 0,
             "background": true
         }
