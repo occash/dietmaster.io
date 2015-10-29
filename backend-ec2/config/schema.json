@@ -52,30 +52,51 @@
                     "type": "string",
                     "format": "date"
                 },
-                "height": {
-                    "type": "number"
-                },
-                "weight": {
-                    "type": "number"
-                },
                 "lifestyle": {
                     "type": "integer"
                 },
                 "diabetic": {
                     "type": "boolean"
                 },
-                "neck": {
-                    "type": "number"
+                "body": {
+                    "type": "object",
+                    "properties": {
+                        "height": {
+                            "type": "number"
+                        },
+                        "weight": {
+                            "type": "number"
+                        },
+                        "neck": {
+                            "type": "number"
+                        },
+                        "abdomen": {
+                            "type": "number"
+                        },
+                        "hip": {
+                            "type": "number"
+                        }
+                    },
+                    "additionalProperties": false
                 },
-                "hip": {
-                    "type": "number"
-                },
-                "abdomen": {
-                    "type": "number"
+                "settings": {
+                    "type": "object",
+                    "properties": {
+                        "language": {
+                            "enum": ["en"]
+                        },
+                        "measure": {
+                            "enum": ["me", "im", "us"]
+                        },
+                        "theme": {
+                            "enum": ["light", "dark"]
+                        }
+                    },
+                    "additionalProperties": false
                 }
             },
             "required": [ "email", "username", "password", "fullname", "gender",
-                          "birthdate", "height", "weight", "lifestyle" ],
+                          "birthdate", "lifestyle", "diabetic" ],
             "additionalProperties": false
         }
     },

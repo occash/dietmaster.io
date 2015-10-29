@@ -14,6 +14,21 @@ from bson.objectid import ObjectId
 
 from base import ApiHandler, StreamApiHandler, auth, dumps
 
+# TODO: default user for country and gender
+default_body = {
+    'height': 180,
+    'weight': 80,
+    'neck': 50,
+    'abdomen': 80,
+    'hip': 24
+}
+
+default_settings = {
+    'language': 'en',
+    'measure': 'me',
+    'theme': 'light'
+}
+
 class UserHandler(ApiHandler):
 
     @auth
@@ -104,12 +119,9 @@ class UsersHandler(ApiHandler):
         # Modify user a bit
         raw_password = user_body.pop('password')
         user_body['created'] = datetime.utcnow()
+        user_body['updated'] = datetime.utcnow()
+        # TODO: check date in jsonschema
         user_body['birthdate'] = datetime.strptime(user_body['birthdate'], '%Y-%m-%d')
-
-        database = self.settings['database']
-        users = database.users
-        settings = database.settings
-        internal_users = database['internal.users']
 
         # Generate password hash
         # TODO: generate hash async
@@ -120,22 +132,40 @@ class UsersHandler(ApiHandler):
         # Generate verify token
         verify_token = hashlib.sha1(os.urandom(128)).hexdigest()
 
-        username = user_body['username']
-        internal_body = {
-            '_id': username,
+        # Set default values
+        settings = default_settings
+        settings.update(user_body.get('settings', {}))
+        user_body['settings'] = settings
+
+        # Set private part
+        private = {
             'salt': salt,
             'password': password,
             'verified': False,
-            'token': verify_token
+            'vcode': verify_token
+        }
+        user_body['private'] = private
+
+        # Prepare facts
+        username = user_body['username']
+        body = default_body
+        body.update(user_body.pop('body', {}))
+        fact_body = {
+            'username': username,
+            'updated': datetime.utcnow(),
+            'body': body
         }
 
         # Save user
+        database = self.settings['database']
+        users = database.users
+        facts = database.facts
+
         try:
             # TODO: make transactional query
             yield users.save(user_body)
-            yield internal_users.save(internal_body)
-            yield settings.save({'language': 'en', 'measure': 'me', 'theme': 'light'})
-        except DuplicateKeyError as e:
+            yield facts.save(fact_body)
+        except DuplicateKeyError:
             raise HTTPError(400, 'User with same name or email already exists')
 
         # Send mail with verification
@@ -150,7 +180,10 @@ class UsersHandler(ApiHandler):
             url='https://dietmaster.io/verify/%s-%s' % (username, verify_token)
         )
 
-        self.write(dumps(user_body))
+        user_body.pop('_id')
+        user_body.pop('private')
+
+        self.write_content(user_body)
 
 class AuthHandler(ApiHandler):
     
