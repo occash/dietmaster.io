@@ -13,6 +13,7 @@ from pymongo.errors import DuplicateKeyError
 from bson.objectid import ObjectId
 
 from base import ApiHandler, StreamApiHandler, auth, dumps
+from facts import calculate_index
 
 # TODO: default user for country and gender
 default_body = {
@@ -117,17 +118,17 @@ class UsersHandler(ApiHandler):
 
     @coroutine
     def post(self):
-        user_body = self.json_body
+        user = self.json_body
         database = self.settings['database']
         users = database.users
         facts = database.facts
 
         # Modify user a bit
-        raw_password = user_body.pop('password')
-        user_body['created'] = datetime.utcnow()
-        user_body['updated'] = datetime.utcnow()
+        raw_password = user.pop('password')
+        user['created'] = datetime.utcnow()
+        user['updated'] = datetime.utcnow()
         # TODO: check date in jsonschema
-        user_body['birthdate'] = datetime.strptime(user_body['birthdate'], '%Y-%m-%d')
+        user['birthdate'] = datetime.strptime(user['birthdate'], '%Y-%m-%d')
 
         # Generate password hash
         # TODO: generate hash async
@@ -140,8 +141,8 @@ class UsersHandler(ApiHandler):
 
         # Set default values
         settings = default_settings
-        settings.update(user_body.get('settings', {}))
-        user_body['settings'] = settings
+        settings.update(user.get('settings', {}))
+        user['settings'] = settings
 
         # Set private part
         private = {
@@ -150,22 +151,26 @@ class UsersHandler(ApiHandler):
             'verified': False,
             'vcode': verify_token
         }
-        user_body['private'] = private
+        user['private'] = private
 
         # Prepare facts
-        username = user_body['username']
+        username = user['username']
         body = default_body
-        body.update(user_body.pop('body', {}))
+        body.update(user.pop('body', {}))
+        index, nutrition = calculate_index(user, body)
+
         fact_body = {
             'username': username,
             'updated': datetime.utcnow(),
-            'body': body
+            'body': body,
+            'index': index,
+            'nutrition': nutrition
         }
 
         # Save user
         try:
             # TODO: make transactional query
-            yield users.save(user_body)
+            yield users.save(user)
             yield facts.save(fact_body)
         except DuplicateKeyError:
             raise HTTPError(400, 'User with same name or email already exists')
@@ -175,17 +180,17 @@ class UsersHandler(ApiHandler):
         mail.send(
             'DietMaster',
             'support@dietmaster.io',
-            user_body['email'],
+            user['email'],
             'Account verification',
             'verify',
             user=username,
             url='https://dietmaster.io/verify/%s-%s' % (username, verify_token)
         )
 
-        user_body.pop('_id')
-        user_body.pop('private')
+        user.pop('_id')
+        user.pop('private')
 
-        self.write_content(user_body)
+        self.write_content(user)
 
 class AuthHandler(ApiHandler):
     
