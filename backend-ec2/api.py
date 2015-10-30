@@ -88,7 +88,11 @@ class UserSettingsHandler(ApiHandler):
     def post(self):
         database = self.settings['database']
         users = database.users
-        yield users.update({'username': self.user}, {'$set': {'settings': self.json_body}}, 
+        fields = {}
+        for key, value in self.json_body.items():
+            fields['settings.%s' % key] = value
+
+        yield users.update({'username': self.user}, {'$set': fields}, 
                               upsert=False, multi=False)
 
 class UsersHandler(ApiHandler):
