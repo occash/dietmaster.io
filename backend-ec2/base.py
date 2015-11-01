@@ -152,7 +152,7 @@ class ApiHandler(RequestHandler):
 
         content_type = self.request.headers.get('Content-Type', 'application/x-www-form-urlencoded')
         content_type, params = _parse_header(content_type)
-        if self.request.method == 'GET':
+        if content_type == 'application/x-www-form-urlencoded':
             body = self.request.query
         else:
             body = self.request.body

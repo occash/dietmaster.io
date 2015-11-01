@@ -44,7 +44,16 @@ class UserHandler(ApiHandler):
         self.write_content(user)
 
 class UserFactsHandler(ApiHandler):
-    pass
+
+    @auth
+    @coroutine
+    def get(self):
+        database = self.settings['database']
+        facts = database.facts
+        cursor = facts.find({'username': self.user}, {'_id': 0}).sort('updated', -1).limit(1)
+        fact = yield cursor.to_list(1)
+        fact = fact[0]
+        self.write_content(fact)
 
 class UserPhotoHandler(StreamApiHandler):
 
