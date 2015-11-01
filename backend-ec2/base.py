@@ -4,9 +4,11 @@
 import json 
 from json import JSONEncoder, JSONDecoder
 from jsonschema import validate, ValidationError
+from urllib.parse import parse_qsl
 
 from tornado.web import RequestHandler, StaticFileHandler, HTTPError
 from tornado.gen import coroutine
+from tornado.httputil import _parse_header
 
 from bson.objectid import ObjectId
 from datetime import datetime
@@ -148,12 +150,21 @@ class ApiHandler(RequestHandler):
         if not self.response_type:
             raise HTTPError(406, 'Not acceptable')
 
-        content_type = self.request.headers.get('Content-Type', 'application/json')
-        body = self.request.body
-        body = body.decode('utf-8')
+        content_type = self.request.headers.get('Content-Type', 'application/x-www-form-urlencoded')
+        content_type, params = _parse_header(content_type)
+        if self.request.method == 'GET':
+            body = self.request.query
+        else:
+            body = self.request.body
+            body = body.decode(params.get('charset', 'UTF-8'))
 
         # Parse body
-        if content_type == 'application/json':
+        if content_type == 'application/x-www-form-urlencoded':
+            try:
+                body = dict(parse_qsl(body))
+            except Exception as e:
+                raise HTTPError(400, 'Invalid query string')
+        elif content_type == 'application/json':
             try:
                 body = loads(body) if body else None
             except Exception as e:

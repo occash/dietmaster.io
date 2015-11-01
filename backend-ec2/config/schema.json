@@ -22,7 +22,30 @@
         }
     },
     "UsersHandler": {
-        "GET": {},
+        "GET": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "email": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["email"],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
+                        "username": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["username"],
+                    "additionalProperties": false
+                }
+            ]
+        },
         "POST": {
             "$schema": "http://json-schema.org/draft-04/schema#",
             "type": "object",

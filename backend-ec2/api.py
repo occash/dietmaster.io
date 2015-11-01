@@ -99,22 +99,16 @@ class UserSettingsHandler(ApiHandler):
 class UsersHandler(ApiHandler):
 
     @coroutine
-    def get(self):
-        key = self.get_argument('key', None)
-        value = self.get_argument('value', None)
-
-        if not key or not value:
-            raise HTTPError(400, 'Key and value required')
-
-        if not key in ['username', 'email']:
-            raise HTTPError(400, 'Invalid key')
-        
+    def get(self):     
         database = self.settings['database']
         users = database.users
         
-        result = yield users.find_one({key: value})
+        result = yield users.find_one(self.json_body)
+        params = {}
+        for key in self.json_body.keys():
+            params[key] = result is None
 
-        self.write_content({key: result is not None})
+        self.write_content(params)
 
     @coroutine
     def post(self):

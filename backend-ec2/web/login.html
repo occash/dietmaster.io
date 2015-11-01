@@ -164,7 +164,7 @@
             <div class="input-icon">
                 <div id="spinner_height">
                     <div class="input-group">
-                        <input type="text" class="spinner-input form-control" maxlength="3" placeholder="Height" name="height">
+                        <input type="text" class="spinner-input form-control" maxlength="3" placeholder="Height" name="body[height]:number">
                         <div class="spinner-buttons input-group-btn btn-group-vertical">
                             <button type="button" class="btn spinner-up btn-xs">
                             <i class="fa fa-angle-up"></i>
@@ -182,7 +182,7 @@
             <div class="input-icon">
                 <div id="spinner_weight">
                     <div class="input-group">
-                        <input type="text" class="spinner-input form-control" maxlength="3" placeholder="Weight" name="weight">
+                        <input type="text" class="spinner-input form-control" maxlength="3" placeholder="Weight" name="body[weight]:number">
                         <div class="spinner-buttons input-group-btn btn-group-vertical">
                             <button type="button" class="btn spinner-up btn-xs">
                             <i class="fa fa-angle-up"></i>
@@ -198,7 +198,7 @@
         <div class="form-group">
             <label class="control-label visible-ie8 visible-ie9">Lifestyle</label>
             <div class="input-icon">
-                <select class="bs-select" data-width="100%" title="Lifestyle" name="lifestyle">
+                <select class="bs-select" data-width="100%" title="Lifestyle" name="lifestyle:number">
                     <option value="0">No fitness</option>
                     <option value="1">Fitness 3 times a week</option>
                     <option value="2">Fitness 5 times a week</option>
@@ -211,8 +211,8 @@
         </div>
         <div class="form-group">
 			<label>
-            <input type="hidden" name="diabetic" value="false" />
-			<input type="checkbox" name="diabetic" value="true" /> I'm diabetic
+            <input type="hidden" name="diabetic:boolean" value="false" />
+			<input type="checkbox" name="diabetic:boolean" value="true" /> I'm diabetic
 			</label>
 		</div>
 		<p>
@@ -251,9 +251,9 @@
 		</div>
 		<div class="form-group">
 			<label>
-			<input type="checkbox" name="tnc" value="true" /> I agree to the <a href="javascript:;">
+			<input type="checkbox" name="tnc" value="true" /> I agree to the <a href="/terms">
 			Terms of Service </a>
-			and <a href="javascript:;">
+			and <a href="/privacy">
 			Privacy Policy </a>
 			</label>
 			<div id="register_tnc_error">

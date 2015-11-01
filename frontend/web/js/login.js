@@ -162,37 +162,53 @@ var Login = function() {
             ignore: "",
             rules: {
 
-                fullname: {
+                'fullname': {
                     required: true
                 },
-                gender: {
+                'gender': {
                     required: true,
                 },
-                height: {
+                'body[height]:number': {
                     required: true,
                 },
-                weight: {
+                'body[weight]:number': {
                     required: true,
                 },
-                lifestyle: {
+                'lifestyle:number': {
                     required: true,
                 },
-                diabetic: {
+                'diabetic:boolean': {
                     required: false,
                 },
-                email: {
+                'email': {
                     required: true,
-                    email: true
+                    email: true,
+                    remote: {
+                        url: '/api/users',
+                        type: 'get',
+                        dataFilter: function (data) {
+                            var result = (JSON.parse(data)).email;
+                            return result;
+                        }
+                    }
                 },
-                username: {
-                    required: true
+                'username': {
+                    required: true,
+                    remote: {
+                        url: '/api/users',
+                        type: 'get',
+                        dataFilter: function (data) {
+                            var result = (JSON.parse(data)).username;
+                            return result;
+                        }
+                    }
                 },
-                password: {
+                'password': {
                     required: true
                 },
                 rpassword: {
                     required: false,
-                    equalTo: "#register_password"
+                    equalTo: '#register_password'
                 },
                 tnc: {
                     required: true
@@ -200,6 +216,12 @@ var Login = function() {
             },
 
             messages: { // custom messages for radio buttons and checkboxes
+                email: {
+                    remote: 'Email already in use'
+                },
+                username: {
+                    remote: 'Username already in use'
+                },
                 tnc: {
                     required: "Please accept terms first."
                 }
@@ -230,12 +252,14 @@ var Login = function() {
             },
 
             submitHandler: function(form) {
-                var formData = $(form).serializeJSON({parseAll: "true"});
+                var formData = $(form).serializeJSON();
+                delete formData['tnc']
+                delete formData['rpassword']
 
                 $.ajax({
                     type: 'POST',
                     url: '/api/users',
-                    contentType: "application/json",
+                    contentType: 'application/json',
                     data: JSON.stringify(formData),
                     success: function(data, textStatus, jqXHR) {
                         jQuery('.login-form').show();
