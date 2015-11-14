@@ -5,6 +5,7 @@ import json
 from json import JSONEncoder, JSONDecoder
 from jsonschema import validate, ValidationError
 from urllib.parse import parse_qsl
+from traceback import format_exception
 
 from tornado.web import RequestHandler, StaticFileHandler, HTTPError
 from tornado.gen import coroutine
@@ -196,15 +197,39 @@ class ApiHandler(RequestHandler):
     def write_error(self, status_code, **kwargs):
         # Handle internal error
         if status_code == 500:
-            # TODO: send email to admins
+            mail = self.settings['mail']
+            general = self.settings['general']
+
+            parameters = [(k, v) for k, v in self.request.query_arguments.items()]
+            headers = [(k, v) for k, v in self.request.headers.items()]
+            traceback = format_exception(
+                kwargs['exc_info'][0],
+                kwargs['exc_info'][1],
+                kwargs['exc_info'][2]
+            )
+
+            mail.send(
+                'DietMaster',
+                'support@dietmaster.io',
+                general['admin'],
+                'Server error',
+                'error',
+                base_url=general['admin'],
+                status=status_code,
+                method=self.request.method,
+                path=self.request.path,
+                parameters=parameters,
+                body=self.request.body,
+                headers=headers,
+                traceback=traceback
+            )
+
             self.write('Internal server error')
-
         # Write raw message if available
-        if 'message' in kwargs:
+        elif 'message' in kwargs:
             self.write(kwargs['message'])
-
         # Write HTTError message (most common)
-        if 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
+        elif 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
             self.write(kwargs['exc_info'][1].log_message)
 
 class StreamApiHandler(StaticFileHandler):

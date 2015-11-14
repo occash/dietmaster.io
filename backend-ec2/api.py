@@ -123,6 +123,7 @@ class UsersHandler(ApiHandler):
     def post(self):
         user = self.json_body
         database = self.settings['database']
+        general = self.settings['general']
         users = database.users
         facts = database.facts
 
@@ -186,6 +187,7 @@ class UsersHandler(ApiHandler):
             user['email'],
             'Account verification',
             'verify',
+            base_url=general['host'],
             user=username,
             url='https://dietmaster.io/verify/%s-%s' % (username, verify_token)
         )
@@ -241,15 +243,12 @@ class AuthHandler(ApiHandler):
         token['user'] = user
         self.write_content(token)
 
+    @auth
     @coroutine
     def delete(self):
-        bearer = self.get_argument('bearer', None)
-        if not bearer:
-            raise HTTPError(403, 'No token supplied')
-
         database = self.settings['database']
         tokens = database.tokens
-        yield tokens.remove({'bearer': bearer})
+        yield tokens.remove({'_id': self.user})
 
 class FoodHandler(ApiHandler):
 

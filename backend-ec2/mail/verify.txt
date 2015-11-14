@@ -2,9 +2,12 @@ Hi, {{ user }}
 
 Your account has been approved.
 To continue using the application, please check the link below and sign in again.
-Verify your account. Click here {{ url }}
+Verify your account. Click here {{ base_url }}{{ url }}
 
 Thank you for choosing DietMaster.
 
 Best regards,
 DietMaster team
+
+Terms: {{ base_url }}/terms
+Privacy: {{ base_url }}/privacy

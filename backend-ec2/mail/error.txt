@@ -1,0 +1,23 @@
+Internal Server Error {{ status }}
+
+{{ method }} {{ path }}
+
+Request parameters:
+{% for key, value in parameters %}
+    {{ key }}: {{value}}
+{% endfor %}
+
+Body:
+{{ body }}
+
+Headers:
+{% for key, value in headers %}
+    {{ key }}: {{value}}
+{% endfor %}
+
+Traceback:
+{% for line in traceback %}
+    {{ line }}
+{% endfor %}
+
+Admin panel: {{ base_url }}/admin

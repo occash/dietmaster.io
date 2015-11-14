@@ -47,6 +47,7 @@ def main():
     dbconfig = config['database']
     webconfig = config['web']
     emailconfig = config['email']
+    generalconfig = config['general']
 
     # Configure logging
     logging.config.dictConfig(config['logging'])
@@ -81,6 +82,7 @@ def main():
         debug=webconfig['debug'],
         cookie_secret=COOKIE_SECRET,
         database=database,
+        general=generalconfig,
         schema=init_schema(),
         mail=mail
     )

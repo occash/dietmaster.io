@@ -128,17 +128,7 @@
     },
     "AuthHandler": {
         "POST": {},
-        "DELETE": {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "type": "object",
-            "properties": {
-                "bearer": {
-                    "type": "string"
-                }
-            },
-            "required": ["bearer"],
-            "additionalProperties": false
-        }
+        "DELETE": {}
     },
     "UserPhotoHandler": {
         "GET": {}

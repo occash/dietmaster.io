@@ -1805,7 +1805,7 @@ function logout() {
     $.ajax({
         type: 'DELETE',
         url: '/api/auth',
-        data: {'bearer': $.cookie('bearer')},
+        headers: {'bearer': $.cookie('bearer')},
         success: function(data, textStatus, jqXHR) {
             $.removeCookie('bearer');
             window.location = "/";

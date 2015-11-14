@@ -15,6 +15,11 @@ email:
   user: ''
   password: ''
 
+general:
+  host: 'https://dietmaster.io'
+  admin: 
+    - artiom.shal@gmail.com
+
 logging:
   version: 1
   disable_existing_loggers: true

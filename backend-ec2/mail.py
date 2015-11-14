@@ -1,4 +1,4 @@
-from multiprocessing import Process, Queue
+﻿from multiprocessing import Process, Queue
 
 from smtplib import SMTP, SMTPException
 
@@ -38,10 +38,15 @@ class MailWorker():
         while True:
             params = queue.get()
 
+            if isinstance(params['to'], list):
+                recipints = ', '.join(params['to'])
+            else:
+                recipints = params['to']
+
             message = MIMEMultipart('alternative')
             message['Subject'] = params['subject']
             message['From'] = formataddr((params['sender'], params['from']))
-            message['To'] = params['to']
+            message['To'] = recipints
 
             plain = MIMEText(template.render(params['template'] + '.txt', **params['args']), 'plain')
             html = MIMEText(template.render(params['template'] + '.html', **params['args']), 'html')
