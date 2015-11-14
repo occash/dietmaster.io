@@ -233,6 +233,12 @@ class ApiHandler(RequestHandler):
         elif 'exc_info' in kwargs and issubclass(kwargs['exc_info'][0], HTTPError):
             self.write(kwargs['exc_info'][1].log_message)
 
+class ApiNotFound(RequestHandler):
+    
+    def prepare(self):
+        self.set_status(404)
+        self.finish('Path not found')
+
 class StreamApiHandler(StaticFileHandler):
     pass
 
