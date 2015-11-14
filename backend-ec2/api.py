@@ -41,7 +41,7 @@ class UserHandler(ApiHandler):
         if not user:
             raise HTTPError(404, 'User not found')
 
-        self.write_content(user)
+        self.write(user)
 
 class UserFactsHandler(ApiHandler):
 
@@ -53,7 +53,7 @@ class UserFactsHandler(ApiHandler):
         cursor = facts.find({'username': self.user}, {'_id': 0}).sort('updated', -1).limit(1)
         fact = yield cursor.to_list(1)
         fact = fact[0]
-        self.write_content(fact)
+        self.write(fact)
 
 class UserPhotoHandler(StreamApiHandler):
 
@@ -91,7 +91,7 @@ class UserSettingsHandler(ApiHandler):
         users = database.users
 
         result = yield users.find_one({'username': self.user}, {'_id': 0, 'settings': 1})
-        self.write_content(result)
+        self.write(result)
 
     @auth
     @coroutine
@@ -117,7 +117,7 @@ class UsersHandler(ApiHandler):
         for key in self.json_body.keys():
             params[key] = result is None
 
-        self.write_content(params)
+        self.write(params)
 
     @coroutine
     def post(self):
@@ -195,7 +195,7 @@ class UsersHandler(ApiHandler):
         user.pop('_id')
         user.pop('private')
 
-        self.write_content(user)
+        self.write(user)
 
 class AuthHandler(ApiHandler):
     
@@ -241,7 +241,7 @@ class AuthHandler(ApiHandler):
 
         token.pop('_id')
         token['user'] = user
-        self.write_content(token)
+        self.write(token)
 
     @auth
     @coroutine
@@ -266,7 +266,7 @@ class FoodHandler(ApiHandler):
         cursor = food.find({'name': rexp}, {'_id': 1, 'name': 1})
         result = yield cursor.to_list(length=10)
 
-        self.write(dumps({'results': result}))
+        self.write({'results': result})
 
 class FoodIdHandler(ApiHandler):
 
@@ -280,4 +280,4 @@ class FoodIdHandler(ApiHandler):
         if not result:
             raise HTTPError(404, 'Product not found')
 
-        self.write(dumps(result))
+        self.write(result)

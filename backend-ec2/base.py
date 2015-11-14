@@ -132,32 +132,32 @@ class ApiHandler(RequestHandler):
 
     response_types = ['*/*', 'application/json']
 
-    def set_default_headers(self):
-        self.set_header('Accept', 'application/json')
-
     def prepare(self):
         if not getattr(self, self.request.method.lower(), None):
             raise HTTPError(405, 'Method not allowed')
 
-        # Check content type
+        # Check accept type
         accept_types = self.request.headers.get('Accept', '*/*')
         accept_types = parse_accept_header(accept_types)
         best_match = None
         for accept_type in accept_types:
             if accept_type[0] in self.response_types:
-                self.response_type = accept_type[0]
+                self.response_type = 'application/json' if accept_type[0] == '*/*' else accept_type[0]
+                self.response_charset = accept_type[1].get('charset', 'utf-8')
+                self.content_type = '%s; %s' % (self.response_type, self.response_charset)
                 break
         
         if not self.response_type:
             raise HTTPError(406, 'Not acceptable')
 
+        # Check content type
         content_type = self.request.headers.get('Content-Type', 'application/x-www-form-urlencoded')
         content_type, params = _parse_header(content_type)
         if content_type == 'application/x-www-form-urlencoded':
             body = self.request.query
         else:
             body = self.request.body
-            body = body.decode(params.get('charset', 'UTF-8'))
+            body = body.decode(params.get('charset', 'utf-8'))
 
         # Parse body
         if content_type == 'application/x-www-form-urlencoded':
@@ -186,13 +186,14 @@ class ApiHandler(RequestHandler):
             raise HTTPError(400, 'Invalid value: %s' % e.message)
 
     # Write content according to accept type
-    def write_content(self, obj):
-        if self.response_type == '*/*':
-            self.write(dumps(obj))
-        elif self.response_type == 'application/json':
-            self.write(dumps(obj))
+    def write(self, obj):
+        if self.response_type == 'application/json':
+            content = dumps(obj)
         else:
             raise HTTPError(406, 'Not acceptable')
+
+        super(ApiHandler, self).write(content)
+        self.set_header('Content-Type', self.content_type)
 
     def write_error(self, status_code, **kwargs):
         # Handle internal error
