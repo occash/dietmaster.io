@@ -24,6 +24,10 @@
             "additionalProperties": false
         }
     },
+    "UserRecordsHandler": {
+        "GET": {},
+        "POST": {}
+    },
     "UsersHandler": {
         "GET": {
             "$schema": "http://json-schema.org/draft-04/schema#",
@@ -134,7 +138,16 @@
         "GET": {}
     },
     "FoodHandler": {
-        "GET": {}
+        "GET": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+                "phrase": {
+                    "type": "string"
+                }
+            },
+            "required": ["phrase"]
+        }
     },
     "FoodIdHandler": {
         "GET": {}

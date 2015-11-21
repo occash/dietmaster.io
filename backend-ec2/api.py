@@ -61,7 +61,7 @@ class UserPhotoHandler(StreamApiHandler):
         if __debug__:
             self.set_header('Cache-control', 'no-store, no-cache, must-revalidate, max-age=0')
 
-    def head(self):
+    def head(self, bearer):
         return StreamApiHandler.get(self, '/', False)
 
     @coroutine
@@ -104,6 +104,18 @@ class UserSettingsHandler(ApiHandler):
 
         yield users.update({'username': self.user}, {'$set': fields}, 
                               upsert=False, multi=False)
+
+class UserRecordsHandler(ApiHandler):
+
+    @auth
+    @coroutine
+    def get(self):
+        pass
+
+    @auth
+    @coroutine
+    def post(self):
+        pass
 
 class UsersHandler(ApiHandler):
 
@@ -201,8 +213,8 @@ class AuthHandler(ApiHandler):
     
     @coroutine
     def post(self):
-        username = self.get_argument('username', None)
-        password = self.get_argument('password', None)
+        username = self.json_body['username']
+        password = self.json_body['password']
 
         if not username or not password:
             raise HTTPError(400, 'No credentials supplied')
@@ -255,15 +267,13 @@ class FoodHandler(ApiHandler):
     @auth
     @coroutine
     def get(self):
-        phrase = self.get_argument('phrase', None)
-        if not phrase:
-            raise HTTPError(400, 'Search phrase required')
+        phrase = self.json_body['phrase']
 
         database = self.settings['database']
         food = database.food
 
         rexp = re.compile('^%s.*' % phrase, re.IGNORECASE)
-        cursor = food.find({'name': rexp}, {'_id': 1, 'name': 1})
+        cursor = food.find({'fullname': rexp}, {'_id': 1, 'fullname': 1})
         result = yield cursor.to_list(length=10)
 
         self.write({'results': result})
