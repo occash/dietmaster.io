@@ -2,3 +2,4 @@ bin/
 build/
 build-android/
 **/*.user*
+**/node_modules/
