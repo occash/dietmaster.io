@@ -1,111 +1,65 @@
-"use strict"
+'use strict'
 
+// Imports
 let parser = require('body-parser')
 let ect = require('ect');
 let express = require('express')
 let passport = require('passport')
 let session = require('express-session')
+let mongodb = require('mongodb');
+
+import * as Auth from './auth'
+import * as Pages from './pages'
+
+// Namespace
+let LocalStrategy = require('passport-local')
+let MongoClient = mongodb.MongoClient
 
 let config = require('./config.json')
 
-let LocalStrategy = require('passport-local') 
+async function main() {
+    // Basic setup
+    let app = express()
+    let renderer = ect({ watch: true, root: __dirname + '/views', ext: '.ect'})
 
-// Basic setup
-let app = express()
-let renderer = ect({ watch: true, root: __dirname + '/views', ext: '.ect'})
+    app.use(parser.urlencoded({extended: true}))
 
-app.use(parser.urlencoded({extended: true}))
+    app.set('view engine', 'ect');
+    app.engine('ect', renderer.render);
+    app.use(express.static('web'));
 
-app.set('view engine', 'ect');
-app.engine('ect', renderer.render);
-app.use(express.static('web'));
+    app.use(session({secret: 'random'}))
+    app.use(passport.initialize())
+    app.use(passport.session())
 
-app.use(session({secret: 'random'}))
-app.use(passport.initialize())
-app.use(passport.session())
-
-let occash = {
-    id: 'trololo',
-    username: 'occash',
-    password: '1'
-}
-
-// Setup passport
-passport.serializeUser(function(user, done) {
-    done(null, user.id);
-});
- 
-passport.deserializeUser(function(id, done) {
-    let err = 'error'
-    let user = null
+    let db = await MongoClient.connect(config.mongo)
     
-    if (id == occash.id) {
-        err = null
-        user = occash
-    }
-        
-    done(err, user)
-});
+    Auth.init(db)
 
-passport.use('login', new LocalStrategy(
-    {passReqToCallback: true},
-    function (req, username, password, done) {
-        console.log('trololo')
-        
-        let err = 'error'
-        let user = null
-        
-        if (username == occash.username &&
-            password == occash.password) {
-            err = null
-            user = occash
-        }
-            
-        done(err, user)
-    }
-))
+    // Setup passport
+    passport.serializeUser(Auth.serialize)
+    passport.deserializeUser(Auth.deserialize)
 
-let auth = function (req, res, next) {
-    if (req.isAuthenticated())
-        return next()
-        
-    res.redirect('/login')
+    passport.use('login', new LocalStrategy(
+        {passReqToCallback: true},
+        Auth.login
+    ))
+
+    // Serve
+    app.get('/', Auth.check, Pages.index)
+    app.get('/login', Pages.login)
+
+    app.post('/login', passport.authenticate('login', {
+        successRedirect: '/',
+        failureRedirect: '/login',
+        failureFlash: false 
+    }))
+
+    app.use(Pages.default404)
+
+    app.listen(config.port, config.host, function () {
+        console.log(config.name + ' started at ' + config.host + ':' + config.port)
+    })
 }
 
-// Serve
-app.get('/', auth, function (req, res) {
-    res.render('index', {user: req.user.username})
-})
-
-app.get('/login', function (req, res) {
-    res.render('login')
-})
-
-app.post('/login', passport.authenticate('login', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: false 
-}))
-
-app.use(function(req, res, next){
-    res.status(404);
-
-    // respond with html page
-    if (req.accepts('html')) {
-        res.render('404', { url: req.url });
-        return;
-    }
-
-    // respond with json
-    if (req.accepts('json')) {
-        res.send({error: 'Not found'});
-        return;
-    }
-
-    // default to plain-text. send()
-    res.type('txt').send('Not found');
-});
-
-app.listen(config.port, config.host, function () {
-    console.log(config.name + ' started at ' + config.host + ':' + config.port)
-})
+main()
