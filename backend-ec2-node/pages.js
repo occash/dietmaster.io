@@ -19,10 +19,14 @@ export function default404 (req, res, next) {
     res.type('txt').send('Not found');
 }
 
-export function index (req, res) {
-    res.render('index', {user: req.user.username})
+export class Index {
+    get (req, res) {
+        res.render('index', {user: req.user.username})
+    }
 }
 
-export function login (req, res) {
-    res.render('login')
+export class Login {  
+    get (req, res) {
+        res.render('login')
+    }
 }

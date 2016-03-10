@@ -8,14 +8,40 @@ let passport = require('passport')
 let session = require('express-session')
 let mongodb = require('mongodb');
 
-import * as Auth from './auth'
-import * as Pages from './pages'
+import {Auth} from './auth'
+import {default404} from './pages'
+import {routes} from './routes'
 
 // Namespace
 let LocalStrategy = require('passport-local')
 let MongoClient = mongodb.MongoClient
 
+// Config
 let config = require('./config.json')
+
+function create (handler, method) {
+    let _handler = handler
+    return _handler[method]
+}
+
+function setup_routes (app, routes) {
+    for (let route of routes) {
+        let path = route[0]
+        let Handler = route[1]
+        let middle = route.length > 2 ? route[2] : []
+        
+        var handler = new Handler()        
+        if ('get' in handler) {
+            let actual = create(handler, 'get')
+            app.get(path, middle, actual)
+        }
+        
+        if ('post' in handler) {
+            let actual = create(handler, 'post')
+            app.get(path, middle, actual)
+        }
+    }
+}
 
 async function main() {
     // Basic setup
@@ -28,13 +54,13 @@ async function main() {
     app.engine('ect', renderer.render);
     app.use(express.static('web'));
 
-    app.use(session({secret: 'random'}))
+    app.use(session({secret: 'random', resave: true, saveUninitialized: true}))
     app.use(passport.initialize())
     app.use(passport.session())
 
     let db = await MongoClient.connect(config.mongo)
     
-    Auth.init(db)
+    Auth.users = await db.collection('users')
 
     // Setup passport
     passport.serializeUser(Auth.serialize)
@@ -46,8 +72,7 @@ async function main() {
     ))
 
     // Serve
-    app.get('/', Auth.check, Pages.index)
-    app.get('/login', Pages.login)
+    setup_routes(app, routes)
 
     app.post('/login', passport.authenticate('login', {
         successRedirect: '/',
@@ -55,7 +80,7 @@ async function main() {
         failureFlash: false 
     }))
 
-    app.use(Pages.default404)
+    app.use(default404)
 
     app.listen(config.port, config.host, function () {
         console.log(config.name + ' started at ' + config.host + ':' + config.port)
