@@ -18,13 +18,14 @@ let MongoClient = mongodb.MongoClient
 
 // Config
 let config = require('./config.json')
+let secret = 'Luke, I am your father'
 
 function create (handler, method) {
     let _handler = handler
     return _handler[method]
 }
 
-function setup_routes (app, routes) {
+function setup (app, routes) {
     for (let route of routes) {
         let path = route[0]
         let Handler = route[1]
@@ -43,18 +44,19 @@ function setup_routes (app, routes) {
     }
 }
 
-async function main() {
+export async function main() {
     // Basic setup
     let app = express()
     let renderer = ect({ watch: true, root: __dirname + '/views', ext: '.ect'})
 
     app.use(parser.urlencoded({extended: true}))
+    app.use(parser.json())
 
     app.set('view engine', 'ect');
     app.engine('ect', renderer.render);
     app.use(express.static('web'));
 
-    app.use(session({secret: 'random', resave: true, saveUninitialized: true}))
+    app.use(session({secret: secret, resave: true, saveUninitialized: true}))
     app.use(passport.initialize())
     app.use(passport.session())
 
@@ -70,21 +72,32 @@ async function main() {
         {passReqToCallback: true},
         Auth.login
     ))
+    
+    passport.use('signup', new LocalStrategy(
+        {passReqToCallback: true},
+        Auth.signup
+    ))
 
     // Serve
-    setup_routes(app, routes)
+    setup(app, routes)
 
     app.post('/login', passport.authenticate('login', {
         successRedirect: '/',
         failureRedirect: '/login',
         failureFlash: false 
     }))
+    
+    app.post('/signup', passport.authenticate('signup', {
+        successRedirect: '/',
+        failureRedirect: '/signup',
+        failureFlash: false 
+    }))
 
+    // Default page
     app.use(default404)
 
+    // Start server
     app.listen(config.port, config.host, function () {
         console.log(config.name + ' started at ' + config.host + ':' + config.port)
     })
 }
-
-main()

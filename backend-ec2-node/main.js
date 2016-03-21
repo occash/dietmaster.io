@@ -1,0 +1,17 @@
+﻿var cluster = require('cluster')
+import {main} from './app'
+
+cluster.schedulingPolicy = cluster.SCHED_RR
+
+if (cluster.isMaster) {
+	var cpuCount = require('os').cpus().length;
+	for (var i = 0; i < cpuCount; i += 1) {
+		cluster.fork()
+	}
+} else {
+	main()
+}
+
+cluster.on('fork', function (worker) {
+	console.log('Worker %d created', worker.id)
+});

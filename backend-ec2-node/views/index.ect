@@ -10,7 +10,11 @@
   </div>
 </nav>
 <div class="row">
-  <div class="col-md-6">.col-md-8</div>
-  <div class="col-md-6">.col-md-4</div>
+    <% include 'panel.ect', { color : 'info', value: '2253', name: 'Calories' } %>
+    <% include 'panel.ect', { color : 'success', value: '50', name: 'Protein' } %>
+    <% include 'panel.ect', { color : 'warning', value: '150', name: 'Lipid' } %>
+    <% include 'panel.ect', { color : 'danger', value: '45', name: 'Carbohydrates' } %>
 </div>
-<h2>Hello, <%- @user %>!</h2>
+<div class="row">
+    <h2>Hello, <%- @user %>!</h2>
+</div>

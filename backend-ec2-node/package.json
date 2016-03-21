@@ -22,8 +22,8 @@
     "nodemon": "^1.9.0"
   },
   "scripts": {
-    "start": "nodemon app.js --exec babel-node",
-    "build": "babel src --out-dir bin",
-    "serve": "node bin/app.js"
+    "start": "nodemon --ignore views/* --ignore web/* --ignore *.json main.js --exec babel-node",
+    "build": "babel lib --out-dir dist",
+    "serve": "node dist/main.js"
   }
 }
