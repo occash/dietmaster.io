@@ -1,29 +1,25 @@
 'use strict'
 
 // Imports
-let parser = require('body-parser')
-let ect = require('ect');
-let express = require('express')
-let passport = require('passport')
-let session = require('express-session')
-let mongodb = require('mongodb');
+const parser = require('body-parser')
+const ect = require('ect');
+const express = require('express')
+const passport = require('passport')
+const session = require('express-session')
+const mongodb = require('mongodb');
 
 import {Auth} from './auth'
 import {default404} from './pages'
 import {routes} from './routes'
 
 // Namespace
-let LocalStrategy = require('passport-local')
-let MongoClient = mongodb.MongoClient
+const LocalStrategy = require('passport-local')
+const MongoClient = mongodb.MongoClient
 
 // Config
-let config = require('./config.json')
-let secret = 'Luke, I am your father'
+const config = require('./config.json')
+const secret = 'Luke, I am your father'
 
-function create (handler, method) {
-    let _handler = handler
-    return _handler[method]
-}
 
 function setup (app, routes) {
     for (let route of routes) {
@@ -32,15 +28,11 @@ function setup (app, routes) {
         let middle = route.length > 2 ? route[2] : []
         
         var handler = new Handler()        
-        if ('get' in handler) {
-            let actual = create(handler, 'get')
-            app.get(path, middle, actual)
-        }
+        if ('get' in handler)
+            app.get(path, middle, handler['get'])
         
-        if ('post' in handler) {
-            let actual = create(handler, 'post')
-            app.get(path, middle, actual)
-        }
+        if ('post' in handler)
+            app.get(path, middle, handler['post'])
     }
 }
 

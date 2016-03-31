@@ -1,11 +1,13 @@
-﻿var cluster = require('cluster')
+﻿'use strict'
+
+const cluster = require('cluster')
 import {main} from './app'
 
 cluster.schedulingPolicy = cluster.SCHED_RR
 
 if (cluster.isMaster) {
-	var cpuCount = require('os').cpus().length;
-	for (var i = 0; i < cpuCount; i += 1) {
+	let cpuCount = require('os').cpus().length;
+	for (let i = 0; i < cpuCount; i += 1) {
 		cluster.fork()
 	}
 } else {

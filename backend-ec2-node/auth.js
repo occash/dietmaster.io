@@ -1,7 +1,11 @@
 'use strict'
 
-let mongodb = require('mongodb');
-let ObjectID = mongodb.ObjectID
+const mongodb = require('mongodb');
+const crypto = require('crypto')
+const utf8 = require('utf8')
+
+//namespace
+const ObjectID = mongodb.ObjectID
 
 let _users = null
 
