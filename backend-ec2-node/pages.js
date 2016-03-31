@@ -25,8 +25,8 @@ export class Index {
     }
 }
 
-export class Login {  
+export class Signin {  
     get (req, res) {
-        res.render('login')
+        res.render('signin')
     }
 }

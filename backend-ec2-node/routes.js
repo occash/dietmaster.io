@@ -5,5 +5,5 @@ import * as handlers from './pages'
 
 export let routes = [
     ['/', handlers.Index, Auth.check],
-    ['/login', handlers.Login]
+    ['/signin', handlers.Signin]
 ]

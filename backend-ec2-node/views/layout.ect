@@ -2,14 +2,33 @@
 <html>
     <head>
         <title>dietmaster.io</title>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Diet application">
+        <meta name="keywords" content="diet, diet programs, nutrition, meal planning, glycemic index">
+        <meta name="author" content="Artem Shal">
+        
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/custom.css">
     </head>
     <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        dietmaster.io
+                    </a>
+                </div>
+            </div>
+        </nav>
         <div class="container-fluid">
             <% content %>
         </div>
     </body>
     <script src="/js/jquery-2.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <% content 'script' %>
 </html>

@@ -68,9 +68,9 @@ export async function main() {
     passport.serializeUser(Auth.serialize)
     passport.deserializeUser(Auth.deserialize)
 
-    passport.use('login', new LocalStrategy(
+    passport.use('signin', new LocalStrategy(
         {passReqToCallback: true},
-        Auth.login
+        Auth.signin
     ))
     
     passport.use('signup', new LocalStrategy(
@@ -81,9 +81,9 @@ export async function main() {
     // Serve
     setup(app, routes)
 
-    app.post('/login', passport.authenticate('login', {
+    app.post('/signin', passport.authenticate('signin', {
         successRedirect: '/',
-        failureRedirect: '/login',
+        failureRedirect: '/signin',
         failureFlash: false 
     }))
     

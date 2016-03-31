@@ -27,7 +27,7 @@ export class Auth {
         }
     }
     
-    static async login (req, username, password, done) {
+    static async signin (req, username, password, done) {
         try {
             let user = await _users.findOne({username: username})
             done(null, user)
@@ -49,6 +49,6 @@ export class Auth {
         if (req.isAuthenticated())
             return next()
             
-        res.redirect('/login')
+        res.redirect('/signin')
     }
 }
