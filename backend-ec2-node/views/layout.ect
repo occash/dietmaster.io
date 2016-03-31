@@ -1,34 +1,27 @@
-<!doctype html>
-<html>
-    <head>
-        <title>dietmaster.io</title>
-        
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Diet application">
-        <meta name="keywords" content="diet, diet programs, nutrition, meal planning, glycemic index">
-        <meta name="author" content="Artem Shal">
-        
-        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" type="text/css" href="/css/custom.css">
-    </head>
-    <body>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">
-                        dietmaster.io
-                    </a>
-                </div>
-            </div>
-        </nav>
+<% extend 'base.ect' %>
+
+<body>
+    <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <% content %>
+            <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menubar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand" href="/">dietmaster.io</a>
+            </div>
+            <div class="collapse navbar-collapse" id="menubar">
+                <% content 'menu' %>
+            </div>
         </div>
-    </body>
-    <script src="/js/jquery-2.2.1.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <% content 'script' %>
-</html>
+    </nav>
+    <div class="container-fluid">
+        <% content %>
+    </div>
+    <footer class="footer">
+        <div class="container-fluid">
+            <p class="text-center text-muted">2016 &copy; Artem Shal. dietmaster.io.</p>
+        </div>
+    </footer>
+</body>

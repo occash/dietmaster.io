@@ -21,7 +21,10 @@ export function default404 (req, res, next) {
 
 export class Index {
     get (req, res) {
-        res.render('index', {user: req.user.username})
+        if (req.user)
+            res.render('app', {user: req.user.username})
+        else
+            res.render('index')
     }
 }
 

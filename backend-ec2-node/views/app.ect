@@ -1,0 +1,11 @@
+<% extend 'layout.ect' %>
+
+<div class="row">
+    <% include 'panel.ect', { color : 'info', value: '2253', name: 'Calories' } %>
+    <% include 'panel.ect', { color : 'success', value: '50', name: 'Protein' } %>
+    <% include 'panel.ect', { color : 'warning', value: '150', name: 'Lipid' } %>
+    <% include 'panel.ect', { color : 'danger', value: '45', name: 'Carbohydrates' } %>
+</div>
+<div class="row">
+    <h2>Hello, <%- @user %>!</h2>
+</div>
