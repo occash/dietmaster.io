@@ -35,6 +35,23 @@ export class Auth {
         try {
             let user = await _users.findOne({username: username})
             done(null, user)
+            /*let hash = crypto.createHash('sha256');
+            let salt = user.private.salt.buffer
+            let rawpass = new Buffer(password, 'utf8')
+            let pass = user.private.password.buffer
+            
+            console.log(Buffer.concat([salt, rawpass]))
+            
+            hash.update(Buffer.concat([salt, rawpass]))
+            let hexpass = hash.digest()
+            
+            console.log(pass)
+            console.log(hexpass)
+            
+            if (hexpass == pass)
+                done(null, user)
+            else
+                done('Incorrect password', null)*/
         } catch (err) {
             done(err, null)
         }
