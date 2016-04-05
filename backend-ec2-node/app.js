@@ -46,7 +46,7 @@ export async function main() {
 
     app.set('view engine', 'ect');
     app.engine('ect', renderer.render);
-    app.use(express.static('web'));
+    app.use(express.static(__dirname + '/web'));
 
     app.use(session({secret: secret, resave: true, saveUninitialized: true}))
     app.use(passport.initialize())
