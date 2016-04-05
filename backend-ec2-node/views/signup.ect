@@ -1,0 +1,116 @@
+<% extend 'layout.ect' %>
+
+<% block 'style' : %>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker3.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-select.min.css">
+<% end %>
+
+<div class="row-fluid">
+    <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="text-center">Join dietmaster.io</h3>
+            </div>
+            <div class="panel-body">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs nav-justified" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#personal" aria-controls="personal" role="tab" data-toggle="tab">Personal</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#shape" aria-controls="shape" role="tab" data-toggle="tab">Shape</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <!-- Personal details -->
+                    <div role="tabpanel" class="tab-pane active" id="personal">
+                        <form class="form-signin" role="form" action="/signin" method="POST">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="username" placeholder="Username" required autofocus></input>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="email" name="email" placeholder="E-mail" required></input>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" placeholder="Password" required></input>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block" type="submit">Create account</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Body shape -->
+                    <div role="tabpanel" class="tab-pane" id="shape">
+                        <form class="form-signin" role="form" action="/signin" method="POST">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="fullname" placeholder="Full name" required autofocus></input>
+                            </div>
+                            <div class="form-group">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary active">
+                                        <input type="radio" name="gender" id="male" autocomplete="off" checked> Male
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="gender" id="female" autocomplete="off"> Female
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="birthdate" placeholder="Date of birth" data-provide="datepicker" required></input>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="number" name="height" placeholder="Height" min="50" max="250" required></input>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="number" name="weight" placeholder="Weight" min="50" max="250" required></input>
+                            </div>
+                            <div class="form-group">
+                                <select class="selectpicker" data-width="100%" title="Lifestyle" name="lifestyle">
+                                    <option value="0">No fitness</option>
+                                    <option value="1">Fitness 3 times a week</option>
+                                    <option value="2">Fitness 5 times a week</option>
+                                    <option value="3">Intensive fitness 5 times a week</option>
+                                    <option value="4">Fitness every day</option>
+                                    <option value="5">Intensive fitness every day</option>
+                                    <option value="6">Intensive fitness every day + physical work</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary">
+                                        <input type="checkbox" autocomplete="off"> I'm a diabetic
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Body details -->
+                    <div role="tabpanel" class="tab-pane" id="details">
+                        3
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% block 'footer' : %>
+    <ul class="list-inline text-center">
+        <li>
+            <a href="/terms">Terms</a>
+        </li>
+        <li>
+            <a href="/privacy">Privacy</a>
+        </li>
+    </ul>
+<% end %>
+
+<% block 'script' : %>
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src="/js/bootstrap-select.min.js"></script>
+<% end %>

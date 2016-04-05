@@ -33,3 +33,9 @@ export class Signin {
         res.render('signin')
     }
 }
+
+export class Signup {  
+    get (req, res) {
+        res.render('signup')
+    }
+}

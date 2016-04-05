@@ -4,52 +4,34 @@
     <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
         <div class="panel">
             <div class="panel-heading">
-                <ul class="nav nav-tabs nav-justified" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#signin" aria-controls="signin" role="tab" data-toggle="tab">
-                            <h2 class="panel-title text-center">Sign in</h2>
-                        </a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">
-                            <h2 class="panel-title text-center">Sign up</h2>
-                        </a>
-                    </li>
-                </ul>
+                <h3 class="text-center">Sign in to dietmaster.io</h3>
             </div>
-            <div class="panel-body tab-content">
-                <!-- Sign in pane-->
-                <div role="tabpanel" class="tab-pane active" id="signin">
-                    <form class="form-signin" role="form" action="/signin" method="POST">
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="username" placeholder="Username" required autofocus></input>
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" type="password" name="password" placeholder="Password" required></input>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-block" type="submit">Sign in</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- Sign up pane-->
-                <div role="tabpanel" class="tab-pane" id="signup">
-                    <form class="form-signin" role="form" action="/signup" method="POST">
-                        <div class="form-group">
-                            <input class="form-control" type="email" name="email" placeholder="E-mail" required autofocus></input>
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="username" placeholder="Username" required></input>
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" type="password" name="password" placeholder="Password" required></input>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-block" type="submit">Sign up</button>
-                        </div>
-                    </form>
-                </div>
+            <div class="panel-body">
+                <form class="form-signin" role="form" action="/signin" method="POST">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="username" placeholder="Username" required autofocus></input>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="password" name="password" placeholder="Password" required></input>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+                    </div>
+                    <a href="/reset" class="pull-left">Forgot password</a>
+                    <a href="/signup" class="pull-right">Create an account</a>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<% block 'footer' : %>
+    <ul class="list-inline text-center">
+        <li>
+            <a href="/terms">Terms</a>
+        </li>
+        <li>
+            <a href="/privacy">Privacy</a>
+        </li>
+    </ul>
+<% end %>
