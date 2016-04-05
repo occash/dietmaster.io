@@ -39,3 +39,15 @@ export class Signup {
         res.render('signup')
     }
 }
+
+export class Terms {  
+    get (req, res) {
+        res.render('terms')
+    }
+}
+
+export class Privacy {  
+    get (req, res) {
+        res.render('privacy')
+    }
+}
